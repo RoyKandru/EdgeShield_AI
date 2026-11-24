@@ -198,6 +198,7 @@ RK3588 NPU cores:
 
   Core 2                  SMS smishing detection  Split BiGRU with masked
                                                   pooling
+                                                  
   -----------------------------------------------------------------------
 
 The `.rknn` model files and associated metadata are located in
@@ -542,7 +543,6 @@ measurements**, not independently reproduced by this README.
 
   NPU Core 2 --- SMS              61.75 requests/s Individual worker
                                                    throughput
-
 
 
   Three-core combined            315.53 requests/s Concurrent NPU
