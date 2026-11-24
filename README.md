@@ -275,7 +275,7 @@ The pre-converted RKNN model artifacts are included in this source
 archive.
 
 ------------------------------------------------------------------------
-
+docs: update EdgeShield AI submission README
 ## Detection pipelines
 
 ### 1. Network intrusion and anomaly detection
@@ -452,7 +452,7 @@ currently operational.
 
 -   User feedback must not automatically be treated as ground truth.
 -   Corrections should require independently verifiable evidence.
--   Uncertain outcomes should remain uncertain rather than being forced
+-   Uncertain outcomes should remain uncertain rather than being forceddocs: update EdgeShield AI submission README
     into malicious/benign labels.
 -   Policy changes should be scoped and validated before deployment.
 -   Failed validation should block deployment.
@@ -542,6 +542,8 @@ measurements**, not independently reproduced by this README.
 
   NPU Core 2 --- SMS              61.75 requests/s Individual worker
                                                    throughput
+
+
 
   Three-core combined            315.53 requests/s Concurrent NPU
                                                    benchmark
