@@ -282,9 +282,10 @@
     }
     .tab {
       position: relative;
-      background: var(--panel);
-      color: #1e293b;
-      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #f7f9fc 0%, #e4ecf5 100%);
+      color: #0f172a;
+      border: 1px solid #9db0c7;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08), inset 0 -2px 0 #b8c7d9, inset 0 1px 0 rgba(255, 255, 255, 0.7);
       width: 100%;
       min-width: 0;
       min-height: 50px;
@@ -298,41 +299,47 @@
       justify-content: center;
       gap: 8px;
       white-space: nowrap;
-      transition: background 0.14s, color 0.14s, border-color 0.14s, box-shadow 0.14s;
+      transition: background 0.14s, color 0.14s, border-color 0.14s, box-shadow 0.14s, transform 0.12s;
     }
     .tab:hover:not(.active) {
-      background: #e4ecf5;
-      color: #0f172a;
-      border-color: #64748b;
-      box-shadow: inset 0 -3px 0 #0284c7;
+      background: linear-gradient(180deg, #f8fbff 0%, #d8e5f3 100%);
+      color: #0369a1;
+      border-color: #0284c7;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(2, 132, 199, 0.18), inset 0 -2px 0 #0284c7;
+    }
+    .tab:active {
+      transform: translateY(1px);
     }
     .tab.active {
-      background: var(--accent-solid);
+      background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
       color: #f8fafc;
-      border-color: var(--accent);
-      box-shadow: 0 2px 8px rgba(3, 105, 161, 0.28);
+      border-color: #0369a1;
+      box-shadow: 0 3px 10px rgba(3, 105, 161, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22);
     }
     .tab#tab-soc {
       margin-left: auto;
       flex: 0 0 auto;
       width: auto;
       min-width: 210px;
-      background: var(--panel);
-      color: #1e293b;
+      background: linear-gradient(180deg, #f7f9fc 0%, #e4ecf5 100%);
+      color: #0f172a;
       border: 2px solid #0d9488;
+      box-shadow: 0 2px 4px rgba(13, 148, 136, 0.14), inset 0 -2px 0 #99d5cf, inset 0 1px 0 rgba(255, 255, 255, 0.7);
       padding: 9px 22px;
     }
     .tab#tab-soc:hover:not(.active) {
-      background: #e4ecf5;
-      color: #0f172a;
+      background: linear-gradient(180deg, #f8fbff 0%, #d8e5f3 100%);
+      color: #0f766e;
       border-color: #0f766e;
-      box-shadow: inset 0 -3px 0 #0d9488;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(13, 148, 136, 0.22), inset 0 -2px 0 #0d9488;
     }
     .tab#tab-soc.active {
-      background: var(--accent-solid);
+      background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
       color: #f8fafc;
       border: 2px solid #0d9488;
-      box-shadow: 0 2px 8px rgba(3, 105, 161, 0.28);
+      box-shadow: 0 3px 10px rgba(3, 105, 161, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22);
     }
     .tab .cnt {
       background: #dbe4ef;
@@ -436,6 +443,20 @@
       flex: 1 1 auto;
       min-height: 0;
     }
+    .net-left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0;
+      min-width: 0;
+    }
+    .net-pcap-pane {
+      flex: 0 0 auto;
+    }
+    .net-devices-pane {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
 
     /* Standard Split-Pane Layouts */
     .split-main {
@@ -457,6 +478,7 @@
     .pane {
       background: var(--panel);
       border: 1px solid var(--line);
+      border-top: 3px solid var(--accent-solid);
       border-radius: 12px;
       display: flex;
       flex-direction: column;
@@ -497,8 +519,9 @@
       background: var(--drawer-bg);
       border: 1px solid var(--line-hi);
       border-left: 3px solid var(--accent);
+      border-top: 3px solid var(--accent-solid);
       border-radius: 12px;
-      box-shadow: -8px 0 28px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
       display: flex;
       flex-direction: column;
       min-height: 0;
@@ -558,10 +581,10 @@
       transition: background 0.14s, color 0.14s, border-color 0.14s, box-shadow 0.14s;
     }
     .subtab:hover:not(.active) {
-      background: #d8e2ee;
-      color: #ffffff;
-      border-color: #4b566b;
-      box-shadow: inset 0 -2px 0 #38bdf8;
+      background: #ede9fe;
+      color: #5b21b6;
+      border-color: #7c3aed;
+      box-shadow: inset 0 -2px 0 #7c3aed;
     }
     .subtab.active {
       background: var(--accent-solid);
@@ -1209,9 +1232,63 @@
     .mini-card {
       background: var(--panel3);
       border: 1px solid var(--line);
+      border-top: 3px solid var(--accent-solid);
       border-radius: 10px;
       padding: 11px 12px;
       min-width: 0;
+    }
+    .kpi:nth-child(1) { border-top: 3px solid var(--info); }
+    .kpi:nth-child(2) { border-top: 3px solid #7c3aed; }
+    .kpi:nth-child(3) { border-top: 3px solid #0d9488; }
+    .kpi:nth-child(4) { border-top: 3px solid var(--crit); }
+    /* Distinct System Monitor Theme for Arm SoC Monitor (#soc) — darker header-matched slate-blue */
+    #soc .pane {
+      background: #d2dde9;
+      border-color: #9cb0c9;
+    }
+    #soc .pane-head {
+      background: #c4d2e2;
+      border-bottom-color: #9cb0c9;
+      color: #0f172a;
+    }
+    #soc .mini-card {
+      background: #e1e9f3;
+      border: 1px solid #a9bcd3;
+      border-top: 3px solid #0369a1;
+    }
+    #soc .insp-label {
+      color: #1e3a5f;
+    }
+    #soc .npu-core-badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 5px;
+      background: #e0f2fe;
+      color: #075985;
+      border: 1px solid #0ea5e9;
+      font-size: 13.5px;
+      font-weight: 700;
+      padding: 4px 11px;
+      letter-spacing: 0.25px;
+      line-height: 1.3;
+    }
+    #soc .soc-thermal-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    #soc .soc-thermal-scroll {
+      max-height: 215px;
+      overflow-y: auto;
+      border: 1px solid #a9bcd3;
+      border-radius: 8px;
+      background: #dbe4ef;
+    }
+    #soc .soc-thermal-scroll thead th {
+      position: sticky;
+      top: 0;
+      background: #c4d2e2;
+      z-index: 2;
     }
     .metric-kv {
       display: flex;
@@ -2023,11 +2100,11 @@
       <div class="tabs-left">
         <button type="button" class="tab active" role="tab" id="tab-overview" data-tab="overview" aria-controls="overview" aria-selected="true">
           <svg class="ic" aria-hidden="true"><use href="#ic-shield"/></svg>
-          Live Scans
+          Live Threats
         </button>
         <button type="button" class="tab" role="tab" id="tab-scanners" data-tab="scanners" aria-controls="scanners" aria-selected="false">
           <svg class="ic" aria-hidden="true"><use href="#ic-scan"/></svg>
-          Threat Scanners
+          Local Scanners
         </button>
         <button type="button" class="tab" role="tab" id="tab-correlations" data-tab="correlations" aria-controls="correlations" aria-selected="false">
           <svg class="ic" aria-hidden="true"><use href="#ic-git-branch"/></svg>
@@ -2462,35 +2539,41 @@
       <!-- SUB-PANEL 3: NETWORK & PCAP -->
       <div id="scan-net" class="subpanel" role="tabpanel" aria-labelledby="subtab-net">
         <div class="split-even">
-          <div class="pane">
-            <div class="pane-head">
-              <h2><svg class="ic" aria-hidden="true"><use href="#ic-radio"/></svg> PCAP Analyzer &amp; Observed LAN Devices</h2>
+          <div class="net-left-col">
+            <div class="pane net-pcap-pane">
+              <div class="pane-head">
+                <h2><svg class="ic" aria-hidden="true"><use href="#ic-upload"/></svg> PCAP Analyzer</h2>
+              </div>
+              <div class="pane-body">
+                <div class="insp-section">
+                  <label class="insp-label" for="pcapIn">Upload PCAP / PCAPNG Capture</label>
+                  <div style="display:flex;gap:8px;align-items:center">
+                    <input id="pcapIn" type="file" accept=".pcap,.pcapng,.cap" />
+                    <button type="button" class="primary" style="white-space:nowrap" onclick="runPcapScan()">
+                      <svg class="ic" aria-hidden="true"><use href="#ic-upload"/></svg> Analyze PCAP
+                    </button>
+                  </div>
+                  <div id="pcapRes" style="margin-top:8px" aria-live="polite"></div>
+                </div>
+
+                <div class="insp-section" style="margin-bottom:0">
+                  <div class="insp-label">Quick Test Network Flow</div>
+                  <div class="sample-row">
+                    <button type="button" class="chip" onclick="testFlowPreset('c2')">Test C2 Beacon :4444</button>
+                    <button type="button" class="chip" onclick="testFlowPreset('dns')">Test DNS Tunnel :53</button>
+                    <button type="button" class="chip" onclick="testFlowPreset('scan')">Test SSH Brute-Force :22</button>
+                    <button type="button" class="chip" onclick="testFlowPreset('benign')">Test Benign HTTPS :443</button>
+                  </div>
+                  <div id="flowRes" aria-live="polite"></div>
+                </div>
+              </div>
             </div>
-            <div class="pane-body">
-              <div class="insp-section">
-                <label class="insp-label" for="pcapIn">Upload PCAP / PCAPNG Capture</label>
-                <div style="display:flex;gap:8px;align-items:center">
-                  <input id="pcapIn" type="file" accept=".pcap,.pcapng,.cap" />
-                  <button type="button" class="primary" style="white-space:nowrap" onclick="runPcapScan()">
-                    <svg class="ic" aria-hidden="true"><use href="#ic-upload"/></svg> Analyze PCAP
-                  </button>
-                </div>
-                <div id="pcapRes" style="margin-top:8px" aria-live="polite"></div>
-              </div>
 
-              <div class="insp-section">
-                <div class="insp-label">Quick Test Network Flow</div>
-                <div class="sample-row">
-                  <button type="button" class="chip" onclick="testFlowPreset('c2')">Test C2 Beacon :4444</button>
-                  <button type="button" class="chip" onclick="testFlowPreset('dns')">Test DNS Tunnel :53</button>
-                  <button type="button" class="chip" onclick="testFlowPreset('scan')">Test SSH Brute-Force :22</button>
-                  <button type="button" class="chip" onclick="testFlowPreset('benign')">Test Benign HTTPS :443</button>
-                </div>
-                <div id="flowRes" aria-live="polite"></div>
+            <div class="pane net-devices-pane">
+              <div class="pane-head">
+                <h3><svg class="ic" aria-hidden="true"><use href="#ic-radio"/></svg> Observed LAN Devices on <span id="netIfaceLbl">&mdash;</span></h3>
               </div>
-
-              <div class="insp-section">
-                <div class="insp-label">Observed LAN Devices on <span id="netIfaceLbl">&mdash;</span></div>
+              <div class="pane-body flush">
                 <div class="table-wrap">
                   <table>
                     <thead>
@@ -4455,7 +4538,7 @@ function renderWelcomePanel() {
 
       <div class="insp-label" style="margin:14px 0 8px">How to Use EdgeShield AI</div>
       <ol class="welcome-steps">
-        <li><span class="step-num">1</span><span><strong>Monitor or Scan:</strong> Watch live alerts stream in the left table, or switch to <em>Threat Scanners</em> to probe URLs, SMS, or PCAP files offline.</span></li>
+        <li><span class="step-num">1</span><span><strong>Monitor or Scan:</strong> Watch live alerts stream in the left table, or switch to <em>Local Scanners</em> to probe URLs, SMS, or PCAP files offline.</span></li>
         <li><span class="step-num">2</span><span><strong>Click Any Alert:</strong> Select a row or click <em>Explain</em> to inspect detection signals and auto-generate an on-device Llama explanation.</span></li>
         <li><span class="step-num">3</span><span><strong>Remediate Safely:</strong> Follow the numbered remediation steps or trigger reversible <em>Contain (TTL)</em> isolation logged to the SHA-256 SCI ledger.</span></li>
       </ol>
@@ -5412,31 +5495,27 @@ async function loadSoc(isAutoTick = false) {
 
       return `
         <div class="mini-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
-            <span class="badge ${spec.cls}">${ic(spec.icon)} ${spec.badge}</span>
-            <div style="display:inline-flex;gap:5px;align-items:center;flex-wrap:wrap">
-              <span class="badge ${isReady ? 'b-low' : 'b-medium'}">${esc(precision)} ${isReady ? 'READY' : 'STANDBY'}</span>
-              ${npuFreqMhz ? `<span class="count-pill">${esc(npuFreqMhz)} MHz</span>` : ''}
-            </div>
+          <div style="display:flex;justify-content:flex-start;align-items:center;gap:6px;margin-bottom:8px">
+            <span class="npu-core-badge">${spec.badge}</span>
           </div>
-          <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:6px">${esc(spec.title)}</div>
+          <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:8px"><span class="muted" style="font-weight:700">MODEL :</span> ${esc(spec.title)}</div>
           <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
-            <span class="muted">Core Load</span>
-            <strong style="font-size:18px;color:${col}">${pct.toFixed(1)}%</strong>
+            <span class="muted" style="font-size:13.5px">Core Load</span>
+            <strong style="font-size:20px;color:${col}">${pct.toFixed(1)}%</strong>
           </div>
           <div class="bar"><i style="width:${Math.min(100, Math.max(0, pct))}%;background:${col}"></i></div>
-          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(38,44,54,0.85)">
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:10px;padding-top:9px;border-top:1px solid var(--line)">
             <div>
-              <div class="muted" style="font-size:11px">Inferences</div>
-              <strong class="mono" style="font-size:12.5px">${esc(inferences)}</strong>
+              <div class="muted" style="font-size:12.5px">Inferences</div>
+              <strong class="mono" style="font-size:14.5px">${esc(inferences)}</strong>
             </div>
             <div>
-              <div class="muted" style="font-size:11px">Avg Latency</div>
-              <strong class="mono" style="font-size:12.5px">${esc(latTxt)}</strong>
+              <div class="muted" style="font-size:12.5px">Avg Latency</div>
+              <strong class="mono" style="font-size:14.5px">${esc(latTxt)}</strong>
             </div>
             <div>
-              <div class="muted" style="font-size:11px">Test ROC-AUC</div>
-              <strong class="mono" style="font-size:12.5px;color:var(--low)">${esc(aucTxt)}</strong>
+              <div class="muted" style="font-size:12.5px">Test ROC-AUC</div>
+              <strong class="mono" style="font-size:14.5px;color:var(--low)">${esc(aucTxt)}</strong>
             </div>
           </div>
         </div>`;
@@ -5524,7 +5603,7 @@ async function loadSoc(isAutoTick = false) {
       <div class="soc-grid" style="margin-bottom:0">
         <div class="mini-card">
           <div class="insp-label" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
-            ${ic('zap')} ExecuTorch Llama-3.2-1B (Arm64 CPU &middot; XNNPACK + KleidiAI)
+            ${ic('zap')} ExecuTorch (Arm64 CPU &middot; XNNPACK + KleidiAI)
           </div>
           <div class="metric-kv"><span class="k">Status</span><span class="v">${llamaStatusBadge}</span></div>
           <div class="metric-kv"><span class="k">Model</span><span class="v">${esc(llamaModelLabel)}</span></div>
@@ -5541,12 +5620,12 @@ async function loadSoc(isAutoTick = false) {
           </details>
         </div>
 
-        <div class="mini-card">
+        <div class="mini-card soc-thermal-card">
           <div class="insp-label" style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px">
             <span style="display:inline-flex;align-items:center;gap:6px">${ic('activity')} RK3588J Thermal Sensors (All Zones)</span>
             <span class="muted">${sensors.length} zone${sensors.length === 1 ? '' : 's'}</span>
           </div>
-          <div class="table-wrap">
+          <div class="table-wrap soc-thermal-scroll">
             <table>
               <thead>
                 <tr>
