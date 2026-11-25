@@ -143,7 +143,7 @@ The exported weights and tokenizer are large and are not included in this source
 | Application runtime | Python / FastAPI plus native C/C++ components |
 | Local advisory runtime | ExecuTorch / XNNPACK / Arm KleidiAI |
 
-The board-specific deployment guide is in [`docs/BOARD_DEPLOYMENT_RK3588J.md`](source/edgeshield-ai/docs/BOARD_DEPLOYMENT_RK3588J.md).
+The board-specific deployment guide is in [`docs/BOARD_DEPLOYMENT_RK3588J.md`](docs/BOARD_DEPLOYMENT_RK3588J.md).
 
 ---
 
