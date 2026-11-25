@@ -108,6 +108,38 @@ flowchart TB
     RESPONSE --> UI
 ```
 
+### Cross-channel threat intelligence and kill-chain correlation
+
+A real attack can span multiple channels. For example, a user may receive a scam SMS, open a phishing URL contained in that message, and then generate network activity associated with the phishing site or a follow-on payload. Looking at each alert independently can leave the investigation fragmented. Correlating the evidence can help an analyst understand the sequence, prioritise related alerts and investigate one incident rather than three disconnected events.
+
+**Current implementation status — important:** EdgeShield currently has three specialist detection paths (network, URL and SMS), a common threat-event / risk presentation and event persistence. The repository does **not** currently contain a verified cross-channel kill-chain correlation engine that automatically links an SMS event to a URL event and then to a network event. The end-to-end correlation workflow below is the planned capability; the dashboard image above should be read as a related-event UI view, not proof that this automated correlation logic is complete.
+
+**Planned correlation workflow**
+
+1. **SMS signal:** retain the SMS finding and, where present, extract the URL or domain from the message.
+2. **URL signal:** when the same URL/domain is separately submitted or observed and analysed, compare its normalised indicators with the SMS evidence.
+3. **Network signal:** look for subsequent network-flow evidence that matches an observed destination IP/domain where that information is actually available to the gateway.
+4. **Incident grouping:** group matching events into a single incident timeline using shared indicators, device/context identifiers where available, and bounded time windows. Preserve each original event and its source.
+5. **Risk and analyst review:** present the linked evidence and sequence to the analyst. Any combined risk score should be an explainable prioritisation score, not a claim of calibrated attack probability.
+
+**Why it is useful**
+
+- **Banking and UPI scams:** connect a fraudulent message with a matching payment or account-verification phishing page and any subsequent suspicious network evidence.
+- **Enterprise phishing:** connect a user-reported message, a visited credential-harvesting URL and related outbound traffic into one investigation.
+- **Malware delivery:** connect a lure or download URL with later destination activity that may indicate a follow-on stage.
+- **IoT / edge deployments:** help operators investigate whether separate device, URL and network alerts may belong to the same campaign.
+
+**Correlation safeguards**
+
+- An SMS containing a URL does not prove that the user clicked it.
+- A matching URL and network destination are supporting evidence, not automatic proof of compromise.
+- Correlation must account for redirects, shared hosting, CDNs, NAT and incomplete network visibility.
+- Encrypted TLS traffic and DNS-over-HTTPS can limit the destination evidence available to a passive gateway.
+- Keep event provenance and timestamps visible; do not silently convert temporal proximity into causation.
+
+**Implementation roadmap:** first normalise and persist common indicators (URL/domain, destination IP, timestamps and available device/context IDs); next add deterministic SMS → URL matching; then URL → network matching and incident timelines; finally add transparent risk fusion and an advisory explanation. This can be built as a lightweight evidence-correlation service over the existing events and does not require another large neural model.
+
+
 ### Pipeline A — specialist detection on the RK3588 NPU
 
 Each model is loaded by a persistent worker and assigned to a dedicated NPU core.
