@@ -1,821 +1,391 @@
+<div align="center">
+
 # EdgeShield AI
 
-### On-device threat, phishing and scam detection for Arm edge systems
+### On-Device Threat, Phishing & Scam Detection for the Arm Edge
 
-**EdgeProc AI Technologies · Bharat AI-SoC Challenge 2026--27 · Problem
-Statement 3**
+**Bharat AI-SoC Challenge 2026–27 · Problem Statement 3**  
+**EdgeProc AI Technologies Pvt. Ltd.**
 
-EdgeShield AI is an on-device cybersecurity platform designed for
-Arm-based edge systems. Its current target platform is the **Rockchip
-RK3588J**, using three specialist Rockchip NPU inference workers for
-network anomaly detection, phishing URL detection and SMS scam
-detection, alongside an Arm64 CPU-based advisory pipeline using **Meta
-Llama 3.2 1B Instruct through ExecuTorch**.
+[![Platform](https://img.shields.io/badge/platform-Arm64%20%7C%20RK3588J-273849)](#target-platform)
+[![NPU](https://img.shields.io/badge/accelerator-RK3588%203--Core%20NPU-273849)](#dual-pipeline-architecture)
+[![Runtime](https://img.shields.io/badge/AI%20runtime-RKNN%20%2B%20ExecuTorch-273849)](#dual-pipeline-architecture)
+[![Operation](https://img.shields.io/badge/operation-local%20%2F%20offline-273849)](#privacy-and-operational-boundaries)
 
-The design goal is to keep detection, event correlation, advisory
-generation, local policy management and audit records on the edge
-device, without requiring a cloud service for the core workflow.
+**One edge gateway. Three specialist threat detectors. One evidence-driven security workflow.**
 
-> **Important distribution note:** The Llama `.pte` model and matching
-> tokenizer are intentionally not included in this repository archive
-> because of their size and separate model-distribution requirements.
-> The EdgeShield integration and runner are included. The project team
-> has separately tested offline ExecuTorch Llama inference on the
-> RK3588J board. See [Llama model
-> setup](#llama-32-1b-instruct-executorch-optional-separately-distributed-model).
+EdgeShield AI is an Arm64 edge-security gateway that brings network intrusion detection, phishing URL analysis and scam-SMS detection together on a Rockchip RK3588J platform. Three dedicated FP16 neural detectors are mapped to the SoC's three NPU cores. A separate on-device Llama runtime on the Arm CPU can explain an already-computed finding, while a common event and risk layer, analyst dashboard, SCI governance workflow and reversible containment controls help operators investigate and respond locally.
 
-------------------------------------------------------------------------
+</div>
 
-## Contents
+---
 
--   [Project at a glance](#project-at-a-glance)
--   [Problem and approach](#problem-and-approach)
--   [Architecture](#architecture)
--   [Target hardware and software](#target-hardware-and-software)
--   [Detection pipelines](#detection-pipelines)
--   [Llama advisory pipeline](#llama-advisory-pipeline)
--   [Self-Correcting Intelligence](#self-correcting-intelligence-sci)
--   [Network monitoring and mobile SMS
-    companion](#network-monitoring-and-mobile-sms-companion)
--   [Containment and safety](#containment-and-safety)
--   [Reported benchmark results](#reported-benchmark-results)
--   [Repository structure](#repository-structure)
--   [Installation and quick start](#installation-and-quick-start)
--   [Llama model
-    setup](#llama-32-1b-instruct-executorch-optional-separately-distributed-model)
--   [API examples](#api-examples)
--   [Configuration](#configuration)
--   [Testing and benchmarking](#testing-and-benchmarking)
--   [Security, privacy and
-    limitations](#security-privacy-and-limitations)
--   [Reproducibility and evidence](#reproducibility-and-evidence)
--   [Roadmap](#roadmap)
--   [Team and acknowledgements](#team-and-acknowledgements)
--   [License](#license)
+## At a glance
 
-------------------------------------------------------------------------
+| What | EdgeShield AI |
+|---|---|
+| Challenge scope | PS3 — on-device threat, phishing and scam detection |
+| Target device | Rockchip RK3588J Arm64 Linux system-on-module / custom board |
+| Detection acceleration | RK3588 3-core NPU using RKNN FP16 models |
+| NPU Core 0 | Network IDS — 1D-CNN + MLP |
+| NPU Core 1 | Phishing URL — lexical MLP + character 1D-CNN |
+| NPU Core 2 | Scam SMS — split BiGRU + masked pooling |
+| Local advisory | Llama 3.2 1B through ExecuTorch, XNNPACK and Arm KleidiAI on the Arm CPU |
+| Backend and interface | FastAPI service, local web dashboard, event persistence and hardware telemetry |
+| Governance and response | 9-stage Self-Correcting Intelligence (SCI) workflow, policy versioning, SHA-256-linked audit records, dry-run-first reversible containment |
+| Network visibility | Passive local-interface capture and flow / protocol feature extraction |
+| Cloud dependency | No cloud service is required for the local detection and inference paths described here |
 
-## Project at a glance
+> **Important distinction:** The RKNN detector artifacts are included in this source package. The large Llama `.pte` weights and tokenizer are intentionally distributed separately. Without those files, the application uses its deterministic template advisory provider; the detector pipeline does not depend on the Llama model being present.
 
-  ---------------------------------------------------------------------
-  Item                               Description
-  ---------------------------------- ----------------------------------
-  Project                            EdgeShield AI
+## Why EdgeShield is different
 
-  Developer                          EdgeProc AI Technologies
+| Design choice | What it means in this implementation |
+|---|---|
+| **Three detectors mapped to three NPU cores** | Network, URL and SMS inference use separate persistent RKNN workers pinned to `NPU_CORE_0`, `NPU_CORE_1` and `NPU_CORE_2`. |
+| **Detection and explanation are separated** | The detection / risk path produces the threat verdict. Llama is an advisory component; it is not allowed to overturn the verdict or write detection policy. |
+| **A gateway view across threat channels** | Network observations, URLs and SMS analyses flow into a common event / risk presentation and dashboard, with correlation views for related activity. |
+| **Real board evidence is part of the repository** | Raw JSON benchmark results, held-out detector metrics, red-team audit output, regression evidence and board screenshots are included. |
+| **Response is designed to be reversible** | Containment supports dry-run operation, finite lifetimes (TTL), protected-host safeguards and undo / audit records. |
+| **Governance is part of the design** | SCI includes feedback verification, diagnosis, bounded correction planning, a Golden Suite regression gate, versioned policy deployment and rollback. |
 
-  Challenge track                    Bharat AI-SoC Challenge 2026--27
+## Visual overview
 
-  Problem statement                  PS3 --- On-device threat, phishing
-                                     and scam detection
+The following screenshots are included in `docs/img/screens/` and were captured from the RK3588J dashboard.
 
-  Target SoC                         Rockchip RK3588J
+<p align="center">
+  <img src="source/edgeshield-ai/docs/img/screens/1_command_center.png" width="48%" alt="EdgeShield command center dashboard">
+  <img src="source/edgeshield-ai/docs/img/screens/2_investigation_drawer_llama.png" width="48%" alt="Threat investigation and local Llama advisory">
+</p>
+<p align="center">
+  <img src="source/edgeshield-ai/docs/img/screens/3_threat_scanners.png" width="48%" alt="URL, SMS and network threat scanners">
+  <img src="source/edgeshield-ai/docs/img/screens/4_correlations.png" width="48%" alt="Cross-channel threat correlations">
+</p>
+<p align="center">
+  <img src="source/edgeshield-ai/docs/img/screens/5_sci_containment.png" width="48%" alt="SCI and reversible containment dashboard">
+  <img src="source/edgeshield-ai/docs/img/screens/6_arm_soc_monitor.png" width="48%" alt="RK3588J NPU and Arm SoC monitor">
+</p>
 
-  AI acceleration                    Three-core Rockchip NPU using RKNN
+*Screenshots: Command Center · Investigation and advisory · Threat Scanners · Correlation view · SCI / Containment · Arm SoC Monitor.*
 
-  Advisory model                     Llama 3.2 1B Instruct, via
-                                     ExecuTorch
+---
 
-  Advisory execution                 Arm64 CPU; XNNPACK / Arm KleidiAI
-                                     build as documented in the
-                                     technical report
+## Dual-pipeline architecture
 
-  Core detection channels            Network, URL and SMS
+EdgeShield separates time-sensitive threat inference from natural-language explanation.
 
-  Operating approach                 Local-first / offline-capable
+```mermaid
+flowchart TB
+    subgraph INPUTS["Local inputs"]
+      LAN["LAN interface<br/>Ethernet / IP traffic"]
+      URL["URL submitted for analysis<br/>or extracted from visible traffic"]
+      SMS["SMS text<br/>API / Android companion forwarder"]
+    end
 
-  Main application                   Python, FastAPI and local web UI
+    subgraph PIPEA["Pipeline A — RK3588 3-core NPU · RKNN FP16"]
+      N0["NPU Core 0<br/>NetworkDualNPU<br/>1D-CNN + MLP"]
+      N1["NPU Core 1<br/>URLDualBranchNPU<br/>Lexical MLP + Char CNN"]
+      N2["NPU Core 2<br/>SplitBiGRU SMS<br/>Masked mean pooling"]
+    end
 
-  Native components                  C/C++ packet sniffer and
-                                     ExecuTorch runner
+    LAN --> N0
+    LAN --> N1
+    URL --> N1
+    LAN --> N2
+    SMS --> N2
 
-  Local persistence                  SQLite
+    N0 --> FUSION["Deterministic risk / evidence layer<br/>ThreatEvent + event persistence"]
+    N1 --> FUSION
+    N2 --> FUSION
 
-  Model distribution                 RKNN models included; Llama
-                                     weights/tokenizer distributed
-                                     separately
-  ---------------------------------------------------------------------
+    FUSION --> UI["FastAPI + local dashboard<br/>Threat feed · investigation · telemetry"]
+    FUSION --> ADVISORY["Pipeline B — Arm CPU<br/>ExecuTorch Llama 3.2 1B<br/>XNNPACK + Arm KleidiAI"]
+    ADVISORY --> VALIDATOR["Advisory validation<br/>Verdict remains detector-owned"]
+    VALIDATOR --> UI
 
-### What EdgeShield does
-
-1.  Analyses network-flow features and selected observable network
-    metadata for suspicious activity.
-2.  Analyses URLs for phishing characteristics using lexical and
-    character-level features.
-3.  Analyses submitted or companion-forwarded SMS text for scam and
-    smishing characteristics.
-4.  Produces a structured threat event with a verdict, risk information
-    and supporting evidence.
-5.  Uses a local Llama advisory pipeline, when its model files are
-    installed, to explain a detector verdict and suggest safe next
-    steps.
-6.  Records feedback and evidence for a governed Self-Correcting
-    Intelligence (SCI) workflow.
-7.  Provides optional, controlled network containment actions with
-    dry-run defaults and undo mechanisms.
-
-**Design boundary:** specialist detectors produce the threat verdict.
-Llama is an explanatory assistant; it is not the authority for changing
-detector verdicts, security policy or containment state.
-
-------------------------------------------------------------------------
-
-## Problem and approach
-
-Phishing, scam messages and network attacks often arrive through
-different channels and are evaluated by separate tools. Cloud-dependent
-services can be unsuitable for deployments where connectivity, privacy,
-latency or data sovereignty matter.
-
-EdgeShield brings three detection channels onto one Arm edge platform:
-
--   **Network:** flow-level anomaly and intrusion detection.
--   **URL:** phishing and suspicious-link detection.
--   **SMS:** smishing, impersonation and scam-message detection.
-
-The system combines specialist models with shared event handling, local
-advisory generation, policy governance and a local interface. Its
-architecture is modular so that detection models can be updated without
-making the LLM responsible for security decisions.
-
-------------------------------------------------------------------------
-
-## Architecture
-
-EdgeShield uses two inference pipelines and a shared platform layer. The
-SCI capability is under development; the complete closed-loop workflow
-is a planned final-prototype milestone.
-
-``` text
-                  EDGE INPUTS
-       ┌────────────┬────────────┬────────────┐
-       │ Network    │ URL        │ SMS        │
-       │ flows      │ links      │ text       │
-       └─────┬──────┴─────┬──────┴─────┬──────┘
-             │            │            │
-             ▼            ▼            ▼
-       ┌──────────┐ ┌──────────┐ ┌──────────┐
-       │ Network  │ │ URL      │ │ SMS      │
-       │ NPU Core0│ │ NPU Core1│ │ NPU Core2│
-       └─────┬────┘ └─────┬────┘ └─────┬────┘
-             └────────────┼────────────┘
-                          ▼
-                ┌──────────────────┐
-                │ ThreatEvent and  │
-                │ risk/event layer │
-                └────────┬─────────┘
-                         │
-             ┌───────────┴────────────┐
-             ▼                        ▼
-   ┌──────────────────┐     ┌────────────────────┐
-   │ Local event store│     │ Advisory pipeline  │
-   │ SQLite / audit   │     │ ExecuTorch + Llama │
-   └────────┬─────────┘     └──────────┬─────────┘
-            └────────────┬─────────────┘
-                         ▼
-             ┌────────────────────────┐
-             │ Local UI, monitoring,  │
-             │ event store and audit  │
-             │ SCI foundation         │
-             │ (under development)    │
-             └────────────────────────┘
+    FUSION --> SCI["SCI governance workflow<br/>Verification · diagnosis · regression gate<br/>policy versioning · rollback · audit"]
+    SCI --> RESPONSE["Reversible containment<br/>dry-run default · TTL · undo"]
+    RESPONSE --> UI
 ```
 
-### Pipeline A --- specialist threat detection
+### Pipeline A — specialist detection on the RK3588 NPU
 
-Three persistent RKNN worker processes are configured for the three
-RK3588 NPU cores:
+Each model is loaded by a persistent worker and assigned to a dedicated NPU core.
 
-  -----------------------------------------------------------------------
-  NPU core                Detection task          Model family described
-                                                  by project
-  ----------------------- ----------------------- -----------------------
-  Core 0                  Network IDS / anomaly   1D-CNN plus MLP
-                          detection               
+| NPU core | Security function | Model architecture | Model artifact |
+|---|---|---|---|
+| **Core 0** | Network intrusion / anomalous-flow detection | `NetworkDualNPU`: 1D-CNN branch + MLP branch + fusion head; 26 flow features | `models/rknn/network_ids_fp16.rknn` |
+| **Core 1** | Phishing URL detection | `URLDualBranchNPU`: 25 lexical features + character 1D-CNN branch + fusion head | `models/rknn/url_hybrid_fp16.rknn` |
+| **Core 2** | Scam / smishing SMS detection | `SplitBiGRUExactPacked` + masked global mean pooling + weighted BCE training objective | `models/rknn/sms_bigru_fp16.rknn` and `sms_bigru_emb.npz` |
 
-  Core 1                  Phishing URL detection  Lexical feature MLP
-                                                  plus character 1D-CNN
+The model metadata and checksums are recorded in `models/rknn/manifest.json` and the associated `*_meta.json` files.
 
-  Core 2                  SMS smishing detection  Split BiGRU with masked
-                                                  pooling
-                                                  
-  -----------------------------------------------------------------------
+### Pipeline B — local threat explanation on the Arm CPU
 
-The `.rknn` model files and associated metadata are located in
-`models/rknn/`. The application also contains classical ML and heuristic
-fallback paths. Actual NPU use depends on a compatible RKNN Lite
-runtime, supported board/driver combination and successful worker
-initialisation.
+- **Model:** Llama 3.2 1B, exported to ExecuTorch (`.pte`).
+- **Runtime:** Native C++ runner using ExecuTorch with XNNPACK and Arm KleidiAI.
+- **Role:** Produce a human-readable explanation and advisory steps using the threat event as context.
+- **Guardrail:** The model is downstream of detection. It cannot change the detector's verdict or SCI policy.
+- **Fallback:** If the `.pte` and tokenizer are absent, a deterministic template advisory provider is used.
 
-### Pipeline B --- local threat advisory
+The exported weights and tokenizer are large and are not included in this source archive. See [Adding the Llama model](#adding-the-llama-model-optional-large-artifacts).
 
-The advisory pipeline is separate from the detector workers:
+## Target platform
 
--   Native ExecuTorch runner (`bin/executorch_runner`).
--   Llama 3.2 1B Instruct `.pte` model supplied separately.
--   Matching tokenizer supplied separately.
--   Local inference on the Arm64 CPU.
--   Prompt sanitisation and output validation in the application layer.
--   Deterministic template advisory fallback when model files or runtime
-    are unavailable, subject to configuration.
+| Item | Target |
+|---|---|
+| SoC | Rockchip RK3588J |
+| CPU | Arm64, 4 × Cortex-A76 + 4 × Cortex-A55 |
+| NPU | 3-core Rockchip NPU, advertised platform capability up to 6 TOPS |
+| OS | Debian-based Arm64 Linux |
+| NPU runtime | RKNN Toolkit Lite 2; benchmarked with Rockchip runtime 2.3.x |
+| Model precision | FP16 RKNN deployment |
+| Application runtime | Python / FastAPI plus native C/C++ components |
+| Local advisory runtime | ExecuTorch / XNNPACK / Arm KleidiAI |
 
-The Llama pipeline explains structured detector results. It does not
-replace the specialist classifiers.
+The board-specific deployment guide is in [`docs/BOARD_DEPLOYMENT_RK3588J.md`](source/edgeshield-ai/docs/BOARD_DEPLOYMENT_RK3588J.md).
 
-### Shared platform services
+---
 
--   FastAPI service and local dashboard.
--   Threat event and risk handling.
--   Local SQLite persistence.
--   SCI verification, diagnosis, policy proposal and validation
-    components.
--   Platform monitoring and benchmark scripts.
--   Optional containment integrations.
+## Measured results
 
-------------------------------------------------------------------------
+The repository includes raw measurement records under [`benchmarks/results/`](source/edgeshield-ai/benchmarks/results/). The headline figures below are copied from those records and are identified by test type so that model evaluation, board throughput and adversarial testing are not confused with one another.
 
-## Target hardware and software
+### RK3588J simultaneous NPU throughput
 
-### Target board
+<badge>Physical RK3588J benchmark</badge>
 
-The project technical report identifies the target as a **Rockchip
-RK3588J Arm64 board with a three-core NPU**.
+| NPU core | Detector | Requests / second | NPU call p50 | NPU call p95 |
+|---|---|---:|---:|---:|
+| Core 0 | Network IDS | 200.77 | 0.643 ms | 1.232 ms |
+| Core 1 | Phishing URL | 143.29 | 1.611 ms | 1.837 ms |
+| Core 2 | Scam SMS | 71.77 | 8.653 ms | 9.102 ms |
+| **Combined simultaneous load** | **All three cores** | **415.83 req/s** | — | — |
 
-The report records the following software/runtime combination:
+This is a four-second concurrent benchmark across the three NPU endpoints. It is an observed test result, not a guaranteed production throughput figure. See [`rk3588_3core_npu_concurrency.json`](source/edgeshield-ai/benchmarks/results/rk3588_3core_npu_concurrency.json).
 
-  ---------------------------------------------------------------------
-  Component                          Reported environment
-  ---------------------------------- ----------------------------------
-  SoC                                Rockchip RK3588J
+### Held-out detector evaluation
 
-  CPU architecture                   Arm64 / AArch64
+| Detector | Evaluation set described in report | ROC-AUC | F1 / operating point | Additional reported metric |
+|---|---|---:|---:|---|
+| Network IDS | CIC-IDS2017 plus Edge-LAN flow data; 289,981 total flows in training/evaluation manifest | 1.0000 | 0.9985 @ 0.50 | Precision 0.9999; recall 0.9971; FPR 0.00% at 0.50 |
+| Phishing URL | Domain-grouped phishing URLs and Tranco benign URLs; 160,000 rows in report | 0.9781 | 0.8291 @ 0.96 | Precision 0.9878; recall 0.7143; FPR 0.80% at 0.96 |
+| Scam SMS | Deduplicated UCI SMS, LSDST-2022 and Indian scam / benign OTP data; 6,573 rows in report | 0.9942 | 0.9592 @ 0.50 | Precision 0.9447; recall 0.9741; FPR 1.39% at 0.50 |
 
-  NPU runtime                        RKNN Toolkit Lite2 2.3.2
+**Thresholds matter.** The URL model's high-precision operating point (0.96) is different from its lower-threshold / cost-sensitive settings. The SMS detector's F1 figure is reported at 0.50; its cost-sensitive recall result uses a lower threshold (0.22). Metrics from different thresholds should not be compared as if they were the same operating point.
 
-  Rockchip runtime/driver            Report references RKNPU driver
-                                     0.9.6 and librknnrt 2.3.x
+See [`detectors_heldout_metrics.json`](source/edgeshield-ai/benchmarks/results/detectors_heldout_metrics.json) and [`benchmarks/README.md`](source/edgeshield-ai/benchmarks/README.md).
 
-  Advisory runtime                   ExecuTorch
+### Local Llama sustained-run benchmark
 
-  Advisory backend                   XNNPACK with Arm KleidiAI, as
-                                     reported
+| Measurement | Recorded result |
+|---|---:|
+| Consecutive advisory runs | 20 |
+| Mean decode speed | 26.54 tokens/s |
+| Median wall time | 3,449 ms |
+| Maximum wall time | 5,456.5 ms |
+| Peak big-core temperature | 84.1 °C |
+| ExecuTorch process RSS before / after | 918.84 MB / 918.84 MB |
+| RSS delta during this test | 0.00 MB |
+| Test output validation | All 20 runs validated |
 
-  Application                        Python 3.10+ / FastAPI
+These are board test results for the particular model export, context configuration and test workload. They are not a universal latency or thermal guarantee. Raw evidence: [`llama_sustained_20run_thermal.json`](source/edgeshield-ai/benchmarks/results/llama_sustained_20run_thermal.json).
 
-  Local database                     SQLite
-  ---------------------------------------------------------------------
+### System memory snapshot
 
-Versions can vary by board image and deployment. Confirm the versions
-installed on the target before reproducing the measurements.
+A recorded board snapshot measured **1,278.25 MB total EdgeShield RSS**: 359.41 MB for the API / three NPU workers / live sniffer pipeline and 918.84 MB for the ExecuTorch Llama process. This is a measurement from the included system-memory benchmark, not a minimum hardware requirement. See [`system_memory_footprint.json`](source/edgeshield-ai/benchmarks/results/system_memory_footprint.json).
 
-### Host development
+### Adversarial audit and regression evidence
 
-Model training and conversion scripts are provided for development
-workflows. Training datasets and the large Llama model are not bundled.
-The pre-converted RKNN model artifacts are included in this source
-archive.
+| Test | Recorded outcome |
+|---|---|
+| Live-wire test waves | 10 attack scenarios; 468 packets sent; board event count increased by 114 |
+| API adversarial suite | 160 cases total: 129 attack cases and 31 benign controls |
+| Attack detection | 129 / 129 attack cases detected in that suite |
+| Precision / F1 | 96.99% / 98.47% |
+| Benign false positives | 4 / 31 controls (12.9% FPR) |
+| Automated tests | 61 passed, 3 skipped |
+| SCI ledger verification | Valid; 8 records checked in the recorded run |
 
-------------------------------------------------------------------------
-docs: update EdgeShield AI submission README
-## Detection pipelines
+**Interpretation:** The reported 100% attack recall applies to the 129 attack cases in this particular test suite. It does not mean zero false positives or universal detection. Four benign controls were flagged. Review the raw [`adversarial_redteam_audit.json`](source/edgeshield-ai/benchmarks/results/adversarial_redteam_audit.json) before interpreting the result.
 
-### 1. Network intrusion and anomaly detection
+---
 
-The network model consumes a 26-feature flow representation produced by
-the project feature pipeline. The technical report describes a compact
-1D-CNN and MLP model.
-
-The live monitor can observe selected packet and flow metadata on a
-configured network interface. It aggregates flow information and sends
-suitable features to the network detector.
-
-**Scope:** this is not a TLS decryption product. Encrypted application
-payloads are not readable through passive packet capture.
-
-### 2. Phishing URL detection
-
-The URL model combines lexical URL features with character-level
-features. It is intended to detect suspicious URL structure, domain
-patterns and phishing indicators.
-
-The technical report describes a 25-feature lexical branch and a
-character CNN branch. The exact preprocessing and feature ordering used
-by the model must remain consistent between training, conversion and
-inference.
-
-### 3. SMS scam and smishing detection
-
-The SMS detector analyses message text and associated available
-metadata. The report describes a BiGRU-based model and
-training/evaluation using public SMS datasets plus an Indian scam/OTP
-dataset assembled for the project.
-
-SMS input can be submitted through the API or delivered by the optional
-Android/Termux companion. The gateway does **not** obtain arbitrary
-handset SMS content from passive Ethernet packet capture.
-
-### Detector metrics
-
-The technical report contains held-out detector results. Metrics must be
-interpreted with their operating thresholds; results at different
-thresholds must not be combined into one row.
-
-  -----------------------------------------------------------------------
-  Detector                Reported result         Threshold context
-  ----------------------- ----------------------- -----------------------
-  Network IDS             ROC-AUC 1.0000; F1      Held-out evaluation in
-                          0.9985; precision       the technical report
-                          0.9999; recall 0.9971;  
-                          FPR 0.00%               
-
-  URL                     ROC-AUC 0.9781; average Precision/FPR operating
-                          precision 0.9780;       point at threshold
-                          precision 0.9878; FPR   0.96; recall is
-                          0.80%                   threshold-dependent
-
-  SMS                     ROC-AUC 0.9942; F1      F1 reported at
-                          0.9592                  threshold 0.50; the
-                                                  report separately
-                                                  reports recall 0.9793
-                                                  at threshold 0.22
-  -----------------------------------------------------------------------
-
-These are dataset evaluation results, not a guarantee of real-world
-detection performance. Dataset composition, split strategy, threshold
-and false-positive rate matter. See the detailed benchmark JSON and
-technical report before reusing the figures.
-
-------------------------------------------------------------------------
-
-## Llama advisory pipeline
-
-### Llama 3.2 1B Instruct via ExecuTorch
-
-The project team reports having tested offline ExecuTorch Llama
-inference on the physical RK3588J board. The `.pte` weights and matching
-tokenizer are intentionally excluded from the source ZIP because of
-their size.
-
-The repository includes the integration code and native runner, but
-**does not include the model weights or tokenizer**. A clean clone
-therefore cannot reproduce Llama generation until the separately
-distributed model files are installed.
-
-### Model package expected by the application
-
-The application README/configuration refers to these default paths:
-
-``` text
-models/llama.pte
-models/tokenizer.model
-```
-
-The top-level project README also references an exported artifact named
-`llama_3_2_1b_xnnpack.pte` and `tokenizer.json`. Use the exact filenames
-and tokenizer format that match the runner build you validated on the
-board. Do not rename or mix incompatible model/tokenizer exports.
-
-### Setup
-
-1.  Obtain the authorised/exported Llama 3.2 1B Instruct ExecuTorch
-    artifact and matching tokenizer from the project team's model
-    package.
-2.  Verify the artifact checksum supplied by the team.
-3.  Copy the model and tokenizer to the configured paths on the board.
-4.  Ensure the ExecuTorch runner binary is built for the board's AArch64
-    environment and matches the model export/runtime.
-5.  Configure the paths using the environment variables below.
-6.  Start EdgeShield and verify the advisory provider reports the
-    ExecuTorch backend rather than the template fallback.
-7.  Run a known test prompt with network access disabled to verify
-    offline operation.
-
-Example environment configuration (adjust paths and tokenizer filename
-to match your validated package):
-
-``` bash
-export EDGESHIELD_EXECUTOR=command
-export EDGESHIELD_EXECUTOR_COMMAND="$PWD/bin/executorch_runner"
-export EDGESHIELD_EXECUTOR_MODEL_PATH="$PWD/models/llama.pte"
-export EDGESHIELD_EXECUTOR_TOKENIZER_PATH="$PWD/models/tokenizer.model"
-export EDGESHIELD_EXECUTOR_DAEMON=true
-```
-
-**Reproducibility requirement:** publish the exact model identifier,
-export recipe, artifact size, SHA-256, tokenizer identity, ExecuTorch
-build/runtime version and board-side test log. Do not commit the large
-model file or credentials to Git.
+## How threat analysis works
 
-### Reported Llama benchmark
-
-The technical report and benchmark JSON record:
-
--   20-run sustained test.
--   21.27 tokens/second reported.
--   p50 latency 1,885.5 ms.
--   Peak recorded CPU temperature 88.6°C.
--   No throttling reported during that test.
-
-These are project-recorded board measurements. The 20-run test does not
-by itself establish long-duration thermal stability under all detector,
-network-monitor and advisory workloads running together.
-
-------------------------------------------------------------------------
-
-## Self-Correcting Intelligence (SCI) --- planned for the final prototype
-
-SCI is a planned capability intended to evolve EdgeShield from a
-detection-and-advisory system into a governed, evidence-grounded
-self-correction platform.
-
-**Implementation status:** SCI is not fully implemented in the current
-submission source. The repository contains initial SCI-related modules,
-policy data structures and tests, but the complete nine-stage
-closed-loop workflow has not yet been delivered or validated end to end.
-The full SCI implementation is planned for the final prototype.
-
-The intended workflow is:
-
-1.  Detection and event recording.
-2.  Feedback and outcome collection.
-3.  Independent evidence verification.
-4.  Failure and root-cause diagnosis.
-5.  Scoped correction or policy proposal.
-6.  Golden-suite regression validation.
-7.  Controlled policy deployment.
-8.  Rollback and recovery.
-9.  Audit and continuous monitoring.
+### Network intrusion and anomaly analysis
 
-These stages describe the target design, not a claim that all stages are
-currently operational.
+The passive monitor reads traffic visible on the selected local network interface. The native sniffer and flow-reduction path extract flow-level features for the Network IDS. The current design also extracts supported DNS, HTTP and SIP / mail-related signals where visible to the local monitor.
 
-### Intended safety principles
-
--   User feedback must not automatically be treated as ground truth.
--   Corrections should require independently verifiable evidence.
--   Uncertain outcomes should remain uncertain rather than being forceddocs: update EdgeShield AI submission README
-    into malicious/benign labels.
--   Policy changes should be scoped and validated before deployment.
--   Failed validation should block deployment.
--   Changes should be auditable and reversible.
--   Llama-generated explanations must not independently deploy policies
-    or alter detector verdicts.
+Examples of traffic behaviours that can be examined include port scans, connection bursts, suspicious destinations and flow anomalies. Exact visibility depends on what the interface can observe and what the protocol exposes.
 
-### Current source status
+### Phishing URL analysis
 
-Initial SCI-related code is located under `app/sci/`, with policy data
-under `data/sci_policy/` and related tests under `tests/`. These
-components represent groundwork toward the planned SCI architecture.
-They must not be interpreted as proof of a completed autonomous
-learning, correction, deployment or rollback loop.
+URLs supplied to the API or extracted from supported visible traffic are analysed using lexical and character-level signals by the hybrid URL detector. The detector's output is combined with the application risk and evidence layer.
 
-For this challenge submission, SCI should be presented as **in
-development / planned for the final prototype**. Any existing SCI
-unit-test or ledger result should be described narrowly as a test of
-that specific component, not as end-to-end SCI validation.
+An optional link sandbox component exists in the source tree. It is not required for offline lexical URL scoring and should be treated as a separate, opt-in capability with its own network and SSRF safety considerations.
 
-------------------------------------------------------------------------
+### Scam SMS analysis
 
-## Network monitoring and mobile SMS companion
+SMS content can be submitted through the local API. The hybrid SMS pipeline combines deterministic scam indicators and model evidence with the RKNN BiGRU inference path when the NPU worker is available.
 
-### Passive network monitoring
+**Cellular SMS is not passively visible on Ethernet.** To analyse messages received by a phone, use the Android companion / local webhook forwarder described in [`MOBILE_COMPANION.md`](source/edgeshield-ai/docs/MOBILE_COMPANION.md). It requires user-granted Android permissions and local connectivity to the gateway.
 
-The native `bin/live_sniffer` component captures packets from a selected
-Linux network interface. The Python live monitor reduces observed
-traffic into flow features and extracts selected information from
-protocols where content is visible.
+### Common event and risk layer
 
-Capabilities are constrained by what the interface can observe and what
-is exposed in plaintext.
+Detector outputs are normalised into a common threat-event representation containing fields such as event identifier, timestamp, source, threat category, severity, risk score, confidence, evidence, recommended actions and model version. The dashboard presents the event history and investigation context.
 
-### Android / Termux SMS companion
+A risk score is a system score used to prioritise an event; it should not be interpreted as a calibrated probability of compromise.
 
-The project includes `scripts/android_sms_forwarder.py` and
-`docs/MOBILE_COMPANION.md` for forwarding SMS data from a companion
-device to the EdgeShield gateway over a local network.
+---
 
-This is an explicit companion integration. It is not equivalent to
-unrestricted SMS access by the gateway. Users must grant the required
-Android permissions and configure the forwarding endpoint themselves.
+## SCI governance and reversible response
 
-------------------------------------------------------------------------
+The Self-Correcting Intelligence (SCI) workflow is organised into nine stages:
 
-## Containment and safety
+1. Threat detection from URL, SMS, network and live-monitor sources.
+2. Decision and evidence logging with the current policy version.
+3. Independent offline outcome verification, including an uncertainty state.
+4. Root-cause diagnosis of verified detection errors.
+5. Deterministic correction planning; LLM policy writes are disabled.
+6. Bounded correction workflow and retraining hand-off where needed.
+7. Golden Suite regression validation before policy changes.
+8. Versioned policy deployment, rollback and SHA-256-linked audit records.
+9. Post-deployment policy-version monitoring.
 
-The source includes an optional containment ladder with support
-described for:
+### Reversible containment
 
--   Domain sinkholing through dnsmasq.
--   IP blocking through nftables.
--   MAC quarantine through nftables.
--   Dry-run mode by default.
--   Time-limited actions and undo endpoints.
--   Protected local/gateway/DNS hosts.
-
-**Operational warning:** containment changes can interrupt network
-connectivity. Keep dry-run enabled during initial setup. Test actual
-enforcement and expiry/undo on an isolated lab network before enabling
-it on a production network. Review the current implementation and system
-configuration; do not assume that an application-side expiry record
-automatically removes every operating-system rule or DNS configuration
-file.
-
-The link sandbox is optional and should remain disabled unless its
-network isolation and SSRF protections have been reviewed for the
-deployment environment.
-
-------------------------------------------------------------------------
-
-## Reported benchmark results
-
-The following results are transcribed from the project's supplied
-technical report and benchmark JSON files. They are **reported project
-measurements**, not independently reproduced by this README.
-
-  ---------------------------------------------------------------------
-  Benchmark                        Reported result Interpretation
-  -------------------- --------------------------- --------------------
-  NPU Core 0 ---                 128.89 requests/s Individual worker
-  Network                                          throughput
-
-  NPU Core 1 --- URL             124.89 requests/s Individual worker
-                                                   throughput
-
-  NPU Core 2 --- SMS              61.75 requests/s Individual worker
-                                                   throughput
-
-
-  Three-core combined            315.53 requests/s Concurrent NPU
-                                                   benchmark
-
-  Llama sustained                   21.27 tokens/s 20-run test
-  generation                                       
-
-  Llama p50 latency                     1,885.5 ms 20-run test
-
-  Llama peak CPU                            88.6°C Recorded in the same
-  temperature                                      test
-
-  Pipeline A memory                      485.02 MB NPU workers, API and
-                                                   sniffer in report
-
-  Pipeline B memory                    1,681.07 MB Llama daemon in
-                                                   report
-
-  Total recorded                       2,166.09 MB Sum reported in the
-  process RSS                                      technical report
-
-  Red-team attacks                         129/129 Reported API
-  detected                                         adversarial suite
-
-  Red-team benign                             4/31 12.9% FPR in the
-  false positives                                  reported benign
-                                                   controls
-
-  Automated regression        61 passed, 3 skipped Reported test run;
-                                                   reproduce on target
-  ---------------------------------------------------------------------
-
-### Important interpretation
-
--   The three-core throughput is a concurrent benchmark result; it
-    should not be interpreted as end-to-end user throughput for every
-    mixed workload.
--   The Llama test is separate from the NPU concurrency test.
--   The red-team suite reports 100% attack recall but also a 12.9%
-    false-positive rate on its benign controls. Both results must be
-    disclosed together.
--   Detector model metrics, adversarial API metrics and live-wire
-    monitoring counts use different test populations and should not be
-    merged.
--   Temperature and memory measurements depend on board cooling, OS
-    image, background processes and workload.
-
-Raw proof files are in `benchmarks/results/`.
-
-------------------------------------------------------------------------
-
-## Repository structure
-
-``` text
-source/edgeshield-ai/
-├── app/
-│   ├── main.py                 # FastAPI application and routes
-│   ├── auth.py                 # API authentication helpers
-│   ├── config.py               # Runtime configuration
-│   ├── events.py               # Threat event handling
-│   ├── risk.py                 # Risk logic
-│   ├── advisory/                # ExecuTorch adapter and template fallback
-│   ├── detectors/               # Network, URL, SMS and live monitoring
-│   ├── edge_models/             # RKNN clients and worker processes
-│   ├── ml/                      # Feature extraction and ML runtime helpers
-│   ├── sci/                     # Initial SCI groundwork; full workflow planned
-│   ├── platform/                # System monitoring
-│   └── static/                  # Local dashboard
-├── bin/
-│   ├── live_sniffer             # Native packet capture binary
-│   └── executorch_runner        # Native ExecuTorch runner binary
-├── src/                         # Native C/C++ sources
-├── models/
-│   ├── rknn/                    # Three RKNN models and metadata
-│   └── *.joblib                 # Classical ML model artifacts
-├── benchmarks/
-│   └── results/                 # Benchmark and evaluation JSON
-├── scripts/
-│   ├── edge_models/             # Training, conversion and benchmark scripts
-│   ├── run_benchmarks.py
-│   ├── export_llama_executorch.sh
-│   └── android_sms_forwarder.py
-├── deploy/                      # systemd and nftables examples
-├── docs/                        # Architecture, deployment, demo and SCI docs
-├── tests/                       # Python tests
-├── native/                      # Optional standalone C++20 baseline
-├── data/                        # Local policy data; runtime DB is created locally
-├── pyproject.toml
-└── run.sh
-```
-
-------------------------------------------------------------------------
-
-## Installation and quick start
-
-### 1. Clone and enter the application directory
-
-``` bash
-git clone <PUBLIC_REPOSITORY_URL>
-cd <REPOSITORY_DIRECTORY>/source/edgeshield-ai
-```
-
-Replace the placeholders with the actual public repository URL and
-directory name after publication.
-
-### 2. Create a Python environment
-
-Python 3.10 or newer is required by `pyproject.toml`.
-
-``` bash
+The containment implementation includes a dry-run-first response path with finite TTLs, protected-host safeguards and undo support. The provided deployment configuration includes nftables integration and DNS sinkhole-related mechanisms.
+
+**Containment is not automatically enabled as an enforcement guarantee.** Review the environment, firewall rules, protected-host configuration and dry-run mode before any live enforcement. Use only on systems and networks you own or are authorised to administer.
+
+The recorded SCI / regression evidence is available in [`sci_and_regression_proof.json`](source/edgeshield-ai/benchmarks/results/sci_and_regression_proof.json).
+
+---
+
+## Quick start
+
+### 1. Requirements
+
+For the hardware-accelerated configuration:
+
+- Rockchip RK3588J Arm64 Linux board with a supported RKNPU driver and runtime.
+- Debian-based Arm64 Linux environment.
+- Python 3.10 or newer for the main application.
+- A separate Python 3.11 environment with `rknn-toolkit-lite2` compatible with the board runtime.
+- Build/runtime dependencies for the included native binaries if you need to rebuild them.
+- A local browser on the board or another trusted LAN machine.
+
+The application can start on a non-RK3588 development host using the available fallback path, but RKNN inference requires compatible Rockchip hardware and runtime.
+
+### 2. Install the Python application dependencies
+
+```bash
+cd EdgeShield_AI_v1.3.0/source/edgeshield-ai
+
 python3 -m venv .venv
-source .venv/bin/activate
+. .venv/bin/activate
+
 python -m pip install --upgrade pip
 pip install -e ".[dev]"
 ```
 
-### 3. Configure the RKNN Lite worker environment
+### 3. Install the RKNN Lite runtime
 
-On the RK3588J board, install a compatible `rknn-toolkit-lite2` package
-in the Python environment used by the worker processes. The project
-documentation records testing with RKNN Lite2 2.3.2.
+Create a separate Python 3.11 environment for the NPU workers. For example, with Miniforge / Conda:
 
-Example:
-
-``` bash
-python3.11 -m venv .venv-rknn
-source .venv-rknn/bin/activate
-python -m pip install --upgrade pip
-python -m pip install numpy rknn-toolkit-lite2==2.3.2
+```bash
+conda create -n rknn-python python=3.11 -y
+conda activate rknn-python
+pip install numpy rknn-toolkit-lite2==2.3.2
 ```
 
-Return to the main application environment and set the worker
-interpreter path:
+Set the path to that interpreter in the main environment:
 
-``` bash
-export EDGESHIELD_RKNN_PYTHON="$PWD/.venv-rknn/bin/python"
+```bash
+export EDGESHIELD_RKNN_PYTHON="$HOME/miniforge3/envs/rknn-python/bin/python"
 ```
 
-Use the actual interpreter path on your board. The RKNN runtime, NPU
-driver and model conversion versions must be compatible.
+Use the RKNN Lite package and runtime versions compatible with your installed Rockchip driver. The versions above reflect the project's tested configuration; they are not a promise of compatibility with every vendor image.
 
-### 4. Grant packet-capture capabilities (optional)
+### 4. Restore packet-capture capabilities
 
-The passive sniffer may require Linux capabilities. Only grant these to
-the reviewed binary and only if live monitoring is required:
+ZIP extraction does not preserve Linux file capabilities. On the target board:
 
-``` bash
+```bash
 sudo setcap cap_net_raw,cap_net_admin=eip bin/live_sniffer
-getcap bin/live_sniffer
 ```
 
-If you do not need passive monitoring, disable it using the
-configuration variable below.
+If `setcap` is unavailable, install the relevant system package (`libcap2-bin` on Debian-family systems). Do not run packet-capture tests on networks for which you do not have authorisation.
 
-### 5. Configure authentication and runtime
+### 5. Start EdgeShield
 
-Do not expose the API on a shared network with authentication disabled.
-Generate a strong random token and configure it before starting:
-
-``` bash
-export EDGESHIELD_API_TOKEN="$(python -c 'import secrets; print(secrets.token_urlsafe(32))')"
-```
-
-For a local-only test, bind to loopback:
-
-``` bash
-export EDGESHIELD_HOST=127.0.0.1
-export EDGESHIELD_PORT=8000
-```
-
-### 6. Start EdgeShield
-
-``` bash
+```bash
 ./run.sh
 ```
 
-The project launcher also documents these commands:
+Useful commands:
 
-``` bash
+```bash
 ./run.sh status
 ./run.sh logs
+./run.sh fg
 ./run.sh restart
 ./run.sh stop
 ```
 
-Check the launcher and environment configuration on the target board
-before installing it as a service.
+The launcher starts the API and local dashboard on port `8000` by default. It also starts the configured NPU worker and monitor processes as available.
 
-### 7. Open the local interface
+### 6. Open the dashboard
 
-``` text
+On the board:
+
+```text
 http://127.0.0.1:8000
 ```
 
-If the service is bound to a different interface, use the corresponding
-address from a trusted local network. Do not expose the service directly
-to the public internet.
+From a trusted machine on the same LAN:
 
-------------------------------------------------------------------------
-
-## Llama 3.2 1B Instruct (ExecuTorch): optional separately distributed model
-
-The large Llama model and tokenizer are excluded from this source
-repository. The team has separately tested the model running offline on
-the RK3588J board.
-
-Before distributing a model package, provide:
-
--   Exact model identifier and licence/source.
--   Exact `.pte` filename and file size.
--   Matching tokenizer filename and format.
--   SHA-256 checksums for both artifacts.
--   ExecuTorch version and build configuration.
--   Export command or reproducible export script.
--   Board-side launch command and successful offline inference log.
-
-Do not download an arbitrary `.pte` or tokenizer and assume it is
-compatible with the included runner.
-
-The application defaults documented in the source are:
-
-``` bash
-EDGESHIELD_EXECUTOR=command
-EDGESHIELD_EXECUTOR_COMMAND=./bin/executorch_runner
-EDGESHIELD_EXECUTOR_MODEL_PATH=./models/llama.pte
-EDGESHIELD_EXECUTOR_TOKENIZER_PATH=./models/tokenizer.model
-EDGESHIELD_EXECUTOR_DAEMON=true
+```text
+http://<BOARD_LAN_IP>:8000
 ```
 
-If the model files are absent, the application can use the deterministic
-template advisory provider. In that mode, do not claim that Llama
-inference is active.
+Do not expose the service directly to the public internet. Configure API authentication and host firewall rules before allowing access from other devices.
 
-------------------------------------------------------------------------
+---
 
-## API examples
+## Verify the service and run sample analyses
 
-The examples below assume the API is running on the local machine. The
-exact request schemas are defined in the source application.
+### Health and subsystem status
 
-### Analyse a URL
-
-``` bash
-curl -sS -X POST "http://127.0.0.1:8000/api/url/analyze" \
-  -H "Content-Type: application/json" \
-  -H "X-EdgeShield-Token: $EDGESHIELD_API_TOKEN" \
-  -d '{
-    "url": "https://example.invalid/verify"
-  }'
+```bash
+curl -s http://127.0.0.1:8000/api/health
+curl -s http://127.0.0.1:8000/api/hardware/rknn/status
+curl -s http://127.0.0.1:8000/api/network/monitor/status
+curl -s http://127.0.0.1:8000/api/sci/pipeline/status
 ```
 
-Use a safe test URL or a controlled lab URL when demonstrating
-detection. Do not visit suspected malicious URLs on a production device.
+### Analyse a phishing URL
 
-### Analyse an SMS message
-
-``` bash
-curl -sS -X POST "http://127.0.0.1:8000/api/sms/analyze" \
-  -H "Content-Type: application/json" \
-  -H "X-EdgeShield-Token: $EDGESHIELD_API_TOKEN" \
-  -d '{
-    "sender": "VM-ALERT",
-    "message": "Your account requires an urgent verification. Do not share OTPs or passwords."
-  }'
+```bash
+curl -s -X POST http://127.0.0.1:8000/api/url/analyze \
+  -H 'Content-Type: application/json' \
+  -d '{"url":"https://example.com/security-check"}'
 ```
 
-### Analyse network flow features
+### Analyse a scam SMS
 
-``` bash
-curl -sS -X POST "http://127.0.0.1:8000/api/network/analyze" \
-  -H "Content-Type: application/json" \
-  -H "X-EdgeShield-Token: $EDGESHIELD_API_TOKEN" \
+```bash
+curl -s -X POST http://127.0.0.1:8000/api/sms/analyze \
+  -H 'Content-Type: application/json' \
+  -d '{"message":"Urgent: Your bank account will be blocked. Complete KYC immediately at https://example.com"}'
+```
+
+### Analyse a network flow
+
+```bash
+curl -s -X POST http://127.0.0.1:8000/api/network/analyze \
+  -H 'Content-Type: application/json' \
   -d '{
     "flows": [{
       "src_ip": "192.168.1.50",
@@ -831,257 +401,203 @@ curl -sS -X POST "http://127.0.0.1:8000/api/network/analyze" \
   }'
 ```
 
-### Check monitoring and inspect the current SCI foundation
+The values above are synthetic demonstration inputs. They do not target a real external service.
 
-``` bash
-curl -sS "http://127.0.0.1:8000/api/network/monitor/status"
-curl -sS "http://127.0.0.1:8000/api/sci/pipeline/status"
+---
+
+## Adding the Llama model (optional large artifacts)
+
+The Llama model is intentionally not included in this source submission because the exported `.pte` file is hundreds of megabytes and the tokenizer is also a large artifact. The detection models required by the three RK3588 NPU workers are distributed separately in `models/rknn/`.
+
+To enable the ExecuTorch advisory pipeline, place the matching exported model and tokenizer in `models/` using the paths expected by the launcher:
+
+```bash
+# Example filenames; use the matching model export and tokenizer pair.
+cp /path/to/llama_3_2_1b_xnnpack_ctx512.pte models/llama.pte
+cp /path/to/tokenizer.json models/tokenizer.model
 ```
 
-If the deployment uses a different authentication policy, follow the
-configured API security requirements. The examples should be checked
-against the current API schema before publication.
+Then ensure the native runner is executable and restart the service:
 
-------------------------------------------------------------------------
-
-## Configuration
-
-The following variables are documented by the source. Confirm actual
-defaults in `app/config.py` before deployment.
-
-  -----------------------------------------------------------------------
-  Variable                               Purpose
-  -------------------------------------- --------------------------------
-  `EDGESHIELD_RKNN_PYTHON`               Python interpreter containing
-                                         RKNN Lite2
-
-  `EDGESHIELD_EXECUTOR`                  Advisory provider selection
-                                         (`command` or `template`)
-
-  `EDGESHIELD_EXECUTOR_COMMAND`          Path to native ExecuTorch runner
-
-  `EDGESHIELD_EXECUTOR_MODEL_PATH`       Llama `.pte` model path
-
-  `EDGESHIELD_EXECUTOR_TOKENIZER_PATH`   Matching tokenizer path
-
-  `EDGESHIELD_EXECUTOR_DAEMON`           Keep advisory model runner
-                                         resident
-
-  `EDGESHIELD_LIVE_MONITOR_ENABLED`      Enable or disable passive live
-                                         monitoring
-
-  `EDGESHIELD_LIVE_MONITOR_INTERFACE`    Network interface to monitor
-
-  `EDGESHIELD_LIVE_MONITOR_WINDOW_S`     Flow aggregation window
-
-  `EDGESHIELD_DB_PATH`                   Local SQLite database path
-
-  `EDGESHIELD_API_TOKEN`                 API authentication token
-
-  `EDGESHIELD_HOST`                      API bind address
-
-  `EDGESHIELD_PORT`                      API port
-
-  `EDGESHIELD_CONTAINMENT_DRY_RUN`       Keep containment in dry-run mode
-                                         by default
-
-  `EDGESHIELD_SANDBOX_ENABLED`           Enable optional URL link sandbox
-  -----------------------------------------------------------------------
-
-For a safer local-only baseline:
-
-``` bash
-export EDGESHIELD_HOST=127.0.0.1
-export EDGESHIELD_API_TOKEN="<GENERATE_A_LONG_RANDOM_SECRET>"
-export EDGESHIELD_LIVE_MONITOR_ENABLED=false
-export EDGESHIELD_CONTAINMENT_DRY_RUN=true
-export EDGESHIELD_SANDBOX_ENABLED=false
+```bash
+chmod +x bin/executorch_runner
+./run.sh restart
+./run.sh status
 ```
 
-------------------------------------------------------------------------
+The actual model and tokenizer must be a compatible pair. Do not rename an unrelated `.pte` file or tokenizer and assume they are interchangeable.
 
-## Testing and benchmarking
+If the model files are absent, the application uses the built-in deterministic template advisory backend. This fallback is expected behaviour and does not indicate that Llama inference is running.
 
-### Run the portable test suite
+See [`scripts/export_llama_executorch.sh`](source/edgeshield-ai/scripts/export_llama_executorch.sh) for the model export workflow and [`docs/TECHNICAL_REPORT_v1.4.md`](source/edgeshield-ai/docs/TECHNICAL_REPORT_v1.4.md) for the recorded configuration and performance results.
 
-``` bash
+---
+
+## Android companion: forwarding cellular SMS
+
+EdgeShield is a Linux gateway. Cellular messages received by an Android phone do not automatically traverse the gateway's Ethernet interface.
+
+For the companion workflow, connect the phone and RK3588J gateway to the same trusted LAN and configure the Android-side forwarder with the required permissions:
+
+```bash
+python3 scripts/android_sms_forwarder.py --gateway <BOARD_LAN_IP> --port 8000
+```
+
+A local automation tool such as Tasker or MacroDroid can also send an HTTP POST to:
+
+```text
+http://<BOARD_LAN_IP>:8000/api/sms/analyze
+```
+
+with a JSON body containing the message. Review [`docs/MOBILE_COMPANION.md`](source/edgeshield-ai/docs/MOBILE_COMPANION.md) for details.
+
+This integration is permission-based forwarding after message receipt; it is not silent interception of cellular SMS.
+
+---
+
+## Repository structure
+
+```text
+EdgeShield_AI_v1.3.0/
+├── README.md                         # Project overview and challenge submission entry point
+├── run.sh                            # Package-level launcher
+├── docs/                             # Top-level architecture and planning documents
+└── source/
+    └── edgeshield-ai/
+        ├── app/
+        │   ├── detectors/             # SMS, URL, network and live-monitor logic
+        │   ├── edge_models/           # RKNN clients, workers and model integration
+        │   ├── advisory/              # ExecuTorch command adapter and template fallback
+        │   ├── sci/                   # SCI governance, validation and containment
+        │   ├── events.py              # Threat event contracts and event handling
+        │   ├── risk.py                # Risk scoring / aggregation
+        │   └── static/                # Local web dashboard
+        ├── models/
+        │   ├── rknn/                  # Three RK3588 FP16 detector models + metadata
+        │   └── *.joblib               # Classical ML / fallback artifacts
+        ├── benchmarks/
+        │   ├── README.md
+        │   └── results/               # Raw benchmark and audit JSON records
+        ├── docs/
+        │   ├── img/screens/            # RK3588J dashboard screenshots
+        │   ├── DEMO.md
+        │   ├── MOBILE_COMPANION.md
+        │   ├── BOARD_DEPLOYMENT_RK3588J.md
+        │   └── TECHNICAL_REPORT_v1.4.md
+        ├── native/                    # C++ native runtime / API baseline
+        ├── src/                       # Native sniffer and ExecuTorch runner source
+        ├── bin/                       # Included Arm64 helper binaries
+        ├── scripts/                   # Training, export, build and benchmark scripts
+        ├── deploy/                    # Service and nftables deployment examples
+        └── tests/                     # Python test suite
+```
+
+---
+
+## Documentation and evidence
+
+| Resource | What it contains |
+|---|---|
+| [Technical engineering report (PDF)](source/edgeshield-ai/docs/EdgeShield_AI_Technical_Report_v1.4.pdf) | System design, model architectures, hardware partitioning, board results and limitations |
+| [Technical report (Markdown)](source/edgeshield-ai/docs/TECHNICAL_REPORT_v1.4.md) | Text version of the engineering report |
+| [Benchmark guide](source/edgeshield-ai/benchmarks/README.md) | Test methods and reported metrics |
+| [Raw benchmark results](source/edgeshield-ai/benchmarks/results/) | JSON measurements from the board |
+| [Demo runbook](source/edgeshield-ai/docs/DEMO.md) | Suggested live demonstration flow |
+| [Board deployment guide](source/edgeshield-ai/docs/BOARD_DEPLOYMENT_RK3588J.md) | RK3588J bring-up and deployment notes |
+| [Mobile companion guide](source/edgeshield-ai/docs/MOBILE_COMPANION.md) | Android SMS forwarding |
+| [SCI engine design](source/edgeshield-ai/docs/SCI_ENGINE_DESIGN.md) | Governance and correction pipeline design |
+| [Model manifests](source/edgeshield-ai/models/rknn/manifest.json) | Model metadata, target core and artifact hashes |
+
+### Reproduce the benchmarks
+
+On the RK3588J board, after installing the matching runtime and dependencies:
+
+```bash
+cd source/edgeshield-ai
+python3 scripts/run_benchmarks.py
+```
+
+This command is intended to reproduce the hardware and model evidence described in the benchmark guide. Run it on the target hardware for comparable results; desktop or emulated measurements are not substitutes for NPU-board measurements.
+
+### Run the automated tests
+
+```bash
+cd source/edgeshield-ai
 pytest -q
 ```
 
-Some tests require RKNN Lite2 and physical RK3588 hardware. A test
-skipped because hardware is unavailable is not a successful hardware
-validation.
+The included recorded test result is 61 passed and 3 skipped. Your local result may differ with Python, package, model and hardware/runtime versions.
 
-### Run the benchmark scripts
+---
 
-``` bash
-python scripts/run_benchmarks.py
-python scripts/edge_models/benchmark_concurrency.py
-```
+## Privacy, security and operational boundaries
 
-Check each script's help/options and required runtime dependencies
-before execution. Store new results with the board model, OS image,
-kernel, NPU driver, RKNN runtime, Python version, model hashes, test
-command and timestamp.
+- **Local-first processing:** the detection and advisory design is intended to run locally; no cloud service is required for the described on-device pipeline.
+- **Encrypted traffic:** passive interface monitoring can observe flow metadata and protocol information that is visible on the interface. It cannot inspect the contents of TLS-encrypted sessions or DNS-over-HTTPS payloads without a separate interception mechanism; EdgeShield does not claim to decrypt those sessions.
+- **SMS boundary:** cellular SMS needs explicit phone-side forwarding to the gateway. The gateway does not silently intercept messages from a phone.
+- **LLM boundary:** the language model is an advisory component. It is not the detector, does not own the risk verdict and is not permitted to write SCI detection policy.
+- **Containment boundary:** dry-run is the default safety posture in the provided design. Live enforcement should be enabled only after validating the firewall, TTL, protected-host and rollback behaviour on an authorised test network.
+- **API exposure:** the application can bind to all interfaces for LAN access. Configure `EDGESHIELD_API_TOKEN`, host firewall rules and a trusted network boundary before exposing mutating endpoints. The token is optional and must be explicitly configured.
+- **Model/data caveats:** benchmark metrics are tied to the datasets, split methods, thresholds and device/runtime configurations recorded in the repository. They should not be interpreted as a guarantee of real-world detection rates.
 
-### Recommended target-board validation
+## Configuration
 
-For a reproducible release, capture:
+The principal runtime settings include:
 
--   Each NPU worker's initialisation log and assigned core.
--   Per-detector inference latency and throughput.
--   Concurrent three-worker throughput and error rate.
--   CPU, NPU and memory utilisation.
--   Temperature during sustained mixed workloads.
--   Llama model/tokenizer checksums and offline inference log.
--   API end-to-end latency.
--   Evidence of current SCI component tests only; do not claim
-    end-to-end SCI validation until the final workflow is implemented.
--   Test-suite summary, including skipped tests and why they were
-    skipped.
+| Variable | Purpose |
+|---|---|
+| `EDGESHIELD_RKNN_PYTHON` | Python interpreter containing RKNN Lite dependencies for NPU workers |
+| `EDGESHIELD_EXECUTOR` | Advisory provider selection (`command` for ExecuTorch runner; `template` for deterministic fallback) |
+| `EDGESHIELD_EXECUTOR_COMMAND` | Path to the native ExecuTorch runner |
+| `EDGESHIELD_EXECUTOR_MODEL_PATH` | Path to the Llama `.pte` model |
+| `EDGESHIELD_EXECUTOR_TOKENIZER_PATH` | Path to the matching tokenizer |
+| `EDGESHIELD_EXECUTOR_DAEMON` | Whether the advisory runner remains resident |
+| `EDGESHIELD_LIVE_MONITOR_ENABLED` | Enable or disable passive NIC monitoring |
+| `EDGESHIELD_LIVE_MONITOR_INTERFACE` | Interface selected for monitoring |
+| `EDGESHIELD_DB_PATH` | SQLite event / SCI database path |
+| `EDGESHIELD_API_TOKEN` | Optional API token for protected operations |
+| `EDGESHIELD_PORT` / `EDGESHIELD_HOST` | API bind address and port |
 
-Do not report a benchmark as a board result unless it was collected on
-the target board. Do not report a test as passed when it was skipped.
+See [`.env.example`](source/edgeshield-ai/.env.example) for the supplied configuration template.
 
-------------------------------------------------------------------------
+---
 
-## Security, privacy and limitations
+## Challenge alignment
 
-### Privacy and offline operation
+| PS3 capability area | EdgeShield implementation |
+|---|---|
+| On-device scam detection | Hybrid SMS analysis with RKNN BiGRU inference on NPU Core 2 |
+| Phishing detection | Lexical and character-level URL model on NPU Core 1 |
+| Threat / network anomaly detection | Flow-feature Network IDS on NPU Core 0, plus passive local-interface monitoring |
+| Arm-based acceleration | Three dedicated RK3588 NPU worker processes |
+| Local AI assistance | ExecuTorch Llama 3.2 1B advisory on the Arm CPU when the separate model files are provisioned |
+| Operator visibility | Local web dashboard, evidence and event history, SoC telemetry |
+| Response and governance | SCI workflow, policy versioning / rollback, audit ledger and reversible containment controls |
 
-The core design is local-first. Network traffic, URLs, SMS inputs,
-threat events and model inference can be processed on the edge device.
-The project does not require a cloud API for the core detection and
-advisory workflow.
+## Known limitations
 
-The optional mobile companion forwards SMS data to the local gateway.
-This is a separate, user-configured integration.
+1. Passive capture is limited to traffic visible to the chosen network interface. TLS, QUIC and DoH encryption limit payload-level visibility.
+2. Cellular SMS requires an Android companion forwarder or an explicit local webhook; it is not passively captured from the mobile network by the gateway.
+3. The optional link sandbox is a separate capability and is not part of the mandatory offline URL lexical-inference path.
+4. The adversarial audit included four benign false positives among 31 benign cases. Further calibration and broader benign traffic evaluation are important.
+5. The reported throughput and model metrics are measured under the included test conditions; they do not guarantee identical performance on a different RK3588 board, kernel, runtime or thermal environment.
+6. Llama model weights and tokenizer are excluded from the source ZIP. Without the matching files, the deterministic template advisory fallback is used.
+7. Some SoC utilization counters depend on kernel / driver exposure and may not be available on every vendor image.
 
-### Known technical limitations
+---
 
-1.  **TLS, DoH and encrypted traffic:** passive packet capture cannot
-    decrypt encrypted application payloads. It can inspect flow metadata
-    and supported plaintext protocol fields.
-2.  **Cellular SMS:** handset SMS is supplied through the companion
-    forwarding workflow; it is not read from arbitrary phones by the
-    passive network sniffer.
-3.  **Compromised legitimate domains:** lexical URL detection may not
-    identify every malicious page hosted on a legitimate domain.
-    Optional page inspection has separate network-security implications.
-4.  **False positives:** the supplied red-team evaluation reports 4
-    false positives among 31 benign controls (12.9%). This must be
-    improved and re-evaluated on a larger, independent benign dataset.
-5.  **Thermal behaviour:** the supplied 20-run Llama test records a peak
-    temperature of 88.6°C. Longer mixed-workload thermal validation is
-    still important.
-6.  **Model dependency:** the Llama weights and tokenizer are not
-    included. Llama mode requires separately supplied compatible files.
-7.  **Dataset generalisation:** public and project datasets do not
-    represent every real-world threat. Results depend on data quality,
-    split design and operating thresholds.
-8.  **Containment risk:** firewall and DNS changes can disrupt
-    connectivity. Keep dry-run enabled until enforcement, expiry and
-    rollback have been tested in an isolated environment.
-9.  **Hardware dependence:** RKNN inference requires a compatible
-    Rockchip board, driver, runtime and model. Other systems may use
-    CPU/classical fallback paths and will not reproduce RK3588 NPU
-    performance.
+## License and third-party components
 
-### Responsible-use guidance
+Review the repository's `LICENSE` and third-party notices before redistribution. The repository uses components and model assets with their own licenses and terms, including Rockchip RKNN runtime components, ExecuTorch, XNNPACK, Arm KleidiAI and Meta Llama model assets. The applicable upstream licenses and model terms remain in force.
 
--   Use only on networks and devices you own or are authorised to
-    monitor.
--   Obtain consent and comply with local laws before collecting or
-    forwarding SMS or network data.
--   Do not use containment actions on production networks without
-    explicit operator approval and a tested recovery path.
--   Treat model outputs as security signals requiring context, not as
-    infallible determinations.
+## Acknowledgements
 
-------------------------------------------------------------------------
+Built by **EdgeProc AI Technologies Pvt. Ltd.** for the **Bharat AI-SoC Challenge 2026–27, Problem Statement 3**.
 
-## Reproducibility and evidence
+---
 
-The repository includes benchmark evidence under `benchmarks/results/`
-and technical documentation under `docs/`.
+<div align="center">
 
-Primary documents:
+**EdgeShield AI — Detection at the edge. Explanations on-device. Response under operator control.**
 
--   `docs/EdgeShield_AI_Technical_Report_v1.4.pdf`
--   `docs/TECHNICAL_REPORT_v1.4.md`
--   `docs/BOARD_DEPLOYMENT_RK3588J.md`
--   `docs/DEMO.md`
--   `docs/SCI_ENGINE_DESIGN.md`
--   `docs/MOBILE_COMPANION.md`
--   `benchmarks/README.md`
-
-Before final submission, ensure that:
-
--   The public repository contains the final source and report.
--   The report version matches the software release identifier.
--   Benchmark JSON files correspond to the exact source/model revision.
--   Llama model metadata and checksums are published even if the model
-    binary is not.
--   The public demo video URL is added below.
--   Screenshots and demo files referenced by this README actually exist
-    in the repository.
--   No secrets, tokens, private data, raw personal SMS or restricted
-    datasets are committed.
-
-### Submission links
-
--   **Technical report:**
-    [`docs/EdgeShield_AI_Technical_Report_v1.4.pdf`](docs/EdgeShield_AI_Technical_Report_v1.4.pdf)
--   **Demo video:** *Add the public two-minute demo URL here.*
--   **Challenge submission:** Bharat AI-SoC Challenge 2026--27, PS3.
-
-------------------------------------------------------------------------
-
-## Roadmap
-
-The next engineering priorities are:
-
-1.  Harden API authentication and privileged containment execution.
-2.  Ensure domain containment has real operating-system-level expiry and
-    reliable undo.
-3.  Complete the planned SCI workflow, including independent evidence
-    verification, diagnosis, gated correction, deployment, rollback and
-    audit.
-4.  Improve benign-case false-positive performance and report
-    per-threshold metrics consistently.
-5.  Validate model preprocessing and inference parity across training,
-    conversion and target deployment.
-6.  Run long-duration mixed NPU, network-monitor and Llama workloads
-    with thermal and memory logging.
-7.  Improve clean-clone reproducibility, version metadata and model
-    artifact provenance.
-
-------------------------------------------------------------------------
-
-## Team and acknowledgements
-
-**EdgeProc AI Technologies**
-
-Project: **EdgeShield AI**
-
-Challenge: **Bharat AI-SoC Challenge 2026--27 --- Problem Statement 3**
-
-Add the registered team name, team members, mentor and institutional
-details here before final submission.
-
-The project uses and builds upon open-source software, public research
-datasets and the Rockchip/ExecuTorch ecosystems. See the corresponding
-upstream licences and dataset terms before redistribution.
-
-------------------------------------------------------------------------
-
-## License
-
-A repository-level licence has not been asserted in this README. Add the
-licence approved by the project owner before making the repository
-public. Until then, do not assume that the source, model artifacts,
-datasets or third-party components are licensed for unrestricted reuse.
-
-Third-party models, datasets, binaries and libraries may have separate
-licence terms. Those terms continue to apply independently of the
-EdgeShield source repository.
+</div>
