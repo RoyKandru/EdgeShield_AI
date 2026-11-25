@@ -66,7 +66,7 @@ The following are the Dashboard screenshots
   <img src="docs/img/screens/6_arm_soc_monitor.png" width="48%" alt="RK3588J NPU and Arm SoC monitor">
 </p>
 
-*Screenshots: Command Center · Investigation and advisory · Threat Scanners · Correlation view · SCI / Containment · Arm SoC Monitor.*
+*Screenshots: Live Threats · Investigation and advisory · Local Scanners · Correlation view · SCI / Containment · Arm SoC Monitor.*
 
 ---
 
@@ -99,8 +99,10 @@ flowchart TB
     N2 --> FUSION
 
     FUSION --> UI["FastAPI + local dashboard<br/>Threat feed · investigation · telemetry"]
-    FUSION --> ADVISORY["Pipeline B — Arm CPU<br/>ExecuTorch Llama 3.2 1B<br/>XNNPACK + Arm KleidiAI"]
-    ADVISORY --> VALIDATOR["Advisory validation<br/>Verdict remains detector-owned"]
+    FUSION --> CORR["CrossChannelCorrelator<br/>10-min sliding window · risk fusion"]
+    CORR --> UI
+    FUSION --> ADVISORY["Pipeline B — Arm CPU<br/>ExecuTorch Llama 3.2 1B (ctx=512)<br/>XNNPACK + Arm KleidiAI · EN/HI/Hinglish"]
+    ADVISORY --> VALIDATOR["Advisory validation<br/>Live explanation + 3-step remediation"]
     VALIDATOR --> UI
 
     FUSION --> SCI["SCI governance workflow<br/>Verification · diagnosis · regression gate<br/>policy versioning · rollback · audit"]
@@ -112,15 +114,7 @@ flowchart TB
 
 A real attack can span multiple channels. For example, a user may receive a scam SMS, open a phishing URL contained in that message, and then generate network activity associated with the phishing site or a follow-on payload. Looking at each alert independently can leave the investigation fragmented. Correlating the evidence can help an analyst understand the sequence, prioritise related alerts and investigate one incident rather than three disconnected events.
 
-**Current implementation status — important:** EdgeShield currently has three specialist detection paths (network, URL and SMS), a common threat-event / risk presentation and event persistence. The repository does **not** currently contain a verified cross-channel kill-chain correlation engine that automatically links an SMS event to a URL event and then to a network event. The end-to-end correlation workflow below is the planned capability; the dashboard image above should be read as a related-event UI view, not proof that this automated correlation logic is complete.
-
-**Planned correlation workflow**
-
-1. **SMS signal:** retain the SMS finding and, where present, extract the URL or domain from the message.
-2. **URL signal:** when the same URL/domain is separately submitted or observed and analysed, compare its normalised indicators with the SMS evidence.
-3. **Network signal:** look for subsequent network-flow evidence that matches an observed destination IP/domain where that information is actually available to the gateway.
-4. **Incident grouping:** group matching events into a single incident timeline using shared indicators, device/context identifiers where available, and bounded time windows. Preserve each original event and its source.
-5. **Risk and analyst review:** present the linked evidence and sequence to the analyst. Any combined risk score should be an explainable prioritisation score, not a claim of calibrated attack probability.
+**Current implementation (`app/risk.py` — `CrossChannelCorrelator`):** Every persisted `ThreatEvent` with `risk_score >= 30` is ingested into `CrossChannelCorrelator(window_s=600.0)` (`app/main.py`). `extract_indicators()` normalises and deduplicates hostnames/domains and non-loopback IPv4 addresses from event `metadata` (`hostname`, `registrable_domain`, `src_ip`, `dst_ip`) and `raw_input_preview`. When **2 or more distinct channels** (e.g., `sms_detector`, `url_detector`, `network_ids`) share an indicator within a 10-minute sliding window, the engine emits a correlated incident (`corr-...`) linking up to 8 `event_ids`, computes a fused priority score `min(100, max_risk + 15 * (len(distinct_sources) - 1))` (`critical >= 80`, `high >= 60`, `medium`), persists it to the SQLite `correlations` table (`app/db.py`), and exposes it via `GET /api/correlations` and the **Correlations** dashboard tab.
 
 **Why it is useful**
 
@@ -137,7 +131,7 @@ A real attack can span multiple channels. For example, a user may receive a scam
 - Encrypted TLS traffic and DNS-over-HTTPS can limit the destination evidence available to a passive gateway.
 - Keep event provenance and timestamps visible; do not silently convert temporal proximity into causation.
 
-**Implementation roadmap:** first normalise and persist common indicators (URL/domain, destination IP, timestamps and available device/context IDs); next add deterministic SMS → URL matching; then URL → network matching and incident timelines; finally add transparent risk fusion and an advisory explanation. This can be built as a lightweight evidence-correlation service over the existing events and does not require another large neural model.
+**Future enhancements:** adding optional device/context ID join keys across NAT boundaries and richer redirect-chain provenance on top of the active `CrossChannelCorrelator` service.
 
 
 ### Pipeline A — specialist detection on the RK3588 NPU
@@ -154,10 +148,10 @@ The model metadata and checksums are recorded in `models/rknn/manifest.json` and
 
 ### Pipeline B — local threat explanation on the Arm CPU
 
-- **Model:** Llama 3.2 1B, exported to ExecuTorch (`.pte`).
-- **Runtime:** Native C++ runner using ExecuTorch with XNNPACK and Arm KleidiAI.
-- **Role:** Produce a human-readable explanation and advisory steps using the threat event as context.
-- **Guardrail:** The model is downstream of detection. It cannot change the detector's verdict or SCI policy.
+- **Model:** Llama 3.2 1B, exported to ExecuTorch (`llama_3_2_1b_xnnpack_ctx512.pte`, `766 MB`, `max_context_len=512`, `8da4w` `group_size=128` + 4-bit embedding quantization `group_size=32`).
+- **Runtime:** Native C++ runner (`src/executorch_runner.cpp`) using ExecuTorch with XNNPACK and Arm KleidiAI.
+- **Role:** Runs two focused on-device passes per alert to generate both a plain-language **Threat Explanation** and **3-step Recommended Remediation Actions** in **English, Hindi, or Hinglish**, rendered as separate cards above **Why This Was Flagged (Detection Signals)** in the **Alert Investigation** panel (with **Read Aloud / Stop** speech controls).
+- **Guardrail:** The model is downstream of detection (`app/advisory/validator.py`). It cannot change the detector's verdict or SCI policy; when `>= 2` valid LLM remediation steps are produced, they are served directly without static template padding.
 - **Fallback:** If the `.pte` and tokenizer are absent, a deterministic template advisory provider is used.
 
 The exported weights and tokenizer are large and are not included in this source archive. See [Adding the Llama model](#adding-the-llama-model-optional-large-artifacts).
@@ -236,7 +230,7 @@ A recorded board snapshot measured **1,278.25 MB total EdgeShield RSS**: 359.41 
 | Attack detection | 129 / 129 attack cases detected in that suite |
 | Precision / F1 | 96.99% / 98.47% |
 | Benign false positives | 4 / 31 controls (12.9% FPR) |
-| Automated tests | 61 passed, 3 skipped |
+| Automated tests | 65 passed, 3 skipped |
 | SCI ledger verification | Valid; 8 records checked in the recorded run |
 
 **Interpretation:** The reported 100% attack recall applies to the 129 attack cases in this particular test suite. It does not mean zero false positives or universal detection. Four benign controls were flagged. Review the raw [`adversarial_redteam_audit.json`](benchmarks/results/adversarial_redteam_audit.json) before interpreting the result.
@@ -394,6 +388,7 @@ Do not expose the service directly to the public internet. Configure API authent
 curl -s http://127.0.0.1:8000/api/health
 curl -s http://127.0.0.1:8000/api/hardware/rknn/status
 curl -s http://127.0.0.1:8000/api/network/monitor/status
+curl -s http://127.0.0.1:8000/api/correlations
 curl -s http://127.0.0.1:8000/api/sci/pipeline/status
 ```
 
@@ -531,7 +526,10 @@ EdgeShield_AI_v1.3.0/
 | Resource | What it contains |
 |---|---|
 | [Technical engineering report (PDF)](docs/EdgeShield_AI_Technical_Report_v1.4.pdf) | System design, model architectures, hardware partitioning, board results and limitations |
-| [Technical report (Markdown)](docs/TECHNICAL_REPORT_v1.4.md) | Text version of the engineering report |
+| [Technical report (HTML / Markdown)](docs/TECHNICAL_REPORT_v1.4.md) | Text and HTML (`docs/EdgeShield_AI_Technical_Report_v1.4.html`) versions of the engineering report |
+| [RK3588J Edge AI Pipelines](docs/EDGE_AI_PIPELINES_RK3588J_v1.4.0.md) | 3-core NPU + ExecuTorch pipeline specifications |
+| [C++ Native Runtime](docs/CPP_NATIVE_RUNTIME_v1.3.0.md) | Native C++ runtime and ExecuTorch runner details |
+| [HLD / SLD & Architecture](docs/HLD_v1.3.0.md) | High-level (`HLD_v1.3.0.md`), low-level (`SLD_v1.3.0.md`), and `ARCHITECTURE_v0.4.0.md` docs |
 | [Benchmark guide](benchmarks/README.md) | Test methods and reported metrics |
 | [Raw benchmark results](benchmarks/results/) | JSON measurements from the board |
 | [Demo runbook](docs/DEMO.md) | Suggested live demonstration flow |
@@ -558,7 +556,7 @@ cd source/edgeshield-ai
 pytest -q
 ```
 
-The included recorded test result is 61 passed and 3 skipped. Your local result may differ with Python, package, model and hardware/runtime versions.
+The latest recorded board test result is **65 passed and 3 skipped** (`pytest -q`). Your local result may differ with Python, package, model and hardware/runtime versions.
 
 ---
 
