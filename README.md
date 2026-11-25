@@ -112,11 +112,11 @@ flowchart TB
 
 Each model is loaded by a persistent worker and assigned to a dedicated NPU core.
 
-| NPU core | Security function | Model architecture | Model artifact |
-|----|---|---|---|
-| **Core 0**  | Network intrusion / anomalous-flow detection | `NetworkDualNPU`: 1D-CNN branch + MLP branch + fusion head; 26 flow features | `models/rknn/network_ids_fp16.rknn` |
-| **Core 1**  | Phishing URL detection | `URLDualBranchNPU`: 25 lexical features + character 1D-CNN branch + fusion head | `models/rknn/url_hybrid_fp16.rknn` |
-| **Core 2**  | Scam / smishing SMS detection | `SplitBiGRUExactPacked` + masked global mean pooling + weighted BCE training objective | `models/rknn/sms_bigru_fp16.rknn` and `sms_bigru_emb.npz` |
+| NPU core   | Security function | Model architecture | Model artifact |
+|-----|---|---|---|
+| **Core 0**   | Network intrusion / anomalous-flow detection | `NetworkDualNPU`: 1D-CNN branch + MLP branch + fusion head; 26 flow features | `models/rknn/network_ids_fp16.rknn` |
+| **Core 1**   | Phishing URL detection | `URLDualBranchNPU`: 25 lexical features + character 1D-CNN branch + fusion head | `models/rknn/url_hybrid_fp16.rknn` |
+| **Core 2**   | Scam / smishing SMS detection | `SplitBiGRUExactPacked` + masked global mean pooling + weighted BCE training objective | `models/rknn/sms_bigru_fp16.rknn` and `sms_bigru_emb.npz` |
 
 The model metadata and checksums are recorded in `models/rknn/manifest.json` and the associated `*_meta.json` files.
 
