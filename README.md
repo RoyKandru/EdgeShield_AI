@@ -530,7 +530,6 @@ EdgeShield_AI_v1.3.0/
 
 | Resource | What it contains |
 |---|---|
-| [Final Project Report (PDF / DOCX)](docs/EdgeShield_AI_Final_Project_Report.pdf) | Expanded engineering report: team, methodology, datasets, neural architectures, `p50/p95/p99` latency, quantization (`8da4w` `ctx=512`), thermals, roadmap & Shield-Breaker ([DOCX](docs/EdgeShield_AI_Final_Project_Report.docx)) |
 | [Technical engineering report (PDF)](docs/EdgeShield_AI_Technical_Report_v1.4.pdf) | System design, model architectures, hardware partitioning, board results and limitations |
 | [Technical report (HTML / Markdown)](docs/TECHNICAL_REPORT_v1.4.md) | Text and HTML (`docs/EdgeShield_AI_Technical_Report_v1.4.html`) versions of the engineering report |
 | [RK3588J Edge AI Pipelines](docs/EDGE_AI_PIPELINES_RK3588J_v1.4.0.md) | 3-core NPU + ExecuTorch pipeline specifications |
@@ -623,7 +622,7 @@ See [`.env.example`](.env.example) for the supplied configuration template.
 
 ## License and third-party components
 
-Review the repository's `LICENSE` and third-party notices before redistribution. The repository uses components and model assets with their own licenses and terms, including Rockchip RKNN runtime components, ExecuTorch, XNNPACK, Arm KleidiAI and Meta Llama model assets. The applicable upstream licenses and model terms remain in force.
+EdgeShield AI's original source code and documentation are licensed under the **Apache License 2.0** (see [`LICENSE`](LICENSE)). Third-party runtime and model components—including Rockchip RKNN runtime components, ExecuTorch, XNNPACK, Arm KleidiAI, and Meta Llama 3.2 model assets—remain subject to their respective upstream licenses and terms.
 
 ---
 
