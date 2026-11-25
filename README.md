@@ -429,7 +429,7 @@ The actual model and tokenizer must be a compatible pair. Do not rename an unrel
 
 If the model files are absent, the application uses the built-in deterministic template advisory backend. This fallback is expected behaviour and does not indicate that Llama inference is running.
 
-See [`scripts/export_llama_executorch.sh`](scripts/export_llama_executorch.sh) for the model export workflow and [`docs/TECHNICAL_REPORT_v1.4.md`](docs/TECHNICAL_REPORT_v1.4.md) for the recorded configuration and performance results.
+See [`scripts/export_llama_executorch.sh`](scripts/export_llama_executorch.sh) for the model export workflow 
 
 ---
 
