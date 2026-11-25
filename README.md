@@ -51,7 +51,7 @@ EdgeShield AI is an Arm64 edge-security gateway that brings network intrusion de
 
 ## Visual overview
 
-The following screenshots are included in `docs/img/screens/` and were captured from the RK3588J dashboard.
+The following are the Dashboard screenshots 
 
 <p align="center">
   <img src="docs/img/screens/1_command_center.png" width="48%" alt="EdgeShield command center dashboard">
