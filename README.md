@@ -590,10 +590,6 @@ See [`.env.example`](source/edgeshield-ai/.env.example) for the supplied configu
 
 Review the repository's `LICENSE` and third-party notices before redistribution. The repository uses components and model assets with their own licenses and terms, including Rockchip RKNN runtime components, ExecuTorch, XNNPACK, Arm KleidiAI and Meta Llama model assets. The applicable upstream licenses and model terms remain in force.
 
-## Acknowledgements
-
-Built by **EdgeProc AI Technologies Pvt. Ltd.** for the **Bharat AI-SoC Challenge 2026–27, Problem Statement 3**.
-
 ---
 
 <div align="center">
