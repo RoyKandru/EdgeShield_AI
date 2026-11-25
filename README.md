@@ -529,11 +529,11 @@ EdgeShield_AI_v1.3.0/
 
 | Resource | What it contains |
 |---|---|
+| [Final Project Report (PDF / DOCX)](docs/EdgeShield_AI_Final_Project_Report.pdf) | Complete methodology, datasets, hardware utilization, quantization & results ([DOCX](docs/EdgeShield_AI_Final_Project_Report.docx)) |
 | [Technical engineering report (PDF)](docs/EdgeShield_AI_Technical_Report_v1.4.pdf) | System design, model architectures, hardware partitioning, board results and limitations |
 | [Technical report (HTML / Markdown)](docs/TECHNICAL_REPORT_v1.4.md) | Text and HTML (`docs/EdgeShield_AI_Technical_Report_v1.4.html`) versions of the engineering report |
 | [RK3588J Edge AI Pipelines](docs/EDGE_AI_PIPELINES_RK3588J_v1.4.0.md) | 3-core NPU + ExecuTorch pipeline specifications |
-| [C++ Native Runtime](docs/CPP_NATIVE_RUNTIME_v1.3.0.md) | Native C++ runtime and ExecuTorch runner details |
-| [HLD / SLD & Architecture](docs/HLD_v1.3.0.md) | High-level (`HLD_v1.3.0.md`), low-level (`SLD_v1.3.0.md`), and `ARCHITECTURE_v0.4.0.md` docs |
+| [HLD & SLD Architecture](docs/HLD.md) | High-level (`docs/HLD.md`) and low-level (`docs/SLD.md`) system design |
 | [Benchmark guide](benchmarks/README.md) | Test methods and reported metrics |
 | [Raw benchmark results](benchmarks/results/) | JSON measurements from the board |
 | [Demo runbook](docs/DEMO.md) | Suggested live demonstration flow |
