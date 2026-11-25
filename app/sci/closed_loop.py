@@ -96,7 +96,7 @@ class SCIClosedLoopController:
                 )
 
     def record_decision(self, policy_version: str | None = None) -> None:
-        ver = policy_version or self.policy_mgr.get_active().get("version", "v1")
+        ver = policy_version or self.policy_mgr.get_active().get("version", "v1.0.0")
         self._bump_monitor(ver, "decisions_count")
 
     def submit_error_cycle(
@@ -111,7 +111,7 @@ class SCIClosedLoopController:
     ) -> dict[str, Any]:
         """Run Stages 3 -> 4 -> 5 -> 7 (and optionally controlled Stage 8) for a suspected error."""
         enforce_non_llm_actor(reviewer)
-        active_ver = self.policy_mgr.get_active().get("version", "v1")
+        active_ver = self.policy_mgr.get_active().get("version", "v1.0.0")
         rec_id = "FB-" + uuid.uuid4().hex[:10].upper()
 
         # Stage 3: Independent Offline Verification

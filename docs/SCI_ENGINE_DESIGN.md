@@ -1,4 +1,4 @@
-# SCI Engine — v1
+# SCI Engine — v0.4.0
 
 SCI is a cross-cutting reliability control plane for EdgeShield's three input
 pipelines and shared AI/runtime infrastructure. No external sensor interfaces

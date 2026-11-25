@@ -10,7 +10,7 @@
 2. `app/ml/network_runtime.py` scores them (lazy load, offline, refuses a bundle whose feature list differs
    from `flow_reducer.MODEL_FEATURES`).
 3. Verdict per flow = **ML score >= threshold OR a production rule fires**; `model_version = network-hybrid-v2`.
-   Missing/corrupt/mismatched artefact, or ML disabled: unchanged rules-only path (`network-rules-v1`).
+   Missing/corrupt/mismatched artefact, or ML disabled: unchanged rules-only path (`network-rules-v0.1`).
 `analyse_flows(list[dict])` is unchanged (rules only).
 
 ## Why the shipped model is not `network_model_v2.joblib`

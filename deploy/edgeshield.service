@@ -5,11 +5,11 @@ After=network-online.target
 [Service]
 Type=simple
 User=open
-WorkingDirectory=/home/open/EdgeShield_AI/source/edgeshield-ai
+WorkingDirectory=/home/open/EdgeShield_AI_v1.3.0/source/edgeshield-ai
 Environment=EDGESHIELD_EXECUTOR=command
-Environment=EDGESHIELD_EXECUTOR_COMMAND=/home/open/EdgeShield_AI/source/edgeshield-ai/bin/executorch_runner
-Environment=EDGESHIELD_EXECUTOR_MODEL_PATH=/home/open/EdgeShield_AI/source/edgeshield-ai/models/llama.pte
-Environment=EDGESHIELD_EXECUTOR_TOKENIZER_PATH=/home/open/EdgeShield_AI/source/edgeshield-ai/models/tokenizer.model
+Environment=EDGESHIELD_EXECUTOR_COMMAND=/home/open/EdgeShield_AI_v1.3.0/source/edgeshield-ai/bin/executorch_runner
+Environment=EDGESHIELD_EXECUTOR_MODEL_PATH=/home/open/EdgeShield_AI_v1.3.0/source/edgeshield-ai/models/llama.pte
+Environment=EDGESHIELD_EXECUTOR_TOKENIZER_PATH=/home/open/EdgeShield_AI_v1.3.0/source/edgeshield-ai/models/tokenizer.model
 Environment=EDGESHIELD_EXECUTOR_DAEMON=true
 Environment=EDGESHIELD_LIVE_MONITOR_ENABLED=true
 Environment=EDGESHIELD_LIVE_MONITOR_INTERFACE=auto

@@ -16,7 +16,7 @@
       "pid": 1871409,
       "ppid": 1871376,
       "rss_mb": 915.77,
-      "cmd_preview": "/home/open/EdgeShield_AI/source/edgeshield-ai/bin/executorch_runner --daemon --model /home/open/EdgeShield_AI"
+      "cmd_preview": "/home/open/EdgeShield_AI_v1.3.0/source/edgeshield-ai/bin/executorch_runner --daemon --model /home/open/EdgeShield_AI_v1."
     },
     {
       "role": "uvicorn_api_server",
@@ -30,35 +30,35 @@
       "pid": 1871464,
       "ppid": 1871376,
       "rss_mb": 49.52,
-      "cmd_preview": "/home/open/miniforge3/envs/rknn-python/bin/python -u /home/open/EdgeShield_AI/source/edgeshield-ai/app/edge_model"
+      "cmd_preview": "/home/open/miniforge3/envs/rknn-python/bin/python -u /home/open/EdgeShield_AI_v1.3.0/source/edgeshield-ai/app/edge_model"
     },
     {
       "role": "npu_core_1_url_worker",
       "pid": 1871448,
       "ppid": 1871376,
       "rss_mb": 38.93,
-      "cmd_preview": "/home/open/miniforge3/envs/rknn-python/bin/python -u /home/open/EdgeShield_AI/source/edgeshield-ai/app/edge_model"
+      "cmd_preview": "/home/open/miniforge3/envs/rknn-python/bin/python -u /home/open/EdgeShield_AI_v1.3.0/source/edgeshield-ai/app/edge_model"
     },
     {
       "role": "npu_core_0_network_worker",
       "pid": 1871424,
       "ppid": 1871376,
       "rss_mb": 37.89,
-      "cmd_preview": "/home/open/miniforge3/envs/rknn-python/bin/python -u /home/open/EdgeShield_AI/source/edgeshield-ai/app/edge_model"
+      "cmd_preview": "/home/open/miniforge3/envs/rknn-python/bin/python -u /home/open/EdgeShield_AI_v1.3.0/source/edgeshield-ai/app/edge_model"
     },
     {
       "role": "executorch_llama_daemon",
       "pid": 1871332,
       "ppid": 1871330,
       "rss_mb": 3.07,
-      "cmd_preview": "bash -c \nset -e\ncd /home/open/EdgeShield_AI/source/edgeshield-ai\necho \"=== 2. Compile bin/executorch_runner ===\"\n"
+      "cmd_preview": "bash -c \nset -e\ncd /home/open/EdgeShield_AI_v1.3.0/source/edgeshield-ai\necho \"=== 2. Compile bin/executorch_runner ===\"\n"
     },
     {
       "role": "live_nic_sniffer",
       "pid": 1871407,
       "ppid": 1871376,
       "rss_mb": 0.75,
-      "cmd_preview": "/home/open/EdgeShield_AI/source/edgeshield-ai/bin/live_sniffer enP2p33s0"
+      "cmd_preview": "/home/open/EdgeShield_AI_v1.3.0/source/edgeshield-ai/bin/live_sniffer enP2p33s0"
     }
   ]
 }

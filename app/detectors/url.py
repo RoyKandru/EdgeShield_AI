@@ -315,7 +315,7 @@ def analyse_url(raw_url: str) -> ThreatEvent:
     else:
         prediction, category, confidence, base = "no_obvious_indicators", "no_obvious_url_indicators", 0.55, 0
 
-    model_version = "url-rules-v1"
+    model_version = "url-rules-v0.1"
     metadata = {"hostname": host, "scheme": scheme}
 
     ml = score_url(raw_url)

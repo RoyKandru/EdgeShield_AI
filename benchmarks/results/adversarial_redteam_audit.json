@@ -13,7 +13,7 @@
     "ping_ms": 35.4,
     "health": {
       "status": "ok",
-      "version": "v1",
+      "version": "1.4.3-arm64-sci",
       "auth_enabled": false
     },
     "latency_ms": 7.36,

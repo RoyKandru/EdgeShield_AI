@@ -1,6 +1,6 @@
 {
-  "version": "v1",
-  "parent_version": "v1",
+  "version": "v1.0.1",
+  "parent_version": "v1.0.0",
   "created_at": "2026-11-23T09:18:30.845984+00:00",
   "actor": "soc-analyst",
   "reason": "PROP-F66D8261A5: missing_domain_reputation -> update_verified_domain_intelligence",

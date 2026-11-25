@@ -6,11 +6,11 @@
 1. Disconnect WAN / internet uplink on the lab router (keep only local LAN between the RK3588J board `192.168.1.6` and test laptop).
 2. On the RK3588J board:
    ```bash
-   cd EdgeShield_AI
+   cd EdgeShield_AI_v1.3.0
    ./run.sh restart
    ./run.sh status
    ```
-   Confirm `Health: ok (v1)`, `NPU: Core 0/1/2 active`, `Monitor: running on enP2p33s0`, and `Advisory: command` (ExecuTorch Llama).
+   Confirm `Health: ok (1.4.3-arm64-sci)`, `NPU: Core 0/1/2 active`, `Monitor: running on enP2p33s0`, and `Advisory: command` (ExecuTorch Llama).
 3. On the test laptop, open **EdgeShield Console** (`http://192.168.1.6:8000`) in your browser and keep a terminal ready on the isolated LAN.
 
 ---

@@ -237,7 +237,7 @@ def analyse_sms(message: str) -> ThreatEvent:
                 evidence=[EvidenceItem(code="SCI_VERIFIED_BENIGN_PHRASE", description=f"Matched SCI verified benign phrase '{_bp}'.", weight=0)],
                 actions=["Verify unexpected requests independently; never share credentials or OTPs."],
                 model_version="sms-hybrid-v2", raw_input=message,
-                metadata={"matched_rule_count": 0, "protective_bank_guard": True, "sci_policy_version": _pol.get("version", "v1")},
+                metadata={"matched_rule_count": 0, "protective_bank_guard": True, "sci_policy_version": _pol.get("version", "v1.0.0")},
                 base_score=0,
             )
     for _ind in _pol.get("verified_deny_indicators", []):
@@ -398,7 +398,7 @@ def analyse_sms(message: str) -> ThreatEvent:
         "embedded_urls": embedded_urls,
         "embedded_phishing_hits": embedded_phish_hits,
         "obfuscation_detected": had_obf,
-        "protective_bank_guard": is_protective_benign, "sci_policy_version": _pol.get("version", "v1"),
+        "protective_bank_guard": is_protective_benign, "sci_policy_version": _pol.get("version", "v1.0.0"),
     }
     if ml_score is not None:
         meta["ml_score"] = ml_score

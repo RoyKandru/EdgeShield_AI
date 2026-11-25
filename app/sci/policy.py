@@ -1,7 +1,7 @@
 """Versioned Dynamic SCI Policy & Local Verified Threat Intelligence Store (with Rollback).
 
 Supports:
-  - Atomic versioned policy activation (v1, v1, ...) with SHA-256 checksums
+  - Atomic versioned policy activation (v1.0.0, v1.0.1, ...) with SHA-256 checksums
   - 1-click rollback to any prior working version
   - Thread-local `policy_override_context(candidate)` so the Validation Engine can safely
     replay any proposed patch through the real detectors without affecting live traffic
@@ -37,7 +37,7 @@ THRESHOLD_CLAMPS = {
 
 def default_policy() -> dict[str, Any]:
     return {
-        "version": "v1",
+        "version": "v1.0.0",
         "parent_version": None,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "actor": "system-bootstrap",
@@ -123,7 +123,7 @@ class PolicyManager:
                 parts = v.lstrip("v").split(".")
                 if len(parts) == 3 and parts[2].isdigit():
                     max_patch = max(max_patch, int(parts[2]))
-            return f"v1.{max_patch + 1}"
+            return f"v1.0.{max_patch + 1}"
 
     def list_versions(self) -> list[dict[str, Any]]:
         with self._lock:

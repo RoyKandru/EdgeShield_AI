@@ -31,7 +31,7 @@ def _rules_only(monkeypatch):
 def test_fallback_when_model_dir_missing(monkeypatch, tmp_path):
     monkeypatch.setattr(settings, "model_dir", str(tmp_path / "nope"))
     e = analyse_url("http://192.0.2.10/urgent/bank/verify-account")
-    assert e.model_version == "url-rules-v1"
+    assert e.model_version == "url-rules-v0.1"
     assert e.prediction == "suspicious"          # rules alone still flag this
     assert not any(x.code == "ML_SCORE" for x in e.evidence)
 
@@ -40,7 +40,7 @@ def test_fallback_on_corrupt_artefact(monkeypatch, tmp_path):
     (tmp_path / url_runtime.ARTEFACT).write_bytes(b"not a joblib file")
     monkeypatch.setattr(settings, "model_dir", str(tmp_path))
     e = analyse_url("http://example.com/")
-    assert e.model_version == "url-rules-v1"
+    assert e.model_version == "url-rules-v0.1"
 
 
 def test_fallback_on_bundle_missing_keys(monkeypatch, tmp_path):
@@ -53,7 +53,7 @@ def test_fallback_on_bundle_missing_keys(monkeypatch, tmp_path):
 def test_ml_disabled_is_identical_to_rules(monkeypatch):
     _rules_only(monkeypatch)
     e = analyse_url("http://192.0.2.10/urgent/bank/verify-account")
-    assert e.model_version == "url-rules-v1"
+    assert e.model_version == "url-rules-v0.1"
     assert set(e.metadata) == {"hostname", "scheme"}
 
 

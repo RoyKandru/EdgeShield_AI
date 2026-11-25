@@ -112,17 +112,17 @@ def test_full_closed_loop_verify_diagnose_plan_validate_deploy_and_rollback(tmp_
     assert res["validation"]["target_resolved"] is True
     assert res["deployed"] is True
     new_ver = res["deployment"]["deployed_version"]
-    assert new_ver == "v1"
+    assert new_ver == "v1.0.1"
 
-    # Immediately verify detector NOW catches the novel domain under deployed policy v1
+    # Immediately verify detector NOW catches the novel domain under deployed policy v1.0.1
     with policy_override_context(pmgr.get_active()):
         after = analyse_url(novel_url)
     assert after.prediction == "suspicious"
     assert any(e.code == "SCI_VERIFIED_DENY_DOMAIN" for e in after.evidence)
 
-    # Rollback to v1 and verify restoration + immutable SHA-256 ledger integrity
+    # Rollback to v1.0.0 and verify restoration + immutable SHA-256 ledger integrity
     rb = ctrl.rollback(actor="soc-analyst-1", reason="test_rollback")
-    assert rb["active_version"] == "v1"
+    assert rb["active_version"] == "v1.0.0"
     with policy_override_context(pmgr.get_active()):
         restored = analyse_url(novel_url)
     assert restored.prediction == "no_obvious_indicators"

@@ -374,15 +374,19 @@ def validate_advisory_output(
 
     vetted = vetted_recommendations(event, lang)
     merged_recs: list[str] = []
-    if valid:
-        for r_item in safe_llm_recs[:2]:
+    if valid and len(safe_llm_recs) >= 2:
+        # Serve genuine live LLM remediation actions when Llama produced >= 2 safe steps
+        merged_recs = safe_llm_recs[:3]
+    else:
+        if valid:
+            for r_item in safe_llm_recs[:2]:
+                if r_item not in merged_recs:
+                    merged_recs.append(r_item)
+        for r_item in vetted:
+            if len(merged_recs) >= 3:
+                break
             if r_item not in merged_recs:
                 merged_recs.append(r_item)
-    for r_item in vetted:
-        if len(merged_recs) >= 4:
-            break
-        if r_item not in merged_recs:
-            merged_recs.append(r_item)
 
     if valid and not notes:
         notes.append("verdict_locked_passed")

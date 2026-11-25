@@ -16,7 +16,7 @@ struct ThreatEvent {
   double risk_score{0.0};
   std::vector<Evidence> evidence;
   std::vector<std::string> recommended_actions;
-  std::string detector_version{"v1"};
+  std::string detector_version{"1.3.0"};
 };
 struct DetectionResult { bool flagged{false}; ThreatEvent event; };
 struct NetworkFlow {

@@ -123,7 +123,7 @@ def system_status():
     et = get_executorch_status()
     llama_ready = bool(et.get("configured") and et.get("artifacts_ok"))
     mon = live_monitor.status()
-    pol_ver = policy_mgr.get_active().get("version", "v1")
+    pol_ver = policy_mgr.get_active().get("version", "v1.0.0")
     return SystemStatus(
         status="ok",
         application="EdgeShield AI",
@@ -144,7 +144,7 @@ def system_status():
             "network": "network-hybrid-v3-npu-1dcnn (RK3588 NPU_CORE_0 + live-wire-dpi)",
             "advisory": "llama-3.2-1b-executorch" if llama_ready else "deterministic-template",
             "sci_policy": pol_ver,
-            "rknn_npu_adapter": "vv1-3core-all-npu-live",
+            "rknn_npu_adapter": "v1.4.3-3core-all-npu-live",
         },
     )
 
@@ -159,7 +159,7 @@ def stats():
     base = store.stats()
     base["live_monitor"] = live_monitor.status()
     base["llama"] = get_executorch_status()
-    base["sci_policy_version"] = policy_mgr.get_active().get("version", "v1")
+    base["sci_policy_version"] = policy_mgr.get_active().get("version", "v1.0.0")
     return base
 
 
@@ -467,7 +467,7 @@ def explain(request: AdvisoryRequest):
         raise HTTPException(status_code=503, detail=f"Advisory provider error: {exc}")
 
 
-# --- RK3588 3-Core NPU Adapter Probe Endpoints (merged from v1) ---
+# --- RK3588 3-Core NPU Adapter Probe Endpoints (merged from v1.4.0) ---
 
 @app.get("/api/hardware/rknn/status")
 def rknn_status():
@@ -563,7 +563,7 @@ def adaptive_status():
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "version": "v1", "auth_enabled": is_auth_enabled()}
+    return {"status": "ok", "version": "1.4.3-arm64-sci", "auth_enabled": is_auth_enabled()}
 
 
 # --- SCI Ledger + 9-Stage Closed-Loop Self-Learning & Self-Correction Endpoints ---

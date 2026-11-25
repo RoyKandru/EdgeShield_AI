@@ -171,7 +171,7 @@ def test_missing_or_mismatched_model_falls_back(tmp_path, monkeypatch):
     monkeypatch.setattr(nrt.settings, "model_dir", str(tmp_path))           # no artefact there
     assert nrt.load_bundle() is None
     events = net.analyse_pcap(str(tmp_path / "t.pcap"))
-    assert events and events[0].model_version == "network-rules-v1"
+    assert events and events[0].model_version == "network-rules-v0.1"
 
     import joblib                                                             # stale feature list
     joblib.dump({"features": ["x"], "model": None, "threshold": 0.5}, tmp_path / nrt.BUNDLE_FILE)

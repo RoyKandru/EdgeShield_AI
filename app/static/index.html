@@ -6,30 +6,30 @@
   <title>EdgeShield AI — EdgeProc Security Console</title>
   <style>
     :root {
-      --bg: #0d1015;
-      --panel: #151921;
-      --panel2: #1c212b;
-      --panel3: #10141b;
-      --drawer-bg: #171c25;
-      --line: #262c36;
-      --line-hi: #384152;
-      --text: #eef2f6;
-      --muted: #98a2b3;
-      --accent: #3b82f6;
-      --accent-hi: #2563eb;
-      --accent-solid: #1d4ed8;
-      --crit: #f85149;
-      --high: #fb923c;
-      --med: #e3b341;
-      --low: #3fb950;
-      --info: #58a6ff;
+      --bg: #e5ebf2;
+      --panel: #f3f6fa;
+      --panel2: #e7edf5;
+      --panel3: #dde5ef;
+      --drawer-bg: #eef3f8;
+      --line: #c4d0de;
+      --line-hi: #96a8be;
+      --text: #0f172a;
+      --muted: #475569;
+      --accent: #0284c7;
+      --accent-hi: #0369a1;
+      --accent-solid: #0369a1;
+      --crit: #dc2626;
+      --high: #ea580c;
+      --med: #d97706;
+      --low: #059669;
+      --info: #0284c7;
       /* Semantic compatibility aliases */
-      --blue: #3b82f6;
-      --blue-hi: #1d4ed8;
-      --cyan: #58a6ff;
-      --green: #3fb950;
-      --amber: #e3b341;
-      --red: #f85149;
+      --blue: #0284c7;
+      --blue-hi: #0369a1;
+      --cyan: #0284c7;
+      --green: #059669;
+      --amber: #d97706;
+      --red: #dc2626;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -38,8 +38,8 @@
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, sans-serif;
       background: var(--bg);
       color: var(--text);
-      font-size: 13.5px;
-      line-height: 1.45;
+      font-size: 14.5px;
+      line-height: 1.5;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -47,7 +47,7 @@
     }
 
     :focus-visible {
-      outline: 2px solid #60a5fa;
+      outline: 2px solid #38bdf8;
       outline-offset: 2px;
       border-radius: 6px;
     }
@@ -63,6 +63,7 @@
       white-space: nowrap;
       border: 0;
     }
+    [hidden] { display: none !important; }
 
     /* Monochrome SVG Icons */
     .ic, .ic-lg {
@@ -81,20 +82,20 @@
     * { scrollbar-width: thin; scrollbar-color: #343d4d var(--panel3); }
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: var(--panel3); }
-    ::-webkit-scrollbar-thumb { background: #343d4d; border-radius: 99px; }
-    ::-webkit-scrollbar-thumb:hover { background: #4b566b; }
+    ::-webkit-scrollbar-thumb { background: #aebccf; border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: #8b9db5; }
 
     /* Row 1: Enterprise Header Chrome */
     header {
       flex: 0 0 auto;
-      padding: 9px 16px;
+      padding: 10px 16px;
       border-bottom: 1px solid var(--line);
-      background: #11151c;
+      background: #dfe7f1;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      min-height: 58px;
+      min-height: 64px;
     }
     .brand {
       display: flex;
@@ -104,33 +105,33 @@
       flex-shrink: 0;
     }
     .logo {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       display: grid;
       place-items: center;
       flex-shrink: 0;
     }
     .logo svg {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       display: block;
     }
     .brand-copy { min-width: 0; }
     .brand h1 {
       margin: 0;
-      font-size: 19px;
+      font-size: 24px;
       font-weight: 800;
-      letter-spacing: -0.2px;
+      letter-spacing: -0.25px;
       line-height: 1.15;
-      color: #f8fafc;
+      color: #0f172a;
       white-space: nowrap;
     }
     .brand .company-sub {
       display: block;
-      margin-top: 1px;
-      font-size: 11.5px;
-      font-weight: 600;
-      letter-spacing: 0.9px;
+      margin-top: 2px;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: 1px;
       text-transform: uppercase;
       color: var(--muted);
       line-height: 1.2;
@@ -153,17 +154,17 @@
       background: var(--panel2);
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 0 8px 0 10px;
-      min-height: 34px;
+      padding: 0 10px 0 10px;
+      min-height: 36px;
       transition: border-color 0.14s ease, background 0.14s ease, box-shadow 0.14s ease;
     }
     .hdr-ctrl:hover {
       border-color: var(--line-hi);
-      background: #222834;
+      background: #d8e2ee;
     }
     .hdr-ctrl:focus-within {
       border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+      box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.28);
     }
     .hdr-ic {
       color: var(--muted);
@@ -171,25 +172,30 @@
     }
     .hdr-sel {
       width: auto;
-      min-height: 32px;
+      min-height: 34px;
       background: transparent;
       border: none;
       color: var(--text);
       font-family: inherit;
-      font-size: 12.5px;
+      font-size: 13.5px;
       font-weight: 600;
       padding: 4px 4px 4px 0;
       cursor: pointer;
-      max-width: 220px;
+      max-width: 230px;
     }
     .hdr-sel:focus { outline: none; }
     .hdr-sel:focus-visible { outline: none; }
     .hdr-sel option {
-      background: #151921;
+      background: #f3f6fa;
       color: var(--text);
     }
 
     /* Live Status Indicators */
+    @keyframes livePulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.65); }
+      70% { box-shadow: 0 0 0 7px rgba(52, 211, 153, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+    }
     .status-dot {
       width: 8px;
       height: 8px;
@@ -199,18 +205,18 @@
     }
     .status-dot.dot-ok {
       background: var(--low);
-      box-shadow: 0 0 0 2px rgba(63, 185, 80, 0.22);
+      animation: livePulseRing 2s infinite;
     }
     .status-dot.dot-warn {
       background: var(--med);
-      box-shadow: 0 0 0 2px rgba(227, 179, 65, 0.22);
+      box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.25);
     }
     .status-dot.dot-off, .status-dot.dot-muted {
       background: #64748b;
     }
     .status-dot.dot-err, .status-dot.dot-crit {
       background: var(--crit);
-      box-shadow: 0 0 0 2px rgba(248, 81, 73, 0.22);
+      box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.25);
     }
 
     /* Generic Status Pills (body usage) */
@@ -218,43 +224,43 @@
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      padding: 3px 9px;
+      padding: 3px 10px;
       border-radius: 999px;
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 700;
       border: 1px solid var(--line-hi);
       background: var(--panel2);
       color: var(--text);
       white-space: nowrap;
-      min-height: 26px;
+      min-height: 28px;
     }
     .pill.ok {
-      background: #0d3321;
-      color: #bbf7d0;
-      border-color: #16a34a;
+      background: #d1fae5;
+      color: #065f46;
+      border-color: #10b981;
     }
     .pill.warn {
-      background: #3d2e0a;
-      color: #fef08a;
-      border-color: #ca8a04;
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #f59e0b;
     }
     .pill.info {
-      background: #172638;
-      color: #bae6fd;
-      border-color: #0284c7;
+      background: #e0f2fe;
+      color: #075985;
+      border-color: #0ea5e9;
     }
     .pill.danger {
-      background: #451215;
-      color: #fecaca;
-      border-color: #dc2626;
+      background: #fee2e2;
+      color: #991b1b;
+      border-color: #ef4444;
     }
 
     /* Row 2: 5-Tab Navigation Bar with Unmistakable Hover Highlight */
     .nav-bar {
       flex: 0 0 auto;
-      padding: 7px 16px;
+      padding: 8px 16px;
       border-bottom: 1px solid var(--line);
-      background: var(--panel3);
+      background: #d8e1ec;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -263,7 +269,7 @@
     .tabs {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       flex-wrap: nowrap;
       overflow-x: auto;
       scrollbar-width: thin;
@@ -272,46 +278,48 @@
     .tab {
       position: relative;
       background: var(--panel);
-      color: #cbd5e1;
+      color: #1e293b;
       border: 1px solid var(--line);
-      min-height: 36px;
-      padding: 6px 13px;
-      border-radius: 8px;
+      min-height: 46px;
+      min-width: 178px;
+      padding: 10px 24px;
+      border-radius: 10px;
       cursor: pointer;
-      font-weight: 600;
-      font-size: 13px;
+      font-weight: 700;
+      font-size: 16px;
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      justify-content: center;
+      gap: 9px;
       white-space: nowrap;
       flex-shrink: 0;
       transition: background 0.14s, color 0.14s, border-color 0.14s, box-shadow 0.14s;
     }
     .tab:hover:not(.active) {
-      background: #252c38;
-      color: #ffffff;
-      border-color: #4b5563;
-      box-shadow: inset 0 -2px 0 #60a5fa;
+      background: #e4ecf5;
+      color: #0f172a;
+      border-color: #64748b;
+      box-shadow: inset 0 -3px 0 #0284c7;
     }
     .tab.active {
-      background: #1d4ed8;
-      color: #ffffff;
-      border-color: #3b82f6;
-      box-shadow: 0 1px 4px rgba(29, 78, 216, 0.35);
+      background: var(--accent-solid);
+      color: #f8fafc;
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(3, 105, 161, 0.28);
     }
     .tab .cnt {
-      background: rgba(152, 162, 179, 0.2);
-      color: var(--text);
-      padding: 1px 7px;
+      background: #dbe4ef;
+      color: #0f172a;
+      padding: 2px 8px;
       border-radius: 999px;
-      font-size: 11.5px;
+      font-size: 13px;
       font-weight: 700;
       line-height: 1.3;
       font-variant-numeric: tabular-nums;
     }
     .tab.active .cnt {
-      background: rgba(13, 16, 21, 0.36);
-      color: #ffffff;
+      background: rgba(15, 23, 42, 0.24);
+      color: #f8fafc;
     }
 
     /* Main Workspace & Tab Panels */
@@ -343,7 +351,7 @@
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 10px;
-      padding: 12px 14px;
+      padding: 12px 15px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -351,7 +359,7 @@
       min-width: 0;
     }
     .kpi .lbl {
-      font-size: 11.5px;
+      font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.45px;
       color: var(--muted);
@@ -361,30 +369,27 @@
       text-overflow: ellipsis;
     }
     .kpi .val {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 800;
       color: var(--text);
       line-height: 1.15;
       font-variant-numeric: tabular-nums;
     }
     .kpi .sub {
-      font-size: 12px;
+      font-size: 12.5px;
       color: var(--muted);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    /* Command Center Adaptive Split Layout (100% full-width by default) */
+    /* Command Center Fixed 2-Column Layout */
     .cc-layout {
       flex: 1 1 auto;
       min-height: 0;
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1.32fr) minmax(390px, 1fr);
       gap: 14px;
-    }
-    .cc-layout.drawer-open {
-      grid-template-columns: minmax(0, 1.32fr) minmax(380px, 1fr);
     }
 
     /* Standard Split-Pane Layouts */
@@ -416,9 +421,9 @@
     }
     .pane-head {
       flex: 0 0 auto;
-      padding: 10px 14px;
+      padding: 11px 14px;
       border-bottom: 1px solid var(--line);
-      background: #181d26;
+      background: #e4ecf5;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -427,7 +432,7 @@
     }
     .pane-head h2, .pane-head h3 {
       margin: 0;
-      font-size: 13.5px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--text);
       display: inline-flex;
@@ -438,16 +443,15 @@
       flex: 1 1 auto;
       min-height: 0;
       overflow-y: auto;
-      padding: 13px 14px;
+      padding: 14px 15px;
     }
     .pane-body.flush { padding: 0; }
 
-    .drawer-pane[hidden] { display: none !important; }
     .drawer-pane,
     .pane.drawer-pane {
       background: var(--drawer-bg);
-      border: 1px solid #334155;
-      border-left: 3px solid #3b82f6;
+      border: 1px solid var(--line-hi);
+      border-left: 3px solid var(--accent);
       border-radius: 12px;
       box-shadow: -8px 0 28px rgba(0, 0, 0, 0.45);
       display: flex;
@@ -464,9 +468,9 @@
     .drawer-head,
     .pane-head.drawer-head {
       flex: 0 0 auto;
-      padding: 10px 14px;
-      background: #1e2430;
-      border-bottom: 1px solid #2e3646;
+      padding: 11px 14px;
+      background: #e4ecf5;
+      border-bottom: 1px solid var(--line);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -475,9 +479,9 @@
     }
     .drawer-head h2, .drawer-head h3 {
       margin: 0;
-      font-size: 13.5px;
+      font-size: 16px;
       font-weight: 700;
-      color: #f8fafc;
+      color: #0f172a;
       display: inline-flex;
       align-items: center;
       gap: 7px;
@@ -494,14 +498,14 @@
     .subtab {
       position: relative;
       background: var(--panel);
-      color: #cbd5e1;
+      color: #1e293b;
       border: 1px solid var(--line);
-      min-height: 34px;
-      padding: 6px 13px;
+      min-height: 36px;
+      padding: 6px 14px;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 12.5px;
+      font-size: 13.5px;
       display: inline-flex;
       align-items: center;
       gap: 7px;
@@ -509,16 +513,16 @@
       transition: background 0.14s, color 0.14s, border-color 0.14s, box-shadow 0.14s;
     }
     .subtab:hover:not(.active) {
-      background: #252c38;
+      background: #d8e2ee;
       color: #ffffff;
-      border-color: #4b5563;
-      box-shadow: inset 0 -2px 0 #60a5fa;
+      border-color: #4b566b;
+      box-shadow: inset 0 -2px 0 #38bdf8;
     }
     .subtab.active {
       background: var(--accent-solid);
       color: #ffffff;
       border-color: var(--accent);
-      box-shadow: 0 1px 4px rgba(29, 78, 216, 0.35);
+      box-shadow: 0 1px 4px rgba(14, 165, 233, 0.35);
     }
     .subtab .cnt {
       background: rgba(152, 162, 179, 0.2);
@@ -530,7 +534,7 @@
       font-variant-numeric: tabular-nums;
     }
     .subtab.active .cnt {
-      background: rgba(13, 16, 21, 0.35);
+      background: rgba(15, 23, 42, 0.22);
       color: #ffffff;
     }
     .subpanel {
@@ -548,12 +552,12 @@
       color: var(--text);
       border: 1px solid var(--line-hi);
       border-radius: 7px;
-      min-height: 32px;
-      padding: 6px 11px;
+      min-height: 34px;
+      padding: 6px 12px;
       cursor: pointer;
       font-family: inherit;
       font-weight: 600;
-      font-size: 12.5px;
+      font-size: 13.5px;
       line-height: 1.2;
       display: inline-flex;
       align-items: center;
@@ -563,17 +567,17 @@
       transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
     }
     button:hover {
-      background: #262d3a;
-      border-color: #4d596e;
+      background: #dce5f0;
+      border-color: #7c90a8;
     }
     button:disabled {
       opacity: 0.55;
       cursor: not-allowed;
     }
     button.btn-sm {
-      min-height: 30px;
+      min-height: 32px;
       padding: 4px 10px;
-      font-size: 12px;
+      font-size: 13.5px;
     }
     button.btn-ghost {
       background: transparent;
@@ -592,62 +596,63 @@
     }
     button.primary:hover {
       background: var(--accent-hi);
-      border-color: #60a5fa;
+      border-color: #38bdf8;
     }
     button.llama-btn {
       background: var(--accent-solid);
       border-color: var(--accent);
       color: #ffffff;
-      min-height: 34px;
+      min-height: 36px;
       padding: 7px 14px;
-      font-size: 12.5px;
+      font-size: 13.5px;
     }
     button.llama-btn:hover {
       background: var(--accent-hi);
-      border-color: #60a5fa;
+      border-color: #38bdf8;
     }
     button.good {
-      background: #0d3321;
-      border-color: #16a34a;
-      color: #bbf7d0;
+      background: #d1fae5;
+      border-color: #059669;
+      color: #065f46;
     }
     button.good:hover {
-      background: #14442c;
-      border-color: #22c55e;
-      color: #dcfce7;
+      background: #a7f3d0;
+      border-color: #047857;
+      color: #064e3b;
     }
     button.danger {
-      background: #451215;
+      background: #fee2e2;
       border-color: #dc2626;
-      color: #fecaca;
+      color: #991b1b;
     }
     button.danger:hover {
-      background: #5c191d;
-      border-color: #ef4444;
-      color: #fee2e2;
+      background: #fecaca;
+      border-color: #b91c1c;
+      color: #7f1d1d;
     }
     button.warn {
-      background: #3d2e0a;
-      border-color: #ca8a04;
-      color: #fef08a;
+      background: #fef3c7;
+      border-color: #d97706;
+      color: #92400e;
     }
     button.warn:hover {
-      background: #4e3b0d;
-      border-color: #eab308;
+      background: #fde68a;
+      border-color: #b45309;
+      color: #78350f;
     }
     button.chip {
-      min-height: 30px;
-      padding: 4px 10px;
-      font-size: 12px;
+      min-height: 32px;
+      padding: 4px 11px;
+      font-size: 13px;
       border-radius: 999px;
       background: var(--panel3);
-      color: #cbd5e1;
+      color: #1e293b;
       border-color: var(--line-hi);
     }
     button.chip:hover {
-      background: #252c38;
+      background: #d8e2ee;
       color: #ffffff;
-      border-color: #4d596e;
+      border-color: #7c90a8;
     }
     .chip.active, button.chip.active {
       background: var(--accent-solid);
@@ -656,7 +661,7 @@
     }
     .chip.active:hover, button.chip.active:hover {
       background: var(--accent-hi);
-      border-color: #60a5fa;
+      border-color: #38bdf8;
       color: #ffffff;
     }
 
@@ -670,11 +675,11 @@
       border-radius: 8px;
       padding: 7px 10px;
       font: inherit;
-      font-size: 12.5px;
-      min-height: 34px;
+      font-size: 13.5px;
+      min-height: 36px;
     }
     input::placeholder, textarea::placeholder {
-      color: #8592a6;
+      color: #8f9bb0;
       opacity: 1;
     }
     input[type="checkbox"], input[type="radio"] {
@@ -687,9 +692,9 @@
     }
     select.inline-sel {
       width: auto;
-      min-height: 30px;
+      min-height: 32px;
       padding: 4px 9px;
-      font-size: 12px;
+      font-size: 13.5px;
     }
     textarea { min-height: 84px; resize: vertical; }
 
@@ -717,28 +722,28 @@
     input[type="search"].search-input,
     input.search-input {
       padding: 5px 10px 5px 31px !important;
-      min-height: 30px;
-      font-size: 12px;
+      min-height: 32px;
+      font-size: 13.5px;
     }
 
     .live-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      min-height: 30px;
-      padding: 4px 10px;
+      min-height: 32px;
+      padding: 4px 11px;
       border-radius: 999px;
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 700;
-      background: #0d3321;
-      color: #bbf7d0;
-      border: 1px solid #16a34a;
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #10b981;
       cursor: pointer;
       transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
     }
     .live-pill:hover {
-      background: #14442c;
-      border-color: #22c55e;
+      background: #a7f3d0;
+      border-color: #34d399;
     }
     .live-pill .pulse-dot {
       width: 7px;
@@ -752,17 +757,25 @@
       50% { opacity: 0.4; transform: scale(0.82); }
     }
     .live-pill.paused {
-      background: #3d2e0a;
-      color: #fef08a;
-      border-color: #ca8a04;
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #f59e0b;
     }
     .live-pill.paused:hover {
-      background: #4e3b0d;
-      border-color: #eab308;
+      background: #5e440c;
+      border-color: #fbbf24;
     }
     .live-pill.paused .pulse-dot {
       background: var(--med);
       animation: none;
+    }
+    .live-ticker {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: ui-monospace, Menlo, monospace;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .new-alerts-bar[hidden] { display: none !important; }
@@ -772,9 +785,9 @@
       justify-content: space-between;
       gap: 10px;
       padding: 7px 14px;
-      background: #17253d;
+      background: #dbeafe;
       border-bottom: 1px solid #2b4570;
-      color: #dbeafe;
+      color: #1e3a8a;
       font-size: 12.5px;
       font-weight: 600;
     }
@@ -786,7 +799,7 @@
       gap: 8px;
       flex-wrap: wrap;
       padding: 8px 14px;
-      background: #11151d;
+      background: #dbe4ef;
       border-bottom: 1px solid var(--line);
       font-size: 12px;
       color: var(--muted);
@@ -819,7 +832,7 @@
       right: 0;
       z-index: 65;
       width: 280px;
-      background: #1b212c;
+      background: #dce5f0;
       border: 1px solid #384152;
       border-radius: 10px;
       padding: 12px 13px;
@@ -885,9 +898,9 @@
       width: 280px;
       padding: 10px 12px;
       border-radius: 9px;
-      background: #1e2430;
+      background: #e2e9f2;
       border: 1px solid #3f4a5c;
-      color: #e2e8f0;
+      color: #1e293b;
       font-size: 12px;
       font-weight: 400;
       line-height: 1.48;
@@ -933,7 +946,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12.5px;
+      font-size: 13.5px;
     }
     .ev-table {
       width: 100%;
@@ -945,17 +958,17 @@
       border-collapse: collapse;
       min-width: 640px;
     }
-    th {
+    th, .ev-table th, .sci-table th {
       position: sticky;
       top: 0;
       z-index: 2;
       text-align: left;
-      padding: 9px 10px;
-      font-size: 11.5px;
+      padding: 10px 10px;
+      font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.4px;
       color: var(--muted);
-      background: #12161e;
+      background: #e1e8f2;
       border-bottom: 1px solid var(--line);
       white-space: nowrap;
     }
@@ -981,11 +994,12 @@
     th button.sort-btn.sort-active,
     th button.sort-btn[aria-sort="ascending"],
     th button.sort-btn[aria-sort="descending"] {
-      color: #93c5fd;
+      color: #7dd3fc;
     }
-    td {
-      padding: 9px 10px;
-      border-bottom: 1px solid rgba(38, 44, 54, 0.85);
+    td, .ev-table td, .sci-table td {
+      padding: 10px 10px;
+      font-size: 13.5px;
+      border-bottom: 1px solid rgba(45, 53, 69, 0.85);
       vertical-align: middle;
       color: var(--text);
     }
@@ -998,39 +1012,71 @@
       transition: background 0.12s ease;
     }
     tr.ev-row:hover {
-      background: rgba(59, 130, 246, 0.1);
+      background: rgba(14, 165, 233, 0.1);
     }
     tr.ev-row.selected {
-      background: #1c273a;
-      box-shadow: inset 3px 0 0 #3b82f6;
+      background: #dbeafe;
+      box-shadow: inset 3px 0 0 #0ea5e9;
     }
-    @keyframes newRowFlash {
-      0% { background: rgba(59, 130, 246, 0.24); }
-      100% { background: transparent; }
+    @keyframes newRowPulseNet {
+      0%, 100% { background: transparent; box-shadow: inset 4px 0 0 transparent; }
+      45% { background: rgba(2, 132, 199, 0.26); box-shadow: inset 4px 0 0 #0284c7; }
     }
+    @keyframes newRowPulseUrl {
+      0%, 100% { background: transparent; box-shadow: inset 4px 0 0 transparent; }
+      45% { background: rgba(124, 58, 237, 0.24); box-shadow: inset 4px 0 0 #7c3aed; }
+    }
+    @keyframes newRowPulseSms {
+      0%, 100% { background: transparent; box-shadow: inset 4px 0 0 transparent; }
+      45% { background: rgba(217, 119, 6, 0.26); box-shadow: inset 4px 0 0 #d97706; }
+    }
+    .ev-row.ev-new,
     tr.ev-row.new-row,
     tr.ev-row.row-new {
-      animation: newRowFlash 1.4s ease-out;
+      animation: newRowPulseNet 0.8s ease-in-out 5;
+    }
+    tr.ev-row.ev-new[data-src="net"] {
+      animation: newRowPulseNet 0.8s ease-in-out 5;
+    }
+    tr.ev-row.ev-new[data-src="url"] {
+      animation: newRowPulseUrl 0.8s ease-in-out 5;
+    }
+    tr.ev-row.ev-new[data-src="sms"] {
+      animation: newRowPulseSms 0.8s ease-in-out 5;
+    }
+    tr.ev-row[data-src="net"] .new-tag { background: #0284c7; border-color: #0369a1; color: #f0f9ff; }
+    tr.ev-row[data-src="url"] .new-tag { background: #7c3aed; border-color: #6d28d9; color: #f5f3ff; }
+    tr.ev-row[data-src="sms"] .new-tag { background: #d97706; border-color: #b45309; color: #fffbeb; }
+    .new-tag {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      font-weight: 700;
+      background: #0369a1;
+      color: #f0f9ff;
+      border: 1px solid #38bdf8;
+      margin-left: 4px;
     }
     .preview-cell {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 12px;
-      color: #dbe3ee;
+      font-size: 13px;
+      color: #1e293b;
     }
     .mono {
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-variant-numeric: tabular-nums;
     }
 
-    /* High-Contrast Semantic Badges (WCAG AA >= 6:1 even on selected rows) */
+    /* High-Contrast Semantic Badges (WCAG AA >= 4.5:1 even on selected rows) */
     .badge {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      padding: 2px 8px;
+      padding: 3px 8px;
       border-radius: 999px;
       font-size: 11.5px;
       font-weight: 700;
@@ -1040,44 +1086,44 @@
       line-height: 1.35;
     }
     .badge.b-critical, .b-critical {
-      background: #451215;
-      color: #fecaca;
-      border: 1px solid #dc2626;
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #ef4444;
     }
     .badge.b-high, .b-high {
-      background: #431d0c;
-      color: #fed7aa;
-      border: 1px solid #ea580c;
+      background: #ffedd5;
+      color: #9a3412;
+      border: 1px solid #f97316;
     }
     .badge.b-medium, .b-medium {
-      background: #3d2e0a;
-      color: #fef08a;
-      border: 1px solid #ca8a04;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #f59e0b;
     }
     .badge.b-low, .b-low {
-      background: #0d3321;
-      color: #bbf7d0;
-      border: 1px solid #16a34a;
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #10b981;
     }
     .badge.b-net, .b-net {
-      background: #172638;
-      color: #bae6fd;
-      border: 1px solid #0284c7;
+      background: #e0f2fe;
+      color: #075985;
+      border: 1px solid #0ea5e9;
     }
     .badge.b-url, .b-url {
-      background: #271c3d;
-      color: #ddd6fe;
-      border: 1px solid #7c3aed;
+      background: #ede9fe;
+      color: #5b21b6;
+      border: 1px solid #8b5cf6;
     }
     .badge.b-sms, .b-sms {
-      background: #362511;
-      color: #fde68a;
-      border: 1px solid #d97706;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #f59e0b;
     }
     .badge.b-live, .b-live {
-      background: #451215;
-      color: #fecaca;
-      border: 1px solid #dc2626;
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #ef4444;
     }
 
     /* SCI Form Grid */
@@ -1156,9 +1202,9 @@
     }
 
     /* Investigation Drawer, Human-Readable Signal Pills & AI Advisory Card */
-    .insp-section { margin-bottom: 13px; }
+    .insp-section { margin-bottom: 8px; }
     .insp-label {
-      font-size: 11.5px;
+      font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.4px;
       color: var(--muted);
@@ -1172,8 +1218,8 @@
       border-radius: 8px;
       padding: 9px 11px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 12px;
-      color: #dbe3ee;
+      font-size: 13px;
+      color: #1e293b;
       word-break: break-word;
       white-space: pre-wrap;
       max-height: 130px;
@@ -1190,10 +1236,10 @@
       gap: 6px;
       padding: 4px 9px;
       border-radius: 7px;
-      background: #1d2430;
-      border: 1px solid #323b4b;
+      background: #e3ebf5;
+      border: 1px solid #bcc9da;
       color: var(--text);
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 500;
       line-height: 1.3;
     }
@@ -1202,10 +1248,10 @@
       align-items: center;
       padding: 1px 6px;
       border-radius: 999px;
-      background: #283142;
-      color: #93c5fd;
+      background: #d1e9fb;
+      color: #0369a1;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 700;
     }
     .sig-chip {
@@ -1213,24 +1259,24 @@
       margin: 2px 4px 2px 0;
       padding: 3px 8px;
       border-radius: 6px;
-      background: #1d2430;
+      background: #e3ebf5;
       border: 1px solid var(--line-hi);
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 12px;
-      color: #dbe3ee;
+      font-size: 12.5px;
+      color: #1e293b;
     }
     .llama-card {
-      background: #131924;
-      border: 1px solid #2e3b52;
+      background: #e6f2fc;
+      border: 1px solid #2c3e55;
       border-left: 3px solid var(--accent);
       border-radius: 10px;
-      padding: 12px 14px;
+      padding: 13px 14px;
       margin-top: 10px;
     }
     .llama-card h4 {
       margin: 0 0 7px;
-      font-size: 13.5px;
-      color: #f8fafc;
+      font-size: 14.5px;
+      color: #0f172a;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -1238,15 +1284,15 @@
       flex-wrap: wrap;
     }
     .llama-text {
-      font-size: 13.5px;
+      font-size: 14.5px;
       color: var(--text);
-      line-height: 1.55;
+      line-height: 1.6;
     }
     .llama-card ul {
       margin: 8px 0 0 18px;
       padding: 0;
-      color: #dbe3ee;
-      font-size: 12.5px;
+      color: #1e293b;
+      font-size: 13.5px;
     }
     .llama-card li { margin-bottom: 4px; }
     .llama-meta {
@@ -1255,6 +1301,131 @@
       color: var(--muted);
       border-top: 1px solid var(--line);
       padding-top: 6px;
+    }
+
+    /* Separate Explanation, Remediation & Detection Signals Cards */
+    .advisory-exp-card {
+      background: #e6f2fc;
+      border: 1px solid #93c5fd;
+      border-left: 4px solid #0284c7;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: 10px;
+    }
+    .advisory-rem-card {
+      background: #e4f6ee;
+      border: 1px solid #86efac;
+      border-left: 4px solid #059669;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: 10px;
+    }
+    .insp-signals-card {
+      background: #e7ecf4;
+      border: 1px solid #b9c7da;
+      border-left: 4px solid #6366f1;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: 12px;
+    }
+    .remediation-list {
+      margin: 8px 0 0 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .remediation-list li {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 14px;
+      color: #064e3b;
+      line-height: 1.55;
+    }
+    .step-num {
+      flex: 0 0 auto;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: #059669;
+      color: #f0fdf4;
+      font-size: 12px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      margin-top: 1px;
+    }
+
+    /* Product Welcome Empty State */
+    .welcome-box {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 6px 2px;
+    }
+    .welcome-hero {
+      padding: 16px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #dce6f2 0%, #eaf0f7 100%);
+      border: 1px solid var(--line-hi);
+    }
+    .welcome-hero h3 {
+      margin: 0 0 4px 0;
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .welcome-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .feature-tile {
+      background: var(--panel3);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 12px;
+    }
+    .feature-tile h4 {
+      margin: 0 0 4px 0;
+      font-size: 13.5px;
+      color: var(--info);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .feature-tile p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .howto-box {
+      background: var(--panel3);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 12px 14px;
+    }
+    .howto-box ol,
+    .welcome-steps {
+      list-style: none;
+      margin: 8px 0 0 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      font-size: 13.5px;
+      color: var(--text);
+    }
+    .howto-box li,
+    .welcome-steps li {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      margin-bottom: 0;
+      line-height: 1.45;
     }
     .spinner {
       display: inline-block;
@@ -1290,9 +1461,9 @@
       background: rgba(16, 20, 27, 0.65);
     }
     .error-box {
-      background: #451215;
+      background: #fee2e2;
       border: 1px solid #dc2626;
-      color: #fecaca;
+      color: #991b1b;
       border-radius: 8px;
       padding: 10px 12px;
       font-size: 12.5px;
@@ -1317,7 +1488,7 @@
     }
     .corr-card:hover {
       border-color: var(--accent);
-      background: #181e29;
+      background: #e6edf6;
       transform: translateY(-1px);
     }
     .corr-card:focus-visible {
@@ -1333,7 +1504,7 @@
       border-radius: 999px;
       font-size: 11.5px;
       font-weight: 700;
-      background: #1b263b;
+      background: #dce8f8;
       color: #bfdbfe;
       border: 1px solid #3b82f6;
       white-space: nowrap;
@@ -1367,7 +1538,7 @@
       font-weight: 700;
       font-size: 12.5px;
       color: var(--muted);
-      background: #181d26;
+      background: #e4ecf5;
       list-style: none;
       display: flex;
       align-items: center;
@@ -1386,7 +1557,7 @@
       padding: 12px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 12px;
-      color: #dbe3ee;
+      color: #1e293b;
       max-height: 320px;
       overflow: auto;
       white-space: pre-wrap;
@@ -1416,34 +1587,34 @@
       font-size: 12.5px;
       font-weight: 600;
       line-height: 1.4;
-      background: #1c222d;
+      background: #f3f6fa;
       color: var(--text);
       border: 1px solid var(--line-hi);
       border-left: 4px solid var(--accent);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
       animation: toastIn 0.18s ease-out;
     }
     .toast-ok {
-      background: #0d2b1d;
-      color: #bbf7d0;
+      background: #d1fae5;
+      color: #065f46;
       border-color: #16a34a;
       border-left-color: #3fb950;
     }
     .toast-warn {
-      background: #332609;
-      color: #fef08a;
+      background: #fef3c7;
+      color: #92400e;
       border-color: #ca8a04;
       border-left-color: #e3b341;
     }
     .toast-err {
       background: #3a1013;
-      color: #fecaca;
+      color: #991b1b;
       border-color: #dc2626;
       border-left-color: #f85149;
     }
     .toast-info {
-      background: #142233;
-      color: #bae6fd;
+      background: #e0f2fe;
+      color: #075985;
       border-color: #0284c7;
       border-left-color: #58a6ff;
     }
@@ -1458,7 +1629,7 @@
       position: fixed;
       inset: 0;
       z-index: 1100;
-      background: rgba(7, 9, 13, 0.78);
+      background: rgba(15, 23, 42, 0.45);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -1471,13 +1642,13 @@
       background: var(--panel);
       border: 1px solid var(--line-hi);
       border-radius: 14px;
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.65);
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.22);
       overflow: hidden;
     }
     .modal-head {
       padding: 12px 16px;
       border-bottom: 1px solid var(--line);
-      background: #181d26;
+      background: #e4ecf5;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1515,7 +1686,7 @@
       .nav-bar { padding: 6px 12px; }
       .workspace { padding: 12px; }
       .hdr-sel { max-width: 175px; }
-      .cc-layout.drawer-open {
+      .cc-layout {
         grid-template-columns: minmax(0, 1.2fr) minmax(350px, 1fr);
       }
     }
@@ -1543,7 +1714,8 @@
         -webkit-overflow-scrolling: touch;
       }
       .kpi-strip { grid-template-columns: repeat(2, 1fr); }
-      .cc-layout.drawer-open { grid-template-columns: 1fr; }
+      .cc-layout { grid-template-columns: 1fr; }
+      .welcome-grid,
       .soc-top-grid,
       .soc-npu-grid,
       .soc-grid,
@@ -1631,13 +1803,6 @@
     </symbol>
     <symbol id="ic-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-    </symbol>
-    <symbol id="ic-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/>
-      <path d="M5 3v4"/>
-      <path d="M3 5h4"/>
-      <path d="M19 17v4"/>
-      <path d="M17 19h4"/>
     </symbol>
     <symbol id="ic-volume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
@@ -1777,7 +1942,7 @@
 
     <div class="top-right">
       <div class="hdr-ctrl" title="Active On-Device AI Model">
-        <svg class="ic hdr-ic" aria-hidden="true"><use href="#ic-sparkles"/></svg>
+        <svg class="ic hdr-ic" aria-hidden="true"><use href="#ic-cpu"/></svg>
         <label class="sr-only" for="llmModelSel">Active AI Model</label>
         <select id="llmModelSel" class="hdr-sel" onchange="onSelectLlmModel(this.value)">
           <option value="">Llama-3.2-1B (ctx=512)</option>
@@ -1810,7 +1975,7 @@
     <nav class="tabs" role="tablist" aria-label="EdgeShield Console Navigation">
       <button type="button" class="tab active" role="tab" id="tab-overview" data-tab="overview" aria-controls="overview" aria-selected="true">
         <svg class="ic" aria-hidden="true"><use href="#ic-shield"/></svg>
-        Command Center
+        Live Scans
       </button>
       <button type="button" class="tab" role="tab" id="tab-scanners" data-tab="scanners" aria-controls="scanners" aria-selected="false">
         <svg class="ic" aria-hidden="true"><use href="#ic-scan"/></svg>
@@ -1899,6 +2064,7 @@
               <svg class="ic" aria-hidden="true"><use href="#ic-shield-alert"/></svg>
               Security Alerts
               <span id="alertCountLbl" class="muted" style="font-size:12px;font-weight:500"></span>
+              <span id="liveTicker" class="live-ticker"></span>
             </h2>
             <div class="filter-bar">
               <label class="sr-only" for="srcFilter">Filter by source</label>
@@ -2035,18 +2201,67 @@
         </div>
 
         <!-- RIGHT DRAWER: Alert Investigation -->
-        <aside id="inspectorDrawer" class="drawer-pane" aria-label="Alert Investigation Drawer" hidden>
+        <aside id="inspectorDrawer" class="drawer-pane" aria-label="Alert Investigation Drawer">
           <div class="drawer-head">
-            <h2>
-              <svg class="ic" aria-hidden="true"><use href="#ic-sparkles"/></svg>
-              Alert Investigation
+            <div style="display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap">
+              <h2 id="drawerTitle">Alert Investigation</h2>
               <span id="inspEventId" class="muted" style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px"></span>
-            </h2>
-            <button type="button" class="btn-sm" onclick="closeInspector()" aria-label="Close investigation drawer">
+            </div>
+            <button type="button" id="btnCloseInspector" class="btn-sm" onclick="closeInspector()" aria-label="Close investigation drawer" hidden>
               <svg class="ic" aria-hidden="true"><use href="#ic-x"/></svg> Close
             </button>
           </div>
-          <div id="inspectorBody" class="pane-body"></div>
+          <div id="inspectorBody" class="pane-body">
+            <div class="insp-section">
+              <div class="insp-label">Product Overview</div>
+              <div class="insp-box" style="font-size:12.5px;line-height:1.55">
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px;font-weight:600;color:var(--text)">
+                  <svg class="ic" aria-hidden="true"><use href="#ic-shield"/></svg>
+                  EdgeShield AI &mdash; Offline Edge Threat Console
+                </div>
+                <div class="muted">
+                  On-device, zero-cloud cybersecurity monitoring combining Network Intrusion Detection, Phishing URL analysis, and Multilingual Scam SMS detection with NPU-accelerated inference.
+                </div>
+              </div>
+            </div>
+
+            <div class="insp-section">
+              <div class="insp-label">Quick-Start Guide</div>
+              <div class="insp-box" style="display:flex;flex-direction:column;gap:10px;font-size:12.5px;line-height:1.45">
+                <div style="display:flex;align-items:flex-start;gap:8px">
+                  <svg class="ic" aria-hidden="true" style="margin-top:2px;flex-shrink:0"><use href="#ic-search"/></svg>
+                  <div>
+                    <strong style="color:var(--text)">1. Inspect an Alert</strong>
+                    <div class="muted">Click any row or <em>Inspect</em> button in Security Alerts to view risk breakdown, triggered indicators, and generate a verdict-locked AI advisory.</div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:8px">
+                  <svg class="ic" aria-hidden="true" style="margin-top:2px;flex-shrink:0"><use href="#ic-scan"/></svg>
+                  <div>
+                    <strong style="color:var(--text)">2. Run On-Demand Scans</strong>
+                    <div class="muted">Open <em>Threat Scanners</em> to test suspicious URLs, English/Hindi/Hinglish SMS messages, or analyze PCAP captures offline.</div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:8px">
+                  <svg class="ic" aria-hidden="true" style="margin-top:2px;flex-shrink:0"><use href="#ic-cpu"/></svg>
+                  <div>
+                    <strong style="color:var(--text)">3. Monitor NPU &amp; Telemetry</strong>
+                    <div class="muted">Check <em>System &amp; AI</em> for live NPU/CPU utilization, model readiness, and automated verification suites.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="insp-section" style="margin-bottom:0">
+              <div class="insp-label">Active Detection Engines</div>
+              <div class="sig-list">
+                <span class="sig-pill"><svg class="ic" aria-hidden="true"><use href="#ic-network"/></svg> Network IDS</span>
+                <span class="sig-pill"><svg class="ic" aria-hidden="true"><use href="#ic-link"/></svg> URL Phishing</span>
+                <span class="sig-pill"><svg class="ic" aria-hidden="true"><use href="#ic-message"/></svg> Scam SMS</span>
+                <span class="sig-pill"><svg class="ic" aria-hidden="true"><use href="#ic-lock"/></svg> On-Device AI</span>
+              </div>
+            </div>
+          </div>
         </aside>
       </div>
     </section>
@@ -2740,13 +2955,13 @@ function cleanModelLabel(raw, ctx) {
 let ALL_EVENTS = [];
 let DISPLAYED_EVENTS = [];
 let EVENTS_BY_ID = new Map();
-let SELECTED_EVENT_ID = null; // Hidden-by-default Investigation Drawer (never auto-selects on load)
+let SELECTED_EVENT_ID = null; // Persistent Right Panel (shows Welcome Screen when null)
 let SEV_SORT = 'newest';      // 'newest' | 'desc' | 'asc'
 
 const ADVISORY_CACHE = new Map();    // key: `${event_id}:${lang}` -> AdvisoryResponse
 const EXPLAIN_IN_FLIGHT = new Set(); // key: `${event_id}:${lang}`
 
-// Smart Live-Tail Auto-Scroll State
+// Smart Live-Tail Auto-Scroll & Live Ticker State
 let LIVE_STREAM_ENABLED = true;
 let USER_HOVERING_TABLE = false;
 let USER_SCROLLED_AWAY = false;
@@ -2755,6 +2970,10 @@ const KNOWN_EVENT_IDS = new Set();
 let INITIAL_LOAD_DONE = false;
 let RECENT_NEW_IDS = new Set();
 let _flashClearTimer = null;
+let LAST_SYNC_TS = 0;
+let LAST_PACKETS_CAPTURED = null;
+let LAST_PACKETS_TS = 0;
+let CURRENT_PKT_RATE = 0;
 
 // Dynamic Hardware / Runtime Control State
 let MONITOR_RUNNING = false;
@@ -2784,7 +3003,7 @@ function showToast(message, type = 'info', ms = 4500) {
   if (!stack) return;
   const norm = String(type || 'info').toLowerCase();
   let cls = 'toast-info';
-  let iconName = 'sparkles';
+  let iconName = 'info';
   let role = 'status';
   if (norm === 'ok' || norm === 'success') {
     cls = 'toast-ok';
@@ -3341,8 +3560,7 @@ document.addEventListener('keydown', e => {
       closeScoreGuide(true);
       return;
     }
-    const drawer = document.getElementById('inspectorDrawer');
-    if (drawer && !drawer.hidden) {
+    if (SELECTED_EVENT_ID) {
       e.preventDefault();
       closeInspector();
     }
@@ -3610,11 +3828,11 @@ function renderLlamaLoadingHtml(lang) {
   const modelTxt = ACTIVE_LLM_LABEL || 'Llama-3.2-1B (ctx=512)';
   const langTag = langBadgeLabel(lang || getSelectedLang());
   return `
-    <div class="llama-card" role="status" aria-live="polite">
+    <div class="advisory-exp-card llama-card" role="status" aria-live="polite">
       <h4>
         <span style="display:inline-flex;align-items:center;gap:6px">
           <span class="spinner" aria-hidden="true"></span>
-          Generating ${esc(langTag)} advisory with ${esc(modelTxt)}...
+          Generating ${esc(langTag)} explanation with ${esc(modelTxt)}...
         </span>
       </h4>
       <div class="muted">Running locally on Arm64 CPU via ExecuTorch (100% offline). Live alerts continue in the background without disturbing your view.</div>
@@ -3623,7 +3841,11 @@ function renderLlamaLoadingHtml(lang) {
 
 function renderLlamaCardHtml(adv, cacheKey, eventId, inlineSlotId = '') {
   const m = adv.metrics || {};
-  const recs = (adv.recommendations || []).map(r => `<li>${formatRecHtml(r)}</li>`).join('');
+  const recsList = (adv.recommendations || []).filter(Boolean);
+  const recsHtml = recsList.length
+    ? `<ol class="remediation-list">${recsList.map((r, i) => `<li><span class="step-num">${i + 1}</span><span>${formatRecHtml(r)}</span></li>`).join('')}</ol>`
+    : '<div class="muted">No additional remediation steps required.</div>';
+
   const langTag = langBadgeLabel(adv.language || getSelectedLang());
   const speedPart = m.decode_tok_per_sec ? ` &middot; ${Number(m.decode_tok_per_sec).toFixed(1)} tok/s` : '';
   const msPart = m.inference_ms ? ` &middot; ${Math.round(Number(m.inference_ms))} ms` : '';
@@ -3641,20 +3863,25 @@ function renderLlamaCardHtml(adv, cacheKey, eventId, inlineSlotId = '') {
   const slotArg = inlineSlotId ? `'${escJsStr(inlineSlotId)}'` : 'null';
 
   return `
-    <div class="llama-card">
+    <div class="advisory-exp-card llama-card">
       <h4>
-        <span style="display:inline-flex;align-items:center;gap:6px">${ic('sparkles')} AI Plain-Language Advisory</span>
+        <span>Plain-Language Threat Explanation</span>
         <span style="display:flex;gap:5px;flex-wrap:wrap;align-items:center">
-          <span class="badge b-low">${esc(adv.provider || 'executorch')}${speedPart}${msPart}</span>
+          <span class="badge b-low">${esc(adv.provider || 'llama-executorch')}${speedPart}${msPart}</span>
           ${verdictBadge}
-          <button type="button" class="btn-sm" onclick="runLlamaForEvent('${eidJs}', ${slotArg}, true)" aria-label="Regenerate explanation" title="Regenerate explanation">${ic('refresh')}</button>
+          <button type="button" class="btn-sm" onclick="runLlamaForEvent('${eidJs}', ${slotArg}, true)" aria-label="Regenerate explanation" title="Regenerate explanation">${ic('refresh')} Regenerate</button>
           <button type="button" class="btn-sm" onclick="speakCachedAdvisory('${escJsStr(cacheKey)}')">${ic('volume')} Read Aloud</button>
-          <button type="button" class="btn-sm" onclick="stopSpeech()" aria-label="Stop speech" title="Stop speech">${ic('stop')}</button>
+          <button type="button" class="btn-sm" onclick="stopSpeech()" aria-label="Stop speech" title="Stop speech">${ic('stop')} Stop</button>
         </span>
       </h4>
       <div class="llama-text">${formatRecHtml(adv.explanation)}</div>
-      ${recs ? `<ul>${recs}</ul>` : ''}
       ${metaParts.length ? `<div class="llama-meta">${metaParts.join(' &middot; ')}</div>` : ''}
+    </div>
+    <div class="advisory-rem-card llama-card">
+      <h4>
+        <span>Recommended Remediation Actions</span>
+      </h4>
+      ${recsHtml}
     </div>`;
 }
 
@@ -3751,6 +3978,18 @@ async function undoContainment(actionId) {
 // =========================================================================
 // 6. Core 4-Second Telemetry & Event Refresh Loop (Smart Live-Tail Aware)
 // =========================================================================
+function updateLiveTicker() {
+  const el = document.getElementById('liveTicker');
+  if (!el) return;
+  if (!LAST_SYNC_TS) {
+    el.textContent = '• Syncing...';
+    return;
+  }
+  const agoSec = Math.max(0, Math.floor((Date.now() - LAST_SYNC_TS) / 1000));
+  const rateTxt = MONITOR_RUNNING ? `${CURRENT_PKT_RATE} pkts/s · ` : '';
+  el.textContent = `• ${rateTxt}updated ${agoSec}s ago`;
+}
+
 async function refreshAll() {
   try {
     const [stRes, statsRes, evsRes, devsRes] = await Promise.all([
@@ -3815,6 +4054,20 @@ async function refreshAll() {
 
     const lm = stats.live_monitor || {};
     setText('netIfaceLbl', MONITOR_RUNNING ? (lm.interface || ACTIVE_NIC_IFACE || 'enP2p33s0') : 'OFF');
+
+    const syncNow = Date.now();
+    LAST_SYNC_TS = syncNow;
+    const pktCount = Number(lm.packets_captured ?? lm.packets ?? 0);
+    if (Number.isFinite(pktCount)) {
+      if (LAST_PACKETS_CAPTURED !== null && LAST_PACKETS_TS > 0 && syncNow > LAST_PACKETS_TS) {
+        const dtSec = (syncNow - LAST_PACKETS_TS) / 1000;
+        const deltaPkts = Math.max(0, pktCount - LAST_PACKETS_CAPTURED);
+        CURRENT_PKT_RATE = dtSec > 0 ? Math.round(deltaPkts / dtSec) : 0;
+      }
+      LAST_PACKETS_CAPTURED = pktCount;
+      LAST_PACKETS_TS = syncNow;
+    }
+    updateLiveTicker();
 
     // Smart Live-Tail update for Overview table (never disturbs user reading/scrolling/inspecting!)
     if (!INITIAL_LOAD_DONE) {
@@ -3978,29 +4231,35 @@ function renderOverviewTable() {
     return;
   }
 
+  const nowMs = Date.now();
   tb.innerHTML = rows.map((e, idx) => {
     const eid = escJsStr(e.event_id);
     const sel = e.event_id === SELECTED_EVENT_ID ? 'selected' : '';
-    const fresh = RECENT_NEW_IDS.has(e.event_id) ? 'new-row ev-new' : '';
+    const evMs = parseEventTimeMs(e.timestamp);
+    const isBrandNew = RECENT_NEW_IDS.has(e.event_id) || (evMs != null && (nowMs - evMs) <= 90000);
+    const fresh = isBrandNew ? 'new-row ev-new' : '';
+    const newBadge = isBrandNew ? ' <span class="new-tag">NEW</span>' : '';
     const tier = severityTier(e);
     const score = Number(e.risk_score) || 0;
     const alertType = humanAlertType(e);
+    const srcLow = String(e.source || '').toLowerCase();
+    const srcKey = srcLow.includes('url') ? 'url' : srcLow.includes('sms') ? 'sms' : 'net';
     return `
-      <tr class="ev-row ${sel} ${fresh}" data-event-id="${esc(e.event_id)}" tabindex="0" aria-selected="${sel ? 'true' : 'false'}"
+      <tr class="ev-row ${sel} ${fresh}" data-src="${srcKey}" data-event-id="${esc(e.event_id)}" tabindex="0" aria-selected="${sel ? 'true' : 'false'}"
           onclick="selectEvent('${eid}', true)"
           onkeydown="if(event.target.tagName!=='BUTTON'&&(event.key==='Enter'||event.key===' ')){event.preventDefault(); selectEvent('${eid}', true);}">
         <td class="mono muted" style="font-size:11.5px">${idx + 1}</td>
         <td class="mono muted" style="font-size:11.5px" title="${esc(formatTimestamp(e.timestamp))}">${esc(formatShortTime(e.timestamp))}</td>
         <td style="padding:6px 8px">${srcBadge(e.source)}</td>
         <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(alertType)}">
-          <strong>${esc(alertType)}</strong>
+          <strong>${esc(alertType)}</strong>${newBadge}
         </td>
         <td style="padding:6px 6px">
           <span class="badge b-${esc(tier)}" title="Risk ${esc(score)}/100 (${esc(tier)})">${esc(score)} ${riskShort(tier)}</span>
         </td>
         <td class="preview-cell" title="${esc(e.raw_input_preview)}">${esc(e.raw_input_preview)}</td>
         <td style="padding:5px 6px">
-          <button type="button" class="primary btn-sm" style="padding:4px 8px;gap:4px" onclick="event.stopPropagation(); selectEvent('${eid}', true)">${ic('sparkles')} Explain</button>
+          <button type="button" class="primary btn-sm" style="padding:4px 8px;gap:4px" onclick="event.stopPropagation(); selectEvent('${eid}', true)">Explain</button>
         </td>
       </tr>`;
   }).join('');
@@ -4027,7 +4286,7 @@ function renderScannerRows(evs, emptyMsg) {
         <td style="padding:6px 6px"><span class="badge b-${esc(tier)}">${esc(score)} ${riskShort(tier)}</span></td>
         <td class="preview-cell" title="${esc(e.raw_input_preview)}">${esc(e.raw_input_preview)}</td>
         <td style="padding:5px 6px">
-          <button type="button" class="primary btn-sm" style="padding:4px 8px;gap:4px" onclick="event.stopPropagation(); jumpAndExplain('${eid}', true)">${ic('sparkles')} Explain</button>
+          <button type="button" class="primary btn-sm" style="padding:4px 8px;gap:4px" onclick="event.stopPropagation(); jumpAndExplain('${eid}', true)">Explain</button>
         </td>
       </tr>`;
   }).join('');
@@ -4105,19 +4364,81 @@ function jumpToIndicator(firstEventId, indicator) {
 }
 
 // =========================================================================
-// 9. Investigation Drawer (Hidden by Default + Auto-Explain + Zero Redundant Button)
+// 9. Persistent Right Panel (Product Welcome Screen + Alert Investigation)
 // =========================================================================
+function renderWelcomePanel() {
+  const drawer = document.getElementById('inspectorDrawer');
+  const titleEl = document.getElementById('drawerTitle');
+  const idEl = document.getElementById('inspEventId');
+  const closeBtn = document.getElementById('btnCloseInspector');
+  const body = document.getElementById('inspectorBody');
+
+  if (drawer) {
+    drawer.hidden = false;
+    drawer.setAttribute('aria-hidden', 'false');
+  }
+  if (titleEl) titleEl.textContent = 'EdgeShield AI Overview';
+  if (idEl) idEl.textContent = '';
+  if (closeBtn) closeBtn.hidden = true;
+  if (!body) return;
+
+  body.innerHTML = `
+    <div class="welcome-panel">
+      <div class="welcome-hero">
+        <div class="welcome-brand-row">
+          <span class="welcome-logo">${ic('shield')}</span>
+          <div>
+            <h3 class="welcome-title">EdgeShield AI</h3>
+            <div class="welcome-byline">by <strong>EdgeProc</strong> &middot; On-Device Arm64 + RK3588 NPU Security Console</div>
+          </div>
+        </div>
+        <p class="welcome-desc">
+          Real-time multi-channel threat detection, cross-channel kill-chain correlation, and verdict-locked on-device AI explanations running locally on EdgeProc hardware with zero cloud dependency.
+        </p>
+      </div>
+
+      <div class="insp-label" style="margin:14px 0 8px">Core On-Device Capabilities</div>
+      <div class="welcome-cap-grid">
+        <div class="welcome-cap-tile">
+          <div class="welcome-cap-head">${ic('network')} <strong>Network Intrusion Monitoring</strong></div>
+          <div class="muted">Live NIC packet capture &amp; PCAP inspection on NPU_CORE_0 for C2 beacons, port scans, and DNS exfiltration.</div>
+        </div>
+        <div class="welcome-cap-tile">
+          <div class="welcome-cap-head">${ic('link')} <strong>Phishing URL Detection</strong></div>
+          <div class="muted">Dual-branch MLP + CharCNN inference on NPU_CORE_1 catching credential harvesters and homograph domains.</div>
+        </div>
+        <div class="welcome-cap-tile">
+          <div class="welcome-cap-head">${ic('message')} <strong>Scam SMS Detection</strong></div>
+          <div class="muted">SplitBiGRU + MaskedPool NLP model on NPU_CORE_2 flagging smishing, OTP theft, and urgent lure campaigns.</div>
+        </div>
+        <div class="welcome-cap-tile">
+          <div class="welcome-cap-head">${ic('cpu')} <strong>On-Device AI Explanation &amp; Remediation</strong></div>
+          <div class="muted">ExecuTorch Llama-3.2 on Arm64 CPU generates plain-language EN/HI/Hinglish explanations &amp; action steps.</div>
+        </div>
+      </div>
+
+      <div class="insp-label" style="margin:14px 0 8px">How to Use EdgeShield AI</div>
+      <ol class="welcome-steps">
+        <li><span class="step-num">1</span><span><strong>Monitor or Scan:</strong> Watch live alerts stream in the left table, or switch to <em>Threat Scanners</em> to probe URLs, SMS, or PCAP files offline.</span></li>
+        <li><span class="step-num">2</span><span><strong>Click Any Alert:</strong> Select a row or click <em>Explain</em> to inspect detection signals and auto-generate an on-device Llama explanation.</span></li>
+        <li><span class="step-num">3</span><span><strong>Remediate Safely:</strong> Follow the numbered remediation steps or trigger reversible <em>Contain (TTL)</em> isolation logged to the SHA-256 SCI ledger.</span></li>
+      </ol>
+    </div>`;
+}
+
 function selectEvent(eventId, autoRunLlama = true) {
   if (!eventId || !EVENTS_BY_ID.has(eventId)) return;
   SELECTED_EVENT_ID = eventId;
 
   const drawer = document.getElementById('inspectorDrawer');
-  const layout = document.getElementById('ccLayout');
+  const titleEl = document.getElementById('drawerTitle');
+  const closeBtn = document.getElementById('btnCloseInspector');
   if (drawer) {
     drawer.hidden = false;
     drawer.setAttribute('aria-hidden', 'false');
   }
-  if (layout) layout.classList.add('drawer-open');
+  if (titleEl) titleEl.textContent = 'Alert Investigation';
+  if (closeBtn) closeBtn.hidden = false;
 
   updateSelectedRowHighlight();
 
@@ -4132,15 +4453,9 @@ function selectEvent(eventId, autoRunLlama = true) {
 
 function closeInspector() {
   SELECTED_EVENT_ID = null;
-  const drawer = document.getElementById('inspectorDrawer');
-  const layout = document.getElementById('ccLayout');
-  if (drawer) {
-    drawer.hidden = true;
-    drawer.setAttribute('aria-hidden', 'true');
-  }
-  if (layout) layout.classList.remove('drawer-open');
   stopSpeech();
   updateSelectedRowHighlight();
+  renderWelcomePanel();
 }
 
 function renderNpuBadgesHtml(meta) {
@@ -4200,9 +4515,9 @@ function renderInspector(eventId) {
     llamaHtml = renderLlamaCardHtml(cachedAdv, cacheKey, ev.event_id, '');
   } else {
     llamaHtml = `
-      <div class="llama-card">
+      <div class="advisory-exp-card llama-card">
         <h4>
-          <span style="display:inline-flex;align-items:center;gap:6px">${ic('sparkles')} AI Plain-Language Advisory</span>
+          <span>Plain-Language Threat Explanation</span>
           <button type="button" class="btn-sm primary" onclick="runLlamaForEvent('${eid}', null, false)">${ic('refresh')} Generate</button>
         </h4>
         <div class="muted">Generate an on-device verdict-locked explanation in ${esc(langBadgeLabel(lang))}.</div>
@@ -4225,21 +4540,21 @@ function renderInspector(eventId) {
       <div class="code-box">${esc(ev.raw_input_preview)}</div>
     </div>
 
-    <div class="insp-section">
-      <div class="insp-label">Why This Was Flagged (Detection Signals)</div>
+    <div id="llamaResultSlot">${llamaHtml}</div>
+
+    <div class="insp-signals-card">
+      <div class="insp-label" style="color:#3730a3">Why This Was Flagged (Detection Signals)</div>
       ${renderSignalPillsHtml(sigs)}
       ${sigs.length
-        ? `<ul style="margin:7px 0 0 18px;padding:0;color:var(--muted);font-size:12px">${sigs.slice(0, 5).map(s => `<li>${formatRecHtml(s.description)}</li>`).join('')}</ul>`
+        ? `<ul style="margin:8px 0 0 18px;padding:0;color:var(--text);font-size:13px">${sigs.slice(0, 5).map(s => `<li>${formatRecHtml(s.description)}</li>`).join('')}</ul>`
         : ''}
     </div>
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px">
       ${renderContainButtonWithTooltip(ev.event_id, isBenign, 'tip-left', 'warn')}
       <button type="button" class="good" onclick="submitFeedback('${eid}','correct','malicious',this)">${ic('check')} Confirm Threat</button>
       <button type="button" class="danger" onclick="submitFeedback('${eid}','false_positive','benign',this)">${ic('x')} False Positive</button>
     </div>
-
-    <div id="llamaResultSlot">${llamaHtml}</div>
   `;
 }
 
@@ -4387,7 +4702,7 @@ function renderInlineScanCard(d, slotPrefix) {
           ${npuBadges}
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-          <button type="button" class="llama-btn btn-sm" onclick="runLlamaForEvent('${eid}','${escJsStr(llamaSlot)}', false)">${ic('sparkles')} Explain with Llama</button>
+          <button type="button" class="llama-btn btn-sm" onclick="runLlamaForEvent('${eid}','${escJsStr(llamaSlot)}', false)">Explain with Llama</button>
           ${renderContainButtonWithTooltip(d.event_id, isBenign, '', 'warn btn-sm')}
         </div>
       </div>
@@ -4739,7 +5054,7 @@ async function loadSci() {
       cardsEl.innerHTML = `
         <div class="mini-card">
           <div class="insp-label">Active Policy Version</div>
-          <strong style="font-size:18px;color:var(--low)">${esc(ap.version || 'v1')}</strong>
+          <strong style="font-size:18px;color:var(--low)">${esc(ap.version || 'v1.0.0')}</strong>
           <div class="muted">LLM Policy Write: LOCKED</div>
         </div>
         <div class="mini-card">
@@ -5174,7 +5489,7 @@ async function loadSoc(isAutoTick = false) {
       <div class="soc-grid" style="margin-bottom:0">
         <div class="mini-card">
           <div class="insp-label" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
-            ${ic('sparkles')} ExecuTorch Llama-3.2-1B (Arm64 CPU &middot; XNNPACK + KleidiAI)
+            ${ic('zap')} ExecuTorch Llama-3.2-1B (Arm64 CPU &middot; XNNPACK + KleidiAI)
           </div>
           <div class="metric-kv"><span class="k">Status</span><span class="v">${llamaStatusBadge}</span></div>
           <div class="metric-kv"><span class="k">Model</span><span class="v">${esc(llamaModelLabel)}</span></div>
@@ -5242,9 +5557,12 @@ if (explainLangEl && !explainLangEl.getAttribute('onchange')) {
 // =========================================================================
 // 15. Initial Hydration & Live Telemetry Polling
 // =========================================================================
+renderWelcomePanel();
+updateLiveTicker();
 loadRuntimeOptions(true);
 refreshAll();
 setInterval(refreshAll, 4000);
+setInterval(updateLiveTicker, 1000);
 setInterval(() => loadRuntimeOptions(false), 12000);
 
 const SOC_LIVE_TIMER = setInterval(() => {

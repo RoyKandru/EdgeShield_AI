@@ -227,7 +227,7 @@ def analyse_flows(flows: list[dict]) -> list[ThreatEvent]:
             confidence=confidence,
             evidence=evidence,
             actions=actions,
-            model_version="network-rules-v1",
+            model_version="network-rules-v0.1",
             raw_input=f"{flow.get('src_ip')}:{flow.get('src_port')} -> {flow.get('dst_ip')}:{dst_port}",
             metadata=meta_out,
             base_score=base,

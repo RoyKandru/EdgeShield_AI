@@ -2,7 +2,7 @@
 """
 Train & Export Phishing URL Dual-Branch Neural Detector for RK3588 NPU_CORE_1
 combining Prasad, Dondeti & Dondeti (2026, Procedia Computer Science 283) Lexical MLP
-with Character 1D-CNN (EdgeShield v1 & Prasad Sec. 7 recommendation).
+with Character 1D-CNN (EdgeShield v1.4.0 & Prasad Sec. 7 recommendation).
 
 - Strict disk-space check before download; datasets are downloaded ONLY on workstation
   and automatically deleted immediately after training & RKNN export!
@@ -535,7 +535,7 @@ def main():
                 "title": "Phishing URL Detection in Real-Time: Machine Learning and Deep Learning Approaches on a Custom Threat Intelligence Dataset",
                 "authors": "Y. Bhanu Prasad, Venkatesulu Dondeti, Ravitez Dondeti",
                 "venue": "Procedia Computer Science 283 (2026) 4859-4879",
-                "upgrade": "25-feature offline Lexical MLP (Prasad 2026) + Character 1D-CNN (Sec. 7 & EdgeShield v1) fused inside RK3588 NPU_CORE_1 FP16",
+                "upgrade": "25-feature offline Lexical MLP (Prasad 2026) + Character 1D-CNN (Sec. 7 & EdgeShield v1.4.0) fused inside RK3588 NPU_CORE_1 FP16",
             },
             "architecture": {
                 "name": "URLDualBranchNPU (Lexical MLP 25->64->32 + Char1DCNN 61x128->64 + Fusion Head 96->48->1)",
