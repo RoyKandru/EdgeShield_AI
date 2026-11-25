@@ -1,4 +1,4 @@
-# EdgeShield AI v1.4.0 — Python-first detector + RK3588J execution plan
+# EdgeShield AI  — Python-first detector + RK3588J execution plan
 
 ## Product and challenge architecture
 
