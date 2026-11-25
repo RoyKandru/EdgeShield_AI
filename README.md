@@ -38,7 +38,7 @@ EdgeShield AI is an Arm64 edge-security gateway that brings network intrusion de
 
 > **Important:** The RKNN detector artifacts are included in this source package. The large Llama `.pte` weights and tokenizer are intentionally distributed separately. Without those files, the application uses its deterministic template advisory provider; the detector pipeline does not depend on the Llama model being present.
 
-## Why EdgeShield is different
+## EdgeShield Design
 
 | Design choice | What it means in this implementation |
 |---|---|
