@@ -269,30 +269,35 @@
     .tabs {
       display: flex;
       align-items: center;
-      gap: 7px;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      scrollbar-width: thin;
+      gap: 28px;
       width: 100%;
+    }
+    .tabs-left {
+      flex: 0 0 58%;
+      max-width: 60%;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      min-width: 0;
     }
     .tab {
       position: relative;
       background: var(--panel);
       color: #1e293b;
       border: 1px solid var(--line);
-      min-height: 46px;
-      min-width: 178px;
-      padding: 10px 24px;
+      width: 100%;
+      min-width: 0;
+      min-height: 50px;
+      padding: 10px 14px;
       border-radius: 10px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 16px;
+      font-size: 15.5px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 9px;
+      gap: 8px;
       white-space: nowrap;
-      flex-shrink: 0;
       transition: background 0.14s, color 0.14s, border-color 0.14s, box-shadow 0.14s;
     }
     .tab:hover:not(.active) {
@@ -305,6 +310,28 @@
       background: var(--accent-solid);
       color: #f8fafc;
       border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(3, 105, 161, 0.28);
+    }
+    .tab#tab-soc {
+      margin-left: auto;
+      flex: 0 0 auto;
+      width: auto;
+      min-width: 210px;
+      background: var(--panel);
+      color: #1e293b;
+      border: 2px solid #0d9488;
+      padding: 9px 22px;
+    }
+    .tab#tab-soc:hover:not(.active) {
+      background: #e4ecf5;
+      color: #0f172a;
+      border-color: #0f766e;
+      box-shadow: inset 0 -3px 0 #0d9488;
+    }
+    .tab#tab-soc.active {
+      background: var(--accent-solid);
+      color: #f8fafc;
+      border: 2px solid #0d9488;
       box-shadow: 0 2px 8px rgba(3, 105, 161, 0.28);
     }
     .tab .cnt {
@@ -322,11 +349,11 @@
       color: #f8fafc;
     }
 
-    /* Main Workspace & Tab Panels */
+    /* Main Workspace & Tab Panels (with clean bottom footer gap) */
     .workspace {
       flex: 1 1 auto;
       min-height: 0;
-      padding: 14px 16px;
+      padding: 14px 18px 24px 18px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -340,39 +367,46 @@
     }
     .panel.active { display: flex; }
 
-    /* Executive 4-Column KPI Strip */
+    /* Compact 4-Column KPI Strip (aligned to Security Alerts width) */
     .kpi-strip {
       flex: 0 0 auto;
       display: grid;
-      grid-template-columns: repeat(4, minmax(150px, 1fr));
-      gap: 12px;
+      grid-template-columns: 0.95fr 1.18fr 0.95fr 0.92fr;
+      gap: 8px;
     }
     .kpi {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 10px;
-      padding: 12px 15px;
+      min-height: 42px;
+      padding: 7px 9px;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 4px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 5px;
       min-width: 0;
     }
     .kpi .lbl {
-      font-size: 12px;
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.45px;
-      color: var(--muted);
+      letter-spacing: 0.25px;
+      color: var(--text);
       font-weight: 700;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .kpi .val {
-      font-size: 28px;
+      font-size: 13.5px;
       font-weight: 800;
       color: var(--text);
-      line-height: 1.15;
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      padding: 2px 8px;
+      border-radius: 999px;
+      line-height: 1.2;
+      flex-shrink: 0;
       font-variant-numeric: tabular-nums;
     }
     .kpi .sub {
@@ -390,6 +424,17 @@
       display: grid;
       grid-template-columns: minmax(0, 1.32fr) minmax(390px, 1fr);
       gap: 14px;
+    }
+    .cc-left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+      min-width: 0;
+    }
+    .cc-left-col > .pane {
+      flex: 1 1 auto;
+      min-height: 0;
     }
 
     /* Standard Split-Pane Layouts */
@@ -693,8 +738,8 @@
     select.inline-sel {
       width: auto;
       min-height: 32px;
-      padding: 4px 9px;
-      font-size: 13.5px;
+      padding: 4px 7px;
+      font-size: 12.5px;
     }
     textarea { min-height: 84px; resize: vertical; }
 
@@ -702,14 +747,14 @@
     .filter-bar {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 5px;
       flex-wrap: wrap;
     }
     .search-wrap {
       position: relative;
-      flex: 1 1 170px;
-      max-width: 260px;
-      min-width: 145px;
+      flex: 1 1 115px;
+      max-width: 170px;
+      min-width: 110px;
     }
     .search-wrap .ic {
       position: absolute;
@@ -729,9 +774,11 @@
     .live-pill {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
       gap: 6px;
       min-height: 32px;
-      padding: 4px 11px;
+      padding: 4px 12px;
       border-radius: 999px;
       font-size: 12.5px;
       font-weight: 700;
@@ -1028,7 +1075,7 @@
     }
     @keyframes newRowPulseSms {
       0%, 100% { background: transparent; box-shadow: inset 4px 0 0 transparent; }
-      45% { background: rgba(217, 119, 6, 0.26); box-shadow: inset 4px 0 0 #d97706; }
+      45% { background: rgba(13, 148, 136, 0.24); box-shadow: inset 4px 0 0 #0d9488; }
     }
     .ev-row.ev-new,
     tr.ev-row.new-row,
@@ -1046,7 +1093,7 @@
     }
     tr.ev-row[data-src="net"] .new-tag { background: #0284c7; border-color: #0369a1; color: #f0f9ff; }
     tr.ev-row[data-src="url"] .new-tag { background: #7c3aed; border-color: #6d28d9; color: #f5f3ff; }
-    tr.ev-row[data-src="sms"] .new-tag { background: #d97706; border-color: #b45309; color: #fffbeb; }
+    tr.ev-row[data-src="sms"] .new-tag { background: #0d9488; border-color: #0f766e; color: #f0fdfa; }
     .new-tag {
       display: inline-block;
       padding: 1px 6px;
@@ -1116,9 +1163,9 @@
       border: 1px solid #8b5cf6;
     }
     .badge.b-sms, .b-sms {
-      background: #fef3c7;
-      color: #92400e;
-      border: 1px solid #f59e0b;
+      background: #ccfbf1;
+      color: #0f766e;
+      border: 1px solid #0d9488;
     }
     .badge.b-live, .b-live {
       background: #fee2e2;
@@ -1973,23 +2020,25 @@
   <!-- Row 2: 5-Tab Navigation Bar -->
   <div class="nav-bar">
     <nav class="tabs" role="tablist" aria-label="EdgeShield Console Navigation">
-      <button type="button" class="tab active" role="tab" id="tab-overview" data-tab="overview" aria-controls="overview" aria-selected="true">
-        <svg class="ic" aria-hidden="true"><use href="#ic-shield"/></svg>
-        Live Scans
-      </button>
-      <button type="button" class="tab" role="tab" id="tab-scanners" data-tab="scanners" aria-controls="scanners" aria-selected="false">
-        <svg class="ic" aria-hidden="true"><use href="#ic-scan"/></svg>
-        Threat Scanners
-      </button>
-      <button type="button" class="tab" role="tab" id="tab-correlations" data-tab="correlations" aria-controls="correlations" aria-selected="false">
-        <svg class="ic" aria-hidden="true"><use href="#ic-git-branch"/></svg>
-        Correlations
-        <span id="tabCntCorr" class="cnt">0</span>
-      </button>
-      <button type="button" class="tab" role="tab" id="tab-sci" data-tab="sci" aria-controls="sci" aria-selected="false">
-        <svg class="ic" aria-hidden="true"><use href="#ic-lock"/></svg>
-        SCI &amp; Containment
-      </button>
+      <div class="tabs-left">
+        <button type="button" class="tab active" role="tab" id="tab-overview" data-tab="overview" aria-controls="overview" aria-selected="true">
+          <svg class="ic" aria-hidden="true"><use href="#ic-shield"/></svg>
+          Live Scans
+        </button>
+        <button type="button" class="tab" role="tab" id="tab-scanners" data-tab="scanners" aria-controls="scanners" aria-selected="false">
+          <svg class="ic" aria-hidden="true"><use href="#ic-scan"/></svg>
+          Threat Scanners
+        </button>
+        <button type="button" class="tab" role="tab" id="tab-correlations" data-tab="correlations" aria-controls="correlations" aria-selected="false">
+          <svg class="ic" aria-hidden="true"><use href="#ic-git-branch"/></svg>
+          Correlations
+          <span id="tabCntCorr" class="cnt">0</span>
+        </button>
+        <button type="button" class="tab" role="tab" id="tab-sci" data-tab="sci" aria-controls="sci" aria-selected="false">
+          <svg class="ic" aria-hidden="true"><use href="#ic-lock"/></svg>
+          SCI &amp; Containment
+        </button>
+      </div>
       <button type="button" class="tab" role="tab" id="tab-soc" data-tab="soc" aria-controls="soc" aria-selected="false">
         <svg class="ic" aria-hidden="true"><use href="#ic-activity"/></svg>
         Arm SoC Monitor
@@ -2037,28 +2086,30 @@
   <main class="workspace">
     <!-- ==================== TAB 1: COMMAND CENTER ==================== -->
     <section id="overview" class="panel active" role="tabpanel" aria-labelledby="tab-overview">
-      <div class="kpi-strip">
-        <div class="kpi">
-          <div class="lbl">Network Alerts</div>
-          <div id="kpiNet" class="val" style="color:var(--info)">0</div>
-        </div>
-        <div class="kpi">
-          <div class="lbl">Phishing URL Alerts</div>
-          <div id="kpiUrl" class="val" style="color:#a78bfa">0</div>
-        </div>
-        <div class="kpi">
-          <div class="lbl">Scam SMS Alerts</div>
-          <div id="kpiSms" class="val" style="color:var(--med)">0</div>
-        </div>
-        <div class="kpi">
-          <div class="lbl">High &amp; Critical</div>
-          <div id="kpiHigh" class="val" style="color:var(--crit)">0</div>
-        </div>
-      </div>
-
       <div id="ccLayout" class="cc-layout">
-        <!-- LEFT / FULL PANE: Security Alerts -->
-        <div class="pane">
+        <!-- LEFT COLUMN: Compact KPI Strip + Security Alerts -->
+        <div class="cc-left-col">
+          <div class="kpi-strip">
+            <div class="kpi">
+              <div class="lbl">Network Alerts</div>
+              <div id="kpiNet" class="val" style="color:var(--info)">0</div>
+            </div>
+            <div class="kpi">
+              <div class="lbl">Phishing URL Alerts</div>
+              <div id="kpiUrl" class="val" style="color:#7c3aed">0</div>
+            </div>
+            <div class="kpi">
+              <div class="lbl">Scam SMS Alerts</div>
+              <div id="kpiSms" class="val" style="color:#0f766e">0</div>
+            </div>
+            <div class="kpi">
+              <div class="lbl">High &amp; Critical</div>
+              <div id="kpiHigh" class="val" style="color:var(--crit)">0</div>
+            </div>
+          </div>
+
+          <!-- LEFT PANE: Security Alerts -->
+          <div class="pane">
           <div class="pane-head">
             <h2>
               <svg class="ic" aria-hidden="true"><use href="#ic-shield-alert"/></svg>
@@ -2175,7 +2226,7 @@
                   <col style="width:152px">
                   <col style="width:104px">
                   <col>
-                  <col style="width:88px">
+                  <col style="width:132px">
                 </colgroup>
                 <thead>
                   <tr>
@@ -2198,6 +2249,7 @@
               </table>
             </div>
           </div>
+          </div>
         </div>
 
         <!-- RIGHT DRAWER: Alert Investigation -->
@@ -2208,7 +2260,7 @@
               <span id="inspEventId" class="muted" style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px"></span>
             </div>
             <button type="button" id="btnCloseInspector" class="btn-sm" onclick="closeInspector()" aria-label="Close investigation drawer" hidden>
-              <svg class="ic" aria-hidden="true"><use href="#ic-x"/></svg> Close
+              <svg class="ic" aria-hidden="true"><use href="#ic-x"/></svg> Clear
             </button>
           </div>
           <div id="inspectorBody" class="pane-body">
@@ -2322,11 +2374,11 @@
               <div class="table-wrap">
                 <table class="ev-table">
                   <colgroup>
-                    <col style="width:94px">
-                    <col style="width:140px">
-                    <col style="width:86px">
+                    <col style="width:78px">
+                    <col style="width:128px">
+                    <col style="width:84px">
                     <col>
-                    <col style="width:86px">
+                    <col style="width:132px">
                   </colgroup>
                   <thead>
                     <tr>
@@ -2382,11 +2434,11 @@
               <div class="table-wrap">
                 <table class="ev-table">
                   <colgroup>
-                    <col style="width:94px">
-                    <col style="width:140px">
-                    <col style="width:86px">
+                    <col style="width:78px">
+                    <col style="width:128px">
+                    <col style="width:84px">
                     <col>
-                    <col style="width:86px">
+                    <col style="width:132px">
                   </colgroup>
                   <thead>
                     <tr>
@@ -2409,41 +2461,10 @@
 
       <!-- SUB-PANEL 3: NETWORK & PCAP -->
       <div id="scan-net" class="subpanel" role="tabpanel" aria-labelledby="subtab-net">
-        <div class="split-main">
+        <div class="split-even">
           <div class="pane">
             <div class="pane-head">
-              <h2><svg class="ic" aria-hidden="true"><use href="#ic-network"/></svg> Network Flow Detections</h2>
-            </div>
-            <div class="pane-body flush">
-              <div class="table-wrap">
-                <table class="ev-table">
-                  <colgroup>
-                    <col style="width:94px">
-                    <col style="width:145px">
-                    <col style="width:86px">
-                    <col>
-                    <col style="width:86px">
-                  </colgroup>
-                  <thead>
-                    <tr>
-                      <th scope="col">Time</th>
-                      <th scope="col">Alert Type</th>
-                      <th scope="col">Severity</th>
-                      <th scope="col">Network Flow</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody id="netEventTable">
-                    <tr><td colspan="5" class="muted" style="padding:14px">No network detections yet.</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <div class="pane">
-            <div class="pane-head">
-              <h3><svg class="ic" aria-hidden="true"><use href="#ic-radio"/></svg> PCAP Analyzer &amp; Observed LAN Devices</h3>
+              <h2><svg class="ic" aria-hidden="true"><use href="#ic-radio"/></svg> PCAP Analyzer &amp; Observed LAN Devices</h2>
             </div>
             <div class="pane-body">
               <div class="insp-section">
@@ -2486,6 +2507,37 @@
                     </tbody>
                   </table>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pane">
+            <div class="pane-head">
+              <h3><svg class="ic" aria-hidden="true"><use href="#ic-network"/></svg> Network Flow Detections</h3>
+            </div>
+            <div class="pane-body flush">
+              <div class="table-wrap">
+                <table class="ev-table">
+                  <colgroup>
+                    <col style="width:78px">
+                    <col style="width:132px">
+                    <col style="width:84px">
+                    <col>
+                    <col style="width:132px">
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th scope="col">Time</th>
+                      <th scope="col">Alert Type</th>
+                      <th scope="col">Severity</th>
+                      <th scope="col">Network Flow</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="netEventTable">
+                    <tr><td colspan="5" class="muted" style="padding:14px">No network detections yet.</td></tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -3846,36 +3898,20 @@ function renderLlamaCardHtml(adv, cacheKey, eventId, inlineSlotId = '') {
     ? `<ol class="remediation-list">${recsList.map((r, i) => `<li><span class="step-num">${i + 1}</span><span>${formatRecHtml(r)}</span></li>`).join('')}</ol>`
     : '<div class="muted">No additional remediation steps required.</div>';
 
-  const langTag = langBadgeLabel(adv.language || getSelectedLang());
   const speedPart = m.decode_tok_per_sec ? ` &middot; ${Number(m.decode_tok_per_sec).toFixed(1)} tok/s` : '';
   const msPart = m.inference_ms ? ` &middot; ${Math.round(Number(m.inference_ms))} ms` : '';
-  const verdictBadge = adv.fallback_used
-    ? `<span class="badge b-medium">${ic('shield-alert')} Guardrail Fallback &middot; ${esc(langTag)}</span>`
-    : `<span class="badge b-low">${ic('check')} Verdict-Locked &middot; ${esc(langTag)}</span>`;
-
-  const metaParts = [];
-  if (adv.runtime_note) metaParts.push(esc(adv.runtime_note));
-  if (m.ttft_ms != null) metaParts.push(`TTFT: ${Math.round(Number(m.ttft_ms))} ms`);
-  if (m.inference_ms != null) metaParts.push(`Total: ${Math.round(Number(m.inference_ms))} ms`);
-  if (m.decode_tok_per_sec != null) metaParts.push(`Decode: ${Number(m.decode_tok_per_sec).toFixed(1)} tok/s`);
-
-  const eidJs = escJsStr(eventId);
-  const slotArg = inlineSlotId ? `'${escJsStr(inlineSlotId)}'` : 'null';
 
   return `
     <div class="advisory-exp-card llama-card">
       <h4>
-        <span>Plain-Language Threat Explanation</span>
+        <span>Threat Explanation</span>
         <span style="display:flex;gap:5px;flex-wrap:wrap;align-items:center">
           <span class="badge b-low">${esc(adv.provider || 'llama-executorch')}${speedPart}${msPart}</span>
-          ${verdictBadge}
-          <button type="button" class="btn-sm" onclick="runLlamaForEvent('${eidJs}', ${slotArg}, true)" aria-label="Regenerate explanation" title="Regenerate explanation">${ic('refresh')} Regenerate</button>
           <button type="button" class="btn-sm" onclick="speakCachedAdvisory('${escJsStr(cacheKey)}')">${ic('volume')} Read Aloud</button>
           <button type="button" class="btn-sm" onclick="stopSpeech()" aria-label="Stop speech" title="Stop speech">${ic('stop')} Stop</button>
         </span>
       </h4>
       <div class="llama-text">${formatRecHtml(adv.explanation)}</div>
-      ${metaParts.length ? `<div class="llama-meta">${metaParts.join(' &middot; ')}</div>` : ''}
     </div>
     <div class="advisory-rem-card llama-card">
       <h4>
@@ -4259,7 +4295,7 @@ function renderOverviewTable() {
         </td>
         <td class="preview-cell" title="${esc(e.raw_input_preview)}">${esc(e.raw_input_preview)}</td>
         <td style="padding:5px 6px">
-          <button type="button" class="primary btn-sm" style="padding:4px 8px;gap:4px" onclick="event.stopPropagation(); selectEvent('${eid}', true)">Explain</button>
+          <button type="button" class="primary btn-sm" style="padding:4px 8px;gap:4px" onclick="event.stopPropagation(); selectEvent('${eid}', true)">Click to Explain</button>
         </td>
       </tr>`;
   }).join('');
@@ -4286,7 +4322,7 @@ function renderScannerRows(evs, emptyMsg) {
         <td style="padding:6px 6px"><span class="badge b-${esc(tier)}">${esc(score)} ${riskShort(tier)}</span></td>
         <td class="preview-cell" title="${esc(e.raw_input_preview)}">${esc(e.raw_input_preview)}</td>
         <td style="padding:5px 6px">
-          <button type="button" class="primary btn-sm" style="padding:4px 8px;gap:4px" onclick="event.stopPropagation(); jumpAndExplain('${eid}', true)">Explain</button>
+          <button type="button" class="primary btn-sm" style="padding:4px 8px;gap:4px" onclick="event.stopPropagation(); jumpAndExplain('${eid}', true)">Click to Explain</button>
         </td>
       </tr>`;
   }).join('');
@@ -4517,7 +4553,7 @@ function renderInspector(eventId) {
     llamaHtml = `
       <div class="advisory-exp-card llama-card">
         <h4>
-          <span>Plain-Language Threat Explanation</span>
+          <span>Threat Explanation</span>
           <button type="button" class="btn-sm primary" onclick="runLlamaForEvent('${eid}', null, false)">${ic('refresh')} Generate</button>
         </h4>
         <div class="muted">Generate an on-device verdict-locked explanation in ${esc(langBadgeLabel(lang))}.</div>
@@ -4525,15 +4561,14 @@ function renderInspector(eventId) {
   }
 
   body.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
-      <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+    <div class="insp-top-row" style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0">
         ${srcBadge(ev.source)}
-        <strong style="font-size:14.5px">${esc(alertTitle)}</strong>
+        <strong style="font-size:14px">${esc(alertTitle)}</strong>
+        ${npuBadges || ''}
       </div>
       <span class="badge b-${esc(tier)}">Risk ${esc(riskScore)}/100 (${riskShort(tier)})</span>
     </div>
-
-    ${npuBadges ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">${npuBadges}</div>` : ''}
 
     <div class="insp-section">
       <div class="insp-label">${esc(artTitle)}</div>
