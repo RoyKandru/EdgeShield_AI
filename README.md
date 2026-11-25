@@ -532,7 +532,6 @@ EdgeShield_AI/
 | [HLD & SLD Architecture](docs/HLD.md) | High-level (`docs/HLD.md`) and low-level (`docs/SLD.md`) system design |
 | [Benchmark guide](benchmarks/README.md) | Test methods and reported metrics |
 | [Raw benchmark results](benchmarks/results/) | JSON measurements from the board |
-| [Demo runbook](docs/DEMO.md) | Suggested live demonstration flow |
 | [Board deployment guide](docs/BOARD_DEPLOYMENT_RK3588J.md) | RK3588J bring-up and deployment notes |
 | [Mobile companion guide](docs/MOBILE_COMPANION.md) | Android SMS forwarding |
 | [SCI engine design](docs/SCI_ENGINE_DESIGN.md) | Governance and correction pipeline design |
