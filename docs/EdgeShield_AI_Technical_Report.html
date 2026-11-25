@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>EdgeShield AI vv1 — Technical Engineering Report</title>
+<style>
+  @page { size: A4; margin: 14mm 15mm; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #0f172a; line-height: 1.48; font-size: 10.1pt; margin: 0; }
+  .hero { background: linear-gradient(135deg, #0b1220 0%, #172554 100%); color: #f8fafc; padding: 20px 24px; border-radius: 10px; margin-bottom: 16px; }
+  .hero h1 { margin: 0 0 6px 0; font-size: 20pt; letter-spacing: -0.3px; }
+  .hero .sub { color: #93c5fd; font-size: 10.5pt; margin-bottom: 10px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; }
+  .badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(147,197,253,0.35); padding: 3px 9px; border-radius: 99px; font-size: 8.5pt; color: #e0f2fe; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0 16px 0; }
+  .kpi { background: #f8fafc; border: 1px solid #cbd5e1; border-top: 3px solid #2563eb; border-radius: 8px; padding: 10px 12px; }
+  .kpi .lbl { font-size: 7.8pt; color: #475569; text-transform: uppercase; letter-spacing: 0.4px; }
+  .kpi .val { font-size: 14.5pt; font-weight: 700; color: #0f172a; margin-top: 2px; }
+  .kpi .note { font-size: 7.9pt; color: #64748b; }
+  h2 { font-size: 13pt; color: #1e3a8a; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 4px; margin: 15px 0 8px 0; page-break-after: avoid; }
+  h3 { font-size: 10.5pt; color: #0f172a; margin: 10px 0 5px 0; page-break-after: avoid; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px 0; font-size: 8.9pt; page-break-inside: avoid; }
+  th, td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #f1f5f9; color: #1e293b; font-weight: 600; }
+  code { background: #f1f5f9; padding: 1px 4px; border-radius: 3px; font-size: 8.5pt; }
+  .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; page-break-inside: avoid; }
+  .card { border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; background: #ffffff; }
+  .arch { background: #0f172a; color: #e2e8f0; font-family: monospace; font-size: 7.9pt; padding: 11px; border-radius: 8px; white-space: pre; overflow-x: auto; line-height: 1.35; page-break-inside: avoid; }
+  .callout { background: #eff6ff; border-left: 4px solid #2563eb; padding: 8px 12px; border-radius: 4px; font-size: 9.1pt; margin: 8px 0; }
+  ul { margin: 4px 0 8px 18px; padding: 0; }
+  li { margin-bottom: 3px; }
+  .footer { margin-top: 14px; border-top: 1px solid #cbd5e1; padding-top: 8px; font-size: 8.2pt; color: #475569; }
+</style>
+</head>
+<body>
+  <div class="hero">
+    <h1>EdgeShield AI (vv1) — Technical Engineering Report</h1>
+    <div class="sub">Bharat AI-SoC Challenge 2026–27 · Problem Statement 3: On-Device Threat, Phishing &amp; Scam Detection</div>
+    <div class="badges">
+      <span class="badge">Arm RK3588J (6 TOPS 3-Core NPU)</span>
+      <span class="badge">Llama-3.2-1B (766 MB · ctx=512 · 8da4w+emb4)</span>
+      <span class="badge">ExecuTorch XNNPACK + Arm KleidiAI</span>
+      <span class="badge">100% Offline · Zero Cloud</span>
+      <span class="badge">9-Stage Closed-Loop SCI + Reversible Containment</span>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="lbl">3-Core NPU Combined</div><div class="val">415.83 req/s</div><div class="note">Core 0 + Core 1 + Core 2 live FP16</div></div>
+    <div class="kpi"><div class="lbl">ExecuTorch Llama (ctx=512)</div><div class="val">26.54 tok/s</div><div class="note">918.8 MB RSS · 20-run +0.00 MB leak</div></div>
+    <div class="kpi"><div class="lbl">Red-Team Attack Recall</div><div class="val">100.0%</div><div class="note">129/129 caught · F1 98.47%</div></div>
+    <div class="kpi"><div class="lbl">Total System RAM (RSS)</div><div class="val">1278.25 MB</div><div class="note">4.02% of 31 GB · 61 tests pass</div></div>
+  </div>
+
+  <h2>1. Dual-Pipeline Arm SoC Architecture</h2>
+  <div class="callout"><strong>Architectural Safety Boundary — Detectors Decide, Llama Explains:</strong> Pipeline A runs three dedicated deep-learning classifiers simultaneously on RK3588 NPU Cores 0, 1, and 2. Pipeline B runs quantized Llama-3.2-1B (<code>766 MB</code>, <code>max_context_len=512</code>, <code>8da4w</code> + 4-bit embeddings) strictly on Arm64 CPU via ExecuTorch (XNNPACK + Arm KleidiAI) behind a prompt-injection sanitizer and verdict-locked validator. Llama never alters risk verdicts or SCI policies.</div>
+  <div class="arch">[LAN NIC enP2p33s0] --> bin/live_sniffer (AF_PACKET) --> FlowReducer(26) / DNS-HTTP URL / SIP SMS
+[Android Phone LAN] --> scripts/android_sms_forwarder.py ------------------------------------+
+                                                                                             v
+  PIPELINE A (3-Core RK3588 NPU · FP16 · RKNNLite 2.3.2)         PIPELINE B (Arm64 CPU · ExecuTorch)
+  ├─ NPU_CORE_0: NetworkDualNPU  (1D-CNN+MLP · 123 KB)           ├─ Prompt-Injection Sanitizer
+  ├─ NPU_CORE_1: URLDualBranchNPU (MLP+CharCNN · 219 KB)         ├─ bin/executorch_runner (ctx=512, 766 MB)
+  └─ NPU_CORE_2: SplitBiGRUExactPacked + Pool (3.9 MB)           └─ Verdict-Locked Validator (EN/HI + TTS)
+                                 └──────────────┬───────────────┘
+                                                v
+  GOVERNANCE: 9-Stage Closed-Loop SCI (Golden Suite Gate + Atomic Rollback) · Reversible Containment
+              (nftables/dnsmasq TTL + Undo + Protected Hosts) · SHA-256 Audit Ledger · X-EdgeShield-Token</div>
+
+  <h2>2. Detector Models, Public Datasets &amp; Held-Out Accuracy</h2>
+  <table>
+    <thead><tr><th>NPU Core</th><th>Architecture &amp; Reference</th><th>Datasets (Real Public + Edge)</th><th>Held-Out Test Metrics</th><th>FP16 Parity</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Core 0</strong><br>Network IDS</td><td><code>NetworkDualNPU</code><br>1D-CNN (1×26→48) + MLP (26→64→64), 23K params</td><td>CIC-IDS2017 (6 attack days) + Edge LAN (<strong>289,981</strong> flows)</td><td>ROC-AUC <strong>1.0000</strong> · F1 <strong>0.9985</strong> · P <strong>0.9999</strong> · R <strong>0.9971</strong> · FPR <strong>0.00%</strong></td><td><code>3e-6</code></td></tr>
+      <tr><td><strong>Core 1</strong><br>Phishing URL</td><td><code>URLDualBranchNPU</code><br>25-feat Lexical MLP + Char 1D-CNN (Prasad 2026)</td><td>Domain-grouped Phishing + Tranco Top-35k (<strong>160,000</strong> URLs)</td><td>ROC-AUC <strong>0.9781</strong> · AP <strong>0.9780</strong> · P <strong>0.9878</strong> / FPR <strong>0.80%</strong> (@0.96)</td><td><code>4.35e-4</code></td></tr>
+      <tr><td><strong>Core 2</strong><br>SMS Smishing</td><td><code>SplitBiGRUExactPacked</code> + Masked Mean Pool + WBCE (Phap 2026)</td><td>Deduplicated UCI + LSDST-2022 + Indian Scam/OTP (<strong>6,573</strong> rows)</td><td>ROC-AUC <strong>0.9942</strong> · F1 <strong>0.9592</strong> (@0.50) · Recall <strong>0.9793</strong> (5:1, τ=0.22)</td><td><code>2.45e-4</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Verified RK3588J Silicon Benchmarks (Raw Proofs in <code>benchmarks/results/</code>)</h2>
+  <div class="chart-row">
+    <div class="card">
+      <h3 style="margin-top:0">3-Core RK3588 NPU Simultaneous Throughput (req/s)</h3>
+      <svg viewBox="0 0 430 135" width="100%" height="125">
+        <text x="5" y="28" font-size="11" fill="#1e293b">Core 0 (Net)</text>
+        <rect x="95" y="15" width="245" height="18" rx="4" fill="#2563eb" />
+        <text x="347" y="28" font-size="11" font-weight="bold" fill="#0f172a">200.77 req/s</text>
+        <text x="5" y="64" font-size="11" fill="#1e293b">Core 1 (URL)</text>
+        <rect x="95" y="51" width="174" height="18" rx="4" fill="#0891b2" />
+        <text x="276" y="64" font-size="11" font-weight="bold" fill="#0f172a">143.29 req/s</text>
+        <text x="5" y="100" font-size="11" fill="#1e293b">Core 2 (SMS)</text>
+        <rect x="95" y="87" width="87" height="18" rx="4" fill="#7c3aed" />
+        <text x="189" y="100" font-size="11" font-weight="bold" fill="#0f172a">71.77 req/s</text>
+        <text x="5" y="128" font-size="9.5" fill="#475569">Combined: 415.83 req/s · NPU Temp: 47.2°C → 49.0°C</text>
+      </svg>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">20-Run ExecuTorch Llama Stability (ctx=512 · 8da4w+emb4)</h3>
+      <svg viewBox="0 0 500 140" width="100%" height="125">
+        <line x1="40" y1="20" x2="40" y2="120" stroke="#cbd5e1" />
+        <line x1="40" y1="120" x2="485" y2="120" stroke="#cbd5e1" />
+        <polyline fill="none" stroke="#16a34a" stroke-width="2.2" points="40,45 63,40 86,48 109,40 132,44 155,45 178,46 202,45 225,44 248,47 271,41 294,61 317,42 341,40 364,46 387,42 410,41 433,40 456,40 480,40" />
+        <polyline fill="none" stroke="#ea580c" stroke-width="1.8" stroke-dasharray="4,3" points="40,54 63,48 86,51 109,46 132,46 155,46 178,43 202,43 225,42 248,39 271,39 294,40 317,37 341,37 364,33 387,35 410,31 433,31 456,31 480,29" />
+        <text x="45" y="16" font-size="10" fill="#16a34a">● Decode tok/s (26.72 → 27.68)</text>
+        <text x="240" y="16" font-size="10" fill="#ea580c">--- BigCore0 °C (Peak 84.1°C)</text>
+        <text x="42" y="135" font-size="9.5" fill="#475569">20 runs · p50 3449.0 ms · RSS Δ +0.00 MB · Throttling: False</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="chart-row">
+    <div class="card">
+      <h3 style="margin-top:0">Per-Process Memory Footprint (RSS on 31 GB SoC)</h3>
+      <table style="margin:4px 0">
+        <thead><tr><th>Process Role</th><th>PID</th><th style="text-align:right">RSS</th></tr></thead>
+        <tbody><tr><td><code>executorch_llama_daemon</code></td><td>1871409</td><td style='text-align:right'><strong>915.77 MB</strong></td></tr><tr><td><code>uvicorn_api_server</code></td><td>1871376</td><td style='text-align:right'><strong>232.32 MB</strong></td></tr><tr><td><code>npu_core_2_sms_worker</code></td><td>1871464</td><td style='text-align:right'><strong>49.52 MB</strong></td></tr><tr><td><code>npu_core_1_url_worker</code></td><td>1871448</td><td style='text-align:right'><strong>38.93 MB</strong></td></tr><tr><td><code>npu_core_0_network_worker</code></td><td>1871424</td><td style='text-align:right'><strong>37.89 MB</strong></td></tr><tr><td><code>executorch_llama_daemon</code></td><td>1871332</td><td style='text-align:right'><strong>3.07 MB</strong></td></tr><tr><td><code>live_nic_sniffer</code></td><td>1871407</td><td style='text-align:right'><strong>0.75 MB</strong></td></tr></tbody>
+      </table>
+      <div style="font-size:8.4pt;color:#475569">Pipeline A (3-Core NPU + API + Sniffer): <strong>359.41 MB</strong> · Pipeline B (Llama ctx=512 Daemon): <strong>918.84 MB</strong> · Total: <strong>1278.25 MB</strong> (4.02%)</div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Independent Adversarial Red-Team Audit</h3>
+      <ul style="font-size:9pt">
+        <li><strong>Live-Wire (IP-Only, 0 API ports touched):</strong> <strong>10/10</strong> attack waves (468 packets) → <strong>+114</strong> passive detections.</li>
+        <li><strong>160-Case Adversarial API Suite:</strong> Attack Recall <strong>100.0%</strong> (129/129, 0 FN), Precision <strong>96.99%</strong>, F1 <strong>98.47%</strong>, Benign FPR <strong>12.9%</strong>.</li>
+        <li><strong>LAN End-to-End Latency:</strong> p50 <strong>32.364 ms</strong> · p95 <strong>56.23 ms</strong>.</li>
+        <li><strong>Regression &amp; SCI Ledger:</strong> <code>61 passed, 3 skipped in 15.26s</code> · Ledger SHA-256 <code>valid=True</code>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>4. Safety Controls, Governance &amp; Honest Limitations</h2>
+  <ul>
+    <li><strong>Verdict-Locked Advisory &amp; Bilingual UX:</strong> Prompt-injection sanitization, anti-contradiction checks, hallucinated-phone filtering, repetition-loop stops, EN/Hindi (1930 helpline) safety guidance, and offline browser Read-Aloud TTS.</li>
+    <li><strong>Reversible Containment Ladder:</strong> Dry-run by default (<code>EDGESHIELD_CONTAINMENT_DRY_RUN=true</code>), auto-protects local/gateway/DNS hosts, finite TTLs + one-click Undo logged to the SHA-256 SCI ledger, plus optional <code>X-EdgeShield-Token</code> auth and opt-in SSRF-safe Link Sandbox (disabled in offline mode).</li>
+    <li><strong>Known Limitations:</strong> (1) Passive <code>AF_PACKET</code> does not decrypt TLS/DoH payloads. (2) Compromised clean domains require enabling the opt-in Link Sandbox. (3) The deployed <code>ctx=512</code> <code>766 MB</code> <code>.pte</code> (<code>8da4w</code> + 4-bit embeddings, <code>918.8 MB</code> RSS) is exported from the local <code>Llama-3.2-1B</code> base checkpoint, so Hindi mode pairs live Hinglish explanations with full Devanagari vetted recommendations (swapping an Instruct Hindi checkpoint via <code>scripts/export_llama_executorch.sh</code> requires zero C++ changes). (4) Cellular phone SMS reaches the gateway via the included Termux/webhook LAN companion. (5) Conservative red-team thresholds yielded 4/31 benign FPs on synthetic controls, remediable via 9-stage SCI closed-loop allowlisting.</li>
+  </ul>
+
+  <div class="footer">EdgeShield AI vv1 · Measured on Rockchip RK3588J (Arm64 Linux) · All raw benchmark logs reproducible via <code>python3 scripts/run_benchmarks.py</code>.</div>
+</body>
+</html>

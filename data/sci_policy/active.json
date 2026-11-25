@@ -1,0 +1,30 @@
+{
+  "version": "v1",
+  "parent_version": null,
+  "created_at": "2026-11-23T09:17:03.086122+00:00",
+  "actor": "system-bootstrap",
+  "reason": "Initial verified RK3588J EdgeShield baseline policy",
+  "verified_allow_domains": [],
+  "verified_deny_domains": [],
+  "verified_deny_indicators": [],
+  "verified_benign_phrases": [],
+  "rule_weights": {
+    "url": {},
+    "sms": {},
+    "network": {}
+  },
+  "thresholds": {
+    "url_ml_threshold": null,
+    "sms_ml_threshold": 0.85,
+    "sms_flag_score": 45,
+    "network_ml_threshold": null
+  },
+  "preprocessing": {
+    "unicode_normalization": true,
+    "embedded_url_handoff": true
+  },
+  "validation_summary": {
+    "status": "baseline"
+  },
+  "sha256": "74c4fc8bcca75ce8df25f716a4332b0bfb77dbe13c7a51417e42ece0cab2bb15"
+}

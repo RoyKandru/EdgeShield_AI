@@ -1,0 +1,23 @@
+# EdgeShield AI — Reference Reversible Containment Table (nftables)
+# Install once on Linux gateway if enabling active enforcement (EDGESHIELD_CONTAINMENT_DRY_RUN=false):
+#   sudo nft -f deploy/edgeshield.nft
+table inet edgeshield {
+  set blocked_ips {
+    type ipv4_addr;
+    flags timeout;
+  }
+  set quarantined_macs {
+    type ether_addr;
+    flags timeout;
+  }
+  chain input {
+    type filter hook input priority 0; policy accept;
+    ip saddr @blocked_ips drop
+  }
+  chain forward {
+    type filter hook forward priority 0; policy accept;
+    ip daddr @blocked_ips drop
+    ip saddr @blocked_ips drop
+    ether saddr @quarantined_macs drop
+  }
+}

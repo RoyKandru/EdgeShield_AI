@@ -1,0 +1,31 @@
+[19:14:02] parse Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv
+[19:14:04] parse Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv
+[19:14:07] parse Friday-WorkingHours-Morning.pcap_ISCX.csv
+[19:14:09] parse Monday-WorkingHours.pcap_ISCX.csv
+[19:14:16] parse Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv
+[19:14:19] parse Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv
+[19:14:21] parse Tuesday-WorkingHours.pcap_ISCX.csv
+[19:14:26] parse Wednesday-workingHours.pcap_ISCX.csv
+[19:14:48] 2830743 flows, 0.197 attack; labels={'BENIGN': 2273097, 'DoS_Hulk': 231073, 'PortScan': 158930, 'DDoS': 128027, 'DoS_GoldenEye': 10293, 'FTP-Patator': 7938, 'SSH-Patator': 5897, 'DoS_slowloris': 5796, 'DoS_Slowhttptest': 5499, 'Bot': 1966, 'Web_Attack_Brute_Force': 1507, 'Web_Attack_XSS': 652, 'Infiltration': 36, 'Web_Attack_Sql_Injection': 21, 'Heartbleed': 11}
+[19:14:53] A: tr=1981513 va=283072 te=566158
+[19:15:15] A V0_baseline12: P=0.9872 R=0.9880 FPR=0.0031
+[19:15:44] A V1_flow_rich: P=0.9954 R=0.9975 FPR=0.0011
+[19:16:11] A V2_flow_rich+host_agg: P=0.9993 R=0.9996 FPR=0.0002
+[19:16:23] A window rules thr=(100,1000) -> 0.948
+[19:16:47] B V0_baseline12: P=0.9864 R=0.3400 FPR=0.0033
+[19:17:13] B V1_flow_rich: P=0.9969 R=0.2765 FPR=0.0006
+[19:17:38] B V2_flow_rich+host_agg: P=1.0000 R=0.9872 FPR=0.0000
+[19:17:50] B window rules thr=(100,1000) -> R=0.992 FPR=0.1090
+[19:18:18] C hold-out PortScan V1_flow_rich: recall=0.003 FPR=0.0011 P=0.505
+[19:18:39] C hold-out PortScan V2_flow_rich+host_agg: recall=0.001 FPR=0.0002 P=0.542
+[19:19:06] C hold-out DDoS V1_flow_rich: recall=0.629 FPR=0.0018 P=0.990
+[19:19:26] C hold-out DDoS V2_flow_rich+host_agg: recall=0.989 FPR=0.0002 P=0.999
+[19:19:52] C hold-out Bot V1_flow_rich: recall=0.000 FPR=0.0012 P=0.000
+[19:20:11] C hold-out Bot V2_flow_rich+host_agg: recall=0.000 FPR=0.0000 P=0.000
+[19:20:38] C hold-out DoS_Hulk V1_flow_rich: recall=0.456 FPR=0.0012 P=0.995
+[19:20:58] C hold-out DoS_Hulk V2_flow_rich+host_agg: recall=1.000 FPR=0.0001 P=1.000
+[19:21:25] C hold-out WebAttacks V1_flow_rich: recall=0.015 FPR=0.0014 P=0.050
+[19:21:44] C hold-out WebAttacks V2_flow_rich+host_agg: recall=0.001 FPR=0.0001 P=0.038
+[19:22:10] C hold-out Patator V1_flow_rich: recall=0.177 FPR=0.0011 P=0.832
+[19:22:30] C hold-out Patator V2_flow_rich+host_agg: recall=1.000 FPR=0.0001 P=0.995
+[19:22:34] done

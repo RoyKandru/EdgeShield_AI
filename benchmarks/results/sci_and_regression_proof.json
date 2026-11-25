@@ -1,0 +1,122 @@
+{
+  "benchmark": "sci_and_regression_proof",
+  "timestamp_utc": "2026-11-24T15:19:07.183379+00:00",
+  "health": {
+    "status": "ok",
+    "version": "v1",
+    "auth_enabled": false
+  },
+  "pytest": {
+    "exit_code": 0,
+    "summary": "61 passed, 3 skipped in 15.26s",
+    "wall_s": 20.53
+  },
+  "sci_pipeline_status": {
+    "architecture": "SCI Evidence-Grounded Closed-Loop Self-Learning & Self-Correction Pipeline",
+    "stages_implemented": [
+      "1. Threat Detection (URL/SMS/Network + Live NIC)",
+      "2. Decision & Evidence Logging (SQLite WAL + Policy Version)",
+      "3. Independent Offline Outcome Verification (with UNCERTAIN + Anti-Poisoning)",
+      "4. Root-Cause Error Diagnosis (7 Explicit Causes)",
+      "5. Deterministic Correction Planner (LLM Policy-Write Locked)",
+      "6. Bounded On-Device Correction Engine + Workstation Retrain Pack",
+      "7. Automated Golden Regression Validation Engine",
+      "8. Versioned Atomic Deployment & Rollback + SHA-256 Audit Ledger",
+      "9. Continuous Post-Deployment Version Monitoring"
+    ],
+    "llm_policy_modification_allowed": false,
+    "active_policy": {
+      "version": "v1",
+      "parent_version": null,
+      "sha256": "74c4fc8bcca75ce8df25f716a4332b0bfb77dbe13c7a51417e42ece0cab2bb15",
+      "verified_allow_domains_count": 0,
+      "verified_deny_domains_count": 0,
+      "verified_deny_indicators_count": 0,
+      "rule_weights": {
+        "url": {},
+        "sms": {},
+        "network": {}
+      },
+      "thresholds": {
+        "url_ml_threshold": null,
+        "sms_ml_threshold": 0.85,
+        "sms_flag_score": 45,
+        "network_ml_threshold": null
+      }
+    },
+    "datasets": {
+      "unverified_feedback": 1,
+      "verified_feedback": 1,
+      "verified_fp": 0,
+      "verified_fn": 1
+    },
+    "policy_versions": [
+      {
+        "version": "v1",
+        "parent_version": "v1",
+        "created_at": "2026-11-23T09:18:30.845984+00:00",
+        "actor": "soc-analyst",
+        "reason": "PROP-F66D8261A5: missing_domain_reputation -> update_verified_domain_intelligence",
+        "sha256": "a15fb2fe8d2bed5864e49a22882f8766084bb9eaed8119a0d5e3af62ff983623",
+        "active": false,
+        "validation_summary": {
+          "f1": 1.0,
+          "fpr": 0.0,
+          "critical_threat_recall": 1.0
+        }
+      },
+      {
+        "version": "v1",
+        "parent_version": null,
+        "created_at": "2026-11-23T09:17:03.086122+00:00",
+        "actor": "system-bootstrap",
+        "reason": "Initial verified RK3588J EdgeShield baseline policy",
+        "sha256": "74c4fc8bcca75ce8df25f716a4332b0bfb77dbe13c7a51417e42ece0cab2bb15",
+        "active": true,
+        "validation_summary": {
+          "status": "baseline"
+        }
+      }
+    ],
+    "root_cause_action_map": {
+      "missing_domain_reputation": "update_verified_domain_intelligence",
+      "incorrect_malicious_domain_classification": "update_verified_threat_indicators",
+      "excessive_feature_weighting": "adjust_risk_weights",
+      "incorrect_url_feature_extraction": "fix_preprocessing_and_feature_extraction",
+      "poor_probability_calibration": "recalibrate_thresholds",
+      "repeated_model_misclassification": "queue_workstation_retraining",
+      "new_phishing_technique": "extract_indicators_and_queue_retrain"
+    },
+    "version_monitoring": [
+      {
+        "policy_version": "v1",
+        "decisions_count": 2795,
+        "verified_fp": 0,
+        "verified_fn": 1,
+        "uncertain_count": 1,
+        "regression_alert": 0,
+        "updated_at": "2026-11-24T15:18:53.914926+00:00"
+      },
+      {
+        "policy_version": "v1",
+        "decisions_count": 1,
+        "verified_fp": 0,
+        "verified_fn": 0,
+        "uncertain_count": 0,
+        "regression_alert": 0,
+        "updated_at": "2026-11-23T09:18:30.929961+00:00"
+      }
+    ],
+    "proposals_recent": 1
+  },
+  "sci_ledger_verify": {
+    "valid": true,
+    "records_checked": 8,
+    "head_hash": "4b9fcfa617a8444e147a0fe5e8329749a969061229b889d523846ee87b22b1d0"
+  },
+  "containment_status": {
+    "mode": "dry_run",
+    "protected_hosts_count": 7,
+    "total_recorded": 3
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "benchmark": "rk3588_3core_npu_concurrency",
+  "timestamp_utc": "2026-11-24T15:17:14.454027+00:00",
+  "platform": "Linux-6.1.43+-aarch64-with-glibc2.41",
+  "machine": "aarch64",
+  "duration_s": 4.0,
+  "active_npu_cores": [
+    "NPU_CORE_0",
+    "NPU_CORE_1",
+    "NPU_CORE_2"
+  ],
+  "live_loads_during_burst": [
+    {
+      "core": 0,
+      "load_percent": 15.1,
+      "active": true
+    },
+    {
+      "core": 1,
+      "load_percent": 23.3,
+      "active": true
+    },
+    {
+      "core": 2,
+      "load_percent": 60.5,
+      "active": true
+    }
+  ],
+  "per_core": {
+    "core_0_network": {
+      "endpoint": "/api/hardware/rknn/network",
+      "runs": 804,
+      "flagged": 804,
+      "wall_s": 4.005,
+      "throughput_req_s": 200.77,
+      "npu_call_latency": {
+        "p50_ms": 0.643,
+        "p95_ms": 1.232,
+        "p99_ms": 1.5,
+        "mean_ms": 0.722
+      },
+      "http_e2e_latency": {
+        "p50_ms": 4.755,
+        "p95_ms": 6.996,
+        "p99_ms": 8.185,
+        "mean_ms": 4.976
+      }
+    },
+    "core_1_url": {
+      "endpoint": "/api/hardware/rknn/url",
+      "runs": 574,
+      "flagged": 574,
+      "wall_s": 4.006,
+      "throughput_req_s": 143.29,
+      "npu_call_latency": {
+        "p50_ms": 1.611,
+        "p95_ms": 1.837,
+        "p99_ms": 2.872,
+        "mean_ms": 1.602
+      },
+      "http_e2e_latency": {
+        "p50_ms": 6.927,
+        "p95_ms": 8.796,
+        "p99_ms": 9.573,
+        "mean_ms": 6.972
+      }
+    },
+    "core_2_sms": {
+      "endpoint": "/api/hardware/rknn/sms",
+      "runs": 288,
+      "flagged": 288,
+      "wall_s": 4.013,
+      "throughput_req_s": 71.77,
+      "npu_call_latency": {
+        "p50_ms": 8.653,
+        "p95_ms": 9.102,
+        "p99_ms": 9.715,
+        "mean_ms": 8.315
+      },
+      "http_e2e_latency": {
+        "p50_ms": 13.883,
+        "p95_ms": 16.1,
+        "p99_ms": 16.998,
+        "mean_ms": 13.928
+      }
+    }
+  },
+  "combined_throughput_req_s": 415.83,
+  "thermals_c_before": {
+    "soc-thermal": 48.1,
+    "bigcore0-thermal": 48.1,
+    "bigcore1-thermal": 48.1,
+    "littlecore-thermal": 48.1,
+    "center-thermal": 47.2,
+    "gpu-thermal": 47.2,
+    "npu-thermal": 47.2
+  },
+  "thermals_c_after": {
+    "soc-thermal": 49.9,
+    "bigcore0-thermal": 49.9,
+    "bigcore1-thermal": 49.9,
+    "littlecore-thermal": 49.9,
+    "center-thermal": 48.1,
+    "gpu-thermal": 48.1,
+    "npu-thermal": 49.0
+  }
+}

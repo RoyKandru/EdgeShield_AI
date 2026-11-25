@@ -1,0 +1,259 @@
+{
+  "benchmark": "llama_sustained_20run_thermal",
+  "timestamp_utc": "2026-11-24T15:18:46.588272+00:00",
+  "runs_completed": 20,
+  "total_wall_s": 73.82,
+  "summary": {
+    "first_5_mean_tok_s": 26.72,
+    "last_5_mean_tok_s": 27.68,
+    "overall_mean_tok_s": 26.54,
+    "latency_p50_ms": 3449.0,
+    "latency_max_ms": 5456.5,
+    "peak_bigcore0_c": 84.1,
+    "executorch_rss_before_mb": 918.84,
+    "executorch_rss_after_mb": 918.84,
+    "rss_delta_mb": 0.0,
+    "all_validated": true,
+    "throttling_detected": false
+  },
+  "thermals_c_start": {
+    "soc-thermal": 61.0,
+    "bigcore0-thermal": 61.9,
+    "bigcore1-thermal": 61.9,
+    "littlecore-thermal": 61.9,
+    "center-thermal": 61.0,
+    "gpu-thermal": 60.1,
+    "npu-thermal": 60.1
+  },
+  "thermals_c_end": {
+    "soc-thermal": 78.5,
+    "bigcore0-thermal": 80.4,
+    "bigcore1-thermal": 80.4,
+    "littlecore-thermal": 79.5,
+    "center-thermal": 77.6,
+    "gpu-thermal": 75.8,
+    "npu-thermal": 76.7
+  },
+  "series": [
+    {
+      "run": 1,
+      "source": "sms_detector",
+      "provider": "llama-executorch-validated-fallback",
+      "validated": true,
+      "wall_ms": 4000.5,
+      "generated_tokens": 60,
+      "decode_tok_per_sec": 26.2,
+      "cpu_big0_c": 69.3,
+      "soc_c": 66.5
+    },
+    {
+      "run": 2,
+      "source": "url_detector",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 5198.5,
+      "generated_tokens": 100,
+      "decode_tok_per_sec": 27.8,
+      "cpu_big0_c": 73.0,
+      "soc_c": 68.4
+    },
+    {
+      "run": 3,
+      "source": "url_detector",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 2718.7,
+      "generated_tokens": 28,
+      "decode_tok_per_sec": 25.2,
+      "cpu_big0_c": 71.2,
+      "soc_c": 68.4
+    },
+    {
+      "run": 4,
+      "source": "network_ids",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 3750.9,
+      "generated_tokens": 61,
+      "decode_tok_per_sec": 27.8,
+      "cpu_big0_c": 73.9,
+      "soc_c": 70.2
+    },
+    {
+      "run": 5,
+      "source": "network_ids",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 4369.5,
+      "generated_tokens": 76,
+      "decode_tok_per_sec": 26.6,
+      "cpu_big0_c": 73.9,
+      "soc_c": 71.2
+    },
+    {
+      "run": 6,
+      "source": "sms_detector",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 3118.3,
+      "generated_tokens": 37,
+      "decode_tok_per_sec": 26.2,
+      "cpu_big0_c": 73.9,
+      "soc_c": 71.2
+    },
+    {
+      "run": 7,
+      "source": "url_detector",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 3301.0,
+      "generated_tokens": 43,
+      "decode_tok_per_sec": 25.8,
+      "cpu_big0_c": 75.8,
+      "soc_c": 72.1
+    },
+    {
+      "run": 8,
+      "source": "url_detector",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 2858.4,
+      "generated_tokens": 32,
+      "decode_tok_per_sec": 26.2,
+      "cpu_big0_c": 75.8,
+      "soc_c": 72.1
+    },
+    {
+      "run": 9,
+      "source": "network_ids",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 3134.0,
+      "generated_tokens": 40,
+      "decode_tok_per_sec": 26.6,
+      "cpu_big0_c": 76.7,
+      "soc_c": 73.0
+    },
+    {
+      "run": 10,
+      "source": "network_ids",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 5456.5,
+      "generated_tokens": 100,
+      "decode_tok_per_sec": 25.4,
+      "cpu_big0_c": 78.5,
+      "soc_c": 73.9
+    },
+    {
+      "run": 11,
+      "source": "sms_detector",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 4958.8,
+      "generated_tokens": 89,
+      "decode_tok_per_sec": 27.6,
+      "cpu_big0_c": 78.5,
+      "soc_c": 75.8
+    },
+    {
+      "run": 12,
+      "source": "url_detector",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 3908.7,
+      "generated_tokens": 47,
+      "decode_tok_per_sec": 20.6,
+      "cpu_big0_c": 77.6,
+      "soc_c": 75.8
+    },
+    {
+      "run": 13,
+      "source": "url_detector",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 3492.7,
+      "generated_tokens": 51,
+      "decode_tok_per_sec": 27.0,
+      "cpu_big0_c": 79.5,
+      "soc_c": 76.7
+    },
+    {
+      "run": 14,
+      "source": "network_ids",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 2528.6,
+      "generated_tokens": 29,
+      "decode_tok_per_sec": 27.7,
+      "cpu_big0_c": 79.5,
+      "soc_c": 76.7
+    },
+    {
+      "run": 15,
+      "source": "network_ids",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 4379.3,
+      "generated_tokens": 73,
+      "decode_tok_per_sec": 25.6,
+      "cpu_big0_c": 82.2,
+      "soc_c": 77.6
+    },
+    {
+      "run": 16,
+      "source": "sms_detector",
+      "provider": "llama-executorch-validated-fallback",
+      "validated": true,
+      "wall_ms": 3029.3,
+      "generated_tokens": 36,
+      "decode_tok_per_sec": 27.3,
+      "cpu_big0_c": 80.4,
+      "soc_c": 77.6
+    },
+    {
+      "run": 17,
+      "source": "url_detector",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 3792.4,
+      "generated_tokens": 59,
+      "decode_tok_per_sec": 27.5,
+      "cpu_big0_c": 83.2,
+      "soc_c": 78.5
+    },
+    {
+      "run": 18,
+      "source": "url_detector",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 3145.2,
+      "generated_tokens": 45,
+      "decode_tok_per_sec": 27.7,
+      "cpu_big0_c": 83.2,
+      "soc_c": 78.5
+    },
+    {
+      "run": 19,
+      "source": "network_ids",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 3405.3,
+      "generated_tokens": 49,
+      "decode_tok_per_sec": 27.9,
+      "cpu_big0_c": 83.2,
+      "soc_c": 79.5
+    },
+    {
+      "run": 20,
+      "source": "network_ids",
+      "provider": "llama-executorch",
+      "validated": true,
+      "wall_ms": 3256.7,
+      "generated_tokens": 48,
+      "decode_tok_per_sec": 28.0,
+      "cpu_big0_c": 84.1,
+      "soc_c": 79.5
+    }
+  ]
+}

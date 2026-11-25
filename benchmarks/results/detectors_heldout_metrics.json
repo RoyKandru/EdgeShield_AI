@@ -1,0 +1,624 @@
+{
+  "benchmark": "detectors_heldout_metrics",
+  "timestamp_utc": "2026-11-24T15:18:46.609749+00:00",
+  "manifest": {
+    "schema_version": "v1",
+    "target_platform": "rk3588",
+    "models": {
+      "network": {
+        "artifact": "./models/rknn/network_ids_fp16.rknn",
+        "meta_artifact": "./models/rknn/network_ids_meta.json",
+        "architecture": "NetworkDualNPU (1D-CNN 1x26->48 + MLP 26->64->64 + Fusion Head 112->48->1)",
+        "input_shape": [
+          1,
+          26
+        ],
+        "core_id": 0,
+        "precision": "fp16",
+        "threshold": 0.8,
+        "threshold_calibrated": true,
+        "rknn_sha256_prefix": "7a8ebcf3ac270c0b",
+        "status": "active_npu"
+      },
+      "url": {
+        "artifact": "./models/rknn/url_hybrid_fp16.rknn",
+        "meta_artifact": "./models/rknn/url_hybrid_meta.json",
+        "architecture": "URLDualBranchNPU (Lexical MLP 25->64->32 + Char1DCNN 61x128->64 + Fusion Head 96->48->1)",
+        "input_shape": [
+          61,
+          128
+        ],
+        "lex_features": 25,
+        "core_id": 1,
+        "precision": "fp16",
+        "threshold": 0.96,
+        "corroborative_threshold": 0.7,
+        "threshold_calibrated": true,
+        "rknn_sha256_prefix": "e9857ebf09f29038",
+        "status": "active_npu"
+      },
+      "sms": {
+        "artifact": "./models/rknn/sms_bigru_fp16.rknn",
+        "embedding_artifact": "./models/rknn/sms_bigru_emb.npz",
+        "meta_artifact": "./models/rknn/sms_bigru_meta.json",
+        "architecture": "SplitBiGRUExactPacked + Masked Global Mean Pooling + WBCE (Phap 2026)",
+        "input_shape": [
+          64,
+          128
+        ],
+        "core_id": 2,
+        "precision": "fp16",
+        "threshold": 0.22,
+        "high_precision_threshold": 0.56,
+        "cost_ratio_default": "5:1",
+        "threshold_calibrated": true,
+        "rknn_sha256_prefix": "d8d4e605a8de813c",
+        "status": "active_npu"
+      }
+    }
+  },
+  "models": {
+    "network_core_0": {
+      "model_id": "network-ids-1dcnn-mlp-v2r26-rknn-v1",
+      "architecture": {
+        "name": "NetworkDualNPU (1D-CNN 1x26->48 + MLP 26->64->64 + Fusion Head 112->48->1)",
+        "npu_target": "rk3588",
+        "npu_core_id": 0,
+        "npu_precision": "fp16",
+        "n_params": 23057,
+        "n_features": 26,
+        "rknn_bytes": 125033,
+        "rknn_sha256_prefix": "7a8ebcf3ac270c0b"
+      },
+      "training": {
+        "datasets": [
+          "CIC-IDS2017 (Mireu-Lab/CIC-IDS: DDoS, PortScan, DoS, Patator, Bot, WebAttacks)",
+          "Edge LAN Live-Wire Augmentation"
+        ],
+        "total_flows": 289981,
+        "train_flows": 202986,
+        "val_flows": 43497,
+        "test_flows": 43498,
+        "wbce_weights": {
+          "w0": 0.9235,
+          "w1": 1.0903
+        },
+        "train_seconds": 157.07
+      },
+      "calibration": {
+        "default_threshold": 0.13,
+        "threshold_rule": "best val F1 subject to val FPR <= 0.5%"
+      },
+      "test_metrics": {
+        "at_opt": {
+          "threshold": 0.13,
+          "precision": 0.9995,
+          "recall": 0.9986,
+          "f1": 0.9991,
+          "roc_auc": 1.0,
+          "ap": 1.0,
+          "fpr": 0.0004,
+          "tp": 19921,
+          "fp": 10,
+          "tn": 23540,
+          "fn": 27
+        },
+        "at_050": {
+          "threshold": 0.5,
+          "precision": 0.9999,
+          "recall": 0.9971,
+          "f1": 0.9985,
+          "roc_auc": 1.0,
+          "ap": 1.0,
+          "fpr": 0.0,
+          "tp": 19890,
+          "fp": 1,
+          "tn": 23549,
+          "fn": 58
+        },
+        "per_family_recall": {
+          "Bot": {
+            "n": 295,
+            "recall": 0.9729
+          },
+          "C2_PORT": {
+            "n": 253,
+            "recall": 0.9328
+          },
+          "DDoS": {
+            "n": 5250,
+            "recall": 1.0
+          },
+          "DoS_Hulk": {
+            "n": 4412,
+            "recall": 1.0
+          },
+          "DoS_Slowhttptest": {
+            "n": 410,
+            "recall": 1.0
+          },
+          "DoS_slowloris": {
+            "n": 428,
+            "recall": 1.0
+          },
+          "FTP-Patator": {
+            "n": 1191,
+            "recall": 1.0
+          },
+          "ICMP_FLOOD": {
+            "n": 242,
+            "recall": 1.0
+          },
+          "PORT_SCAN": {
+            "n": 256,
+            "recall": 0.9961
+          },
+          "PortScan": {
+            "n": 5250,
+            "recall": 1.0
+          },
+          "SSH-Patator": {
+            "n": 885,
+            "recall": 1.0
+          },
+          "SSH_BF": {
+            "n": 261,
+            "recall": 1.0
+          },
+          "SYN_FLOOD": {
+            "n": 245,
+            "recall": 1.0
+          },
+          "UDP_FLOOD": {
+            "n": 243,
+            "recall": 1.0
+          },
+          "Web_Attack_\u00ef\u00bf\u00bd_Brute_Force": {
+            "n": 226,
+            "recall": 0.9956
+          },
+          "Web_Attack_\u00ef\u00bf\u00bd_Sql_Injection": {
+            "n": 3,
+            "recall": 1.0
+          },
+          "Web_Attack_\u00ef\u00bf\u00bd_XSS": {
+            "n": 98,
+            "recall": 1.0
+          }
+        },
+        "rknn_fp16_sim_parity_max_diff": 3e-06,
+        "rknn_fp16_sim_parity_mean_diff": 0.0
+      }
+    },
+    "url_core_1": {
+      "model_id": "url-dualbranch-mlp-charcnn-rknn-v1",
+      "architecture": {
+        "name": "URLDualBranchNPU (Lexical MLP 25->64->32 + Char1DCNN 61x128->64 + Fusion Head 96->48->1)",
+        "npu_target": "rk3588",
+        "npu_core_id": 1,
+        "npu_precision": "fp16",
+        "n_params": 61217,
+        "n_lex_features": 25,
+        "char_vocab": 61,
+        "char_max_len": 128,
+        "rknn_bytes": 223502,
+        "rknn_sha256_prefix": "e9857ebf09f29038"
+      },
+      "training": {
+        "datasets": [
+          "ealvaradob/phishing-dataset (urls.json)",
+          "Tranco Top-35k Benign",
+          "Targeted IP/Brand-Spoof Augmentation"
+        ],
+        "train_rows": 110269,
+        "val_rows": 28220,
+        "test_rows": 21511,
+        "split_method": "domain-grouped 70/15/15 (zero shared registered domain)",
+        "wbce_weights": {
+          "w0": 0.9371,
+          "w1": 1.072
+        },
+        "train_seconds": 591.5
+      },
+      "calibration": {
+        "high_precision_threshold": 0.96,
+        "cost_sensitive_threshold": 0.13
+      },
+      "test_metrics": {
+        "at_050": {
+          "threshold": 0.5,
+          "precision": 0.8982,
+          "recall": 0.936,
+          "f1": 0.9167,
+          "roc_auc": 0.9781,
+          "ap": 0.978,
+          "fpr": 0.096,
+          "tp": 9562,
+          "fp": 1084,
+          "tn": 10211,
+          "fn": 654
+        },
+        "at_high_precision": {
+          "threshold": 0.96,
+          "precision": 0.9878,
+          "recall": 0.7143,
+          "f1": 0.8291,
+          "roc_auc": 0.9781,
+          "ap": 0.978,
+          "fpr": 0.008,
+          "tp": 7297,
+          "fp": 90,
+          "tn": 11205,
+          "fn": 2919
+        },
+        "at_cost_5_1": {
+          "threshold": 0.13,
+          "precision": 0.8012,
+          "recall": 0.9769,
+          "f1": 0.8804,
+          "roc_auc": 0.9781,
+          "ap": 0.978,
+          "fpr": 0.2192,
+          "tp": 9980,
+          "fp": 2476,
+          "tn": 8819,
+          "fn": 236
+        },
+        "external_disjoint": {
+          "openphish_live": {
+            "n": 300,
+            "recall_at_050": 0.85,
+            "recall_at_hi": 0.6567,
+            "recall_at_cost": 0.9533
+          },
+          "tranco_50k_55k_https": {
+            "n": 5000,
+            "fpr_at_050": 0.0868,
+            "fpr_at_hi": 0.027
+          },
+          "tranco_50k_55k_bare": {
+            "n": 5000,
+            "fpr_at_050": 0.7154,
+            "fpr_at_hi": 0.065
+          }
+        },
+        "rknn_fp16_sim_parity_max_diff": 0.000435,
+        "rknn_fp16_sim_parity_mean_diff": 8e-05
+      }
+    },
+    "sms_core_2": {
+      "model_id": "sms-bigru-maskedpool-wbce-rknn-v1",
+      "architecture": {
+        "name": "SplitBiGRUExactPacked + Masked Global Mean Pooling + WBCE",
+        "npu_target": "rk3588",
+        "npu_core_id": 2,
+        "npu_precision": "fp16",
+        "packed_equivalence": "exact (valid-prefix reversal + order-invariant mean pooling, diff < 1e-7)",
+        "t_max": 64,
+        "emb_dim": 128,
+        "hidden_dim": 128,
+        "vocab_size": 3769,
+        "rknn_bytes": 4008243,
+        "emb_bytes": 910148,
+        "rknn_sha256_prefix": "d8d4e605a8de813c"
+      },
+      "training": {
+        "datasets": [
+          "UCI SMS Spam Collection (5,574)",
+          "LSDST-2022 (5,971)",
+          "Indian Domain & Benign OTP Augmentation (720)"
+        ],
+        "deduplicated_total": 6573,
+        "train_p95_len": 33,
+        "train_p99_len": 52,
+        "wbce_weights": {
+          "w0": 0.6219,
+          "w1": 2.5504
+        },
+        "train_seconds": 244.48
+      },
+      "calibration": {
+        "default_cost_ratio": "5:1",
+        "default_threshold": 0.22,
+        "cost_curves": {
+          "2:1": {
+            "c_fn": 2.0,
+            "c_fp": 1.0,
+            "optimal_tau": 0.56,
+            "min_expected_cost": 31.0,
+            "val_metrics_at_opt": {
+              "threshold": 0.56,
+              "precision": 0.9343,
+              "recall": 0.9536,
+              "f1": 0.9439,
+              "roc_auc": 0.9926,
+              "ap": 0.9815,
+              "fpr": 0.0164,
+              "tp": 185,
+              "fp": 13,
+              "tn": 779,
+              "fn": 9
+            },
+            "curve": [
+              {
+                "tau": 0.1,
+                "cost": 71.0,
+                "fn": 3,
+                "fp": 65
+              },
+              {
+                "tau": 0.2,
+                "cost": 47.0,
+                "fn": 3,
+                "fp": 41
+              },
+              {
+                "tau": 0.3,
+                "cost": 49.0,
+                "fn": 9,
+                "fp": 31
+              },
+              {
+                "tau": 0.4,
+                "cost": 40.0,
+                "fn": 9,
+                "fp": 22
+              },
+              {
+                "tau": 0.5,
+                "cost": 32.0,
+                "fn": 9,
+                "fp": 14
+              },
+              {
+                "tau": 0.6,
+                "cost": 33.0,
+                "fn": 11,
+                "fp": 11
+              },
+              {
+                "tau": 0.7,
+                "cost": 31.0,
+                "fn": 11,
+                "fp": 9
+              },
+              {
+                "tau": 0.8,
+                "cost": 34.0,
+                "fn": 13,
+                "fp": 8
+              },
+              {
+                "tau": 0.9,
+                "cost": 31.0,
+                "fn": 13,
+                "fp": 5
+              }
+            ]
+          },
+          "5:1": {
+            "c_fn": 5.0,
+            "c_fp": 1.0,
+            "optimal_tau": 0.22,
+            "min_expected_cost": 53.0,
+            "val_metrics_at_opt": {
+              "threshold": 0.22,
+              "precision": 0.8341,
+              "recall": 0.9845,
+              "f1": 0.9031,
+              "roc_auc": 0.9926,
+              "ap": 0.9815,
+              "fpr": 0.048,
+              "tp": 191,
+              "fp": 38,
+              "tn": 754,
+              "fn": 3
+            },
+            "curve": [
+              {
+                "tau": 0.1,
+                "cost": 80.0,
+                "fn": 3,
+                "fp": 65
+              },
+              {
+                "tau": 0.2,
+                "cost": 56.0,
+                "fn": 3,
+                "fp": 41
+              },
+              {
+                "tau": 0.3,
+                "cost": 76.0,
+                "fn": 9,
+                "fp": 31
+              },
+              {
+                "tau": 0.4,
+                "cost": 67.0,
+                "fn": 9,
+                "fp": 22
+              },
+              {
+                "tau": 0.5,
+                "cost": 59.0,
+                "fn": 9,
+                "fp": 14
+              },
+              {
+                "tau": 0.6,
+                "cost": 66.0,
+                "fn": 11,
+                "fp": 11
+              },
+              {
+                "tau": 0.7,
+                "cost": 64.0,
+                "fn": 11,
+                "fp": 9
+              },
+              {
+                "tau": 0.8,
+                "cost": 73.0,
+                "fn": 13,
+                "fp": 8
+              },
+              {
+                "tau": 0.9,
+                "cost": 70.0,
+                "fn": 13,
+                "fp": 5
+              }
+            ]
+          },
+          "10:1": {
+            "c_fn": 10.0,
+            "c_fp": 1.0,
+            "optimal_tau": 0.22,
+            "min_expected_cost": 68.0,
+            "val_metrics_at_opt": {
+              "threshold": 0.22,
+              "precision": 0.8341,
+              "recall": 0.9845,
+              "f1": 0.9031,
+              "roc_auc": 0.9926,
+              "ap": 0.9815,
+              "fpr": 0.048,
+              "tp": 191,
+              "fp": 38,
+              "tn": 754,
+              "fn": 3
+            },
+            "curve": [
+              {
+                "tau": 0.1,
+                "cost": 95.0,
+                "fn": 3,
+                "fp": 65
+              },
+              {
+                "tau": 0.2,
+                "cost": 71.0,
+                "fn": 3,
+                "fp": 41
+              },
+              {
+                "tau": 0.3,
+                "cost": 121.0,
+                "fn": 9,
+                "fp": 31
+              },
+              {
+                "tau": 0.4,
+                "cost": 112.0,
+                "fn": 9,
+                "fp": 22
+              },
+              {
+                "tau": 0.5,
+                "cost": 104.0,
+                "fn": 9,
+                "fp": 14
+              },
+              {
+                "tau": 0.6,
+                "cost": 121.0,
+                "fn": 11,
+                "fp": 11
+              },
+              {
+                "tau": 0.7,
+                "cost": 119.0,
+                "fn": 11,
+                "fp": 9
+              },
+              {
+                "tau": 0.8,
+                "cost": 138.0,
+                "fn": 13,
+                "fp": 8
+              },
+              {
+                "tau": 0.9,
+                "cost": 135.0,
+                "fn": 13,
+                "fp": 5
+              }
+            ]
+          }
+        }
+      },
+      "test_metrics": {
+        "overall_at_opt": {
+          "threshold": 0.22,
+          "precision": 0.863,
+          "recall": 0.9793,
+          "f1": 0.9175,
+          "roc_auc": 0.9942,
+          "ap": 0.9884,
+          "fpr": 0.0378,
+          "tp": 189,
+          "fp": 30,
+          "tn": 763,
+          "fn": 4
+        },
+        "overall_at_050": {
+          "threshold": 0.5,
+          "precision": 0.9447,
+          "recall": 0.9741,
+          "f1": 0.9592,
+          "roc_auc": 0.9942,
+          "ap": 0.9884,
+          "fpr": 0.0139,
+          "tp": 188,
+          "fp": 11,
+          "tn": 782,
+          "fn": 5
+        },
+        "per_source": {
+          "uci": {
+            "threshold": 0.22,
+            "precision": 0.775,
+            "recall": 0.9688,
+            "f1": 0.8611,
+            "roc_auc": 0.9914,
+            "ap": 0.9762,
+            "fpr": 0.0398,
+            "tp": 93,
+            "fp": 27,
+            "tn": 651,
+            "fn": 3
+          },
+          "lsdst": {
+            "threshold": 0.22,
+            "precision": 0.9538,
+            "recall": 0.9841,
+            "f1": 0.9688,
+            "roc_auc": 0.9959,
+            "ap": 0.9962,
+            "fpr": 0.0385,
+            "tp": 62,
+            "fp": 3,
+            "tn": 75,
+            "fn": 1
+          },
+          "indian_domain": {
+            "threshold": 0.22,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "roc_auc": 1.0,
+            "ap": 1.0,
+            "fpr": 0.0,
+            "tp": 34,
+            "fp": 0,
+            "tn": 37,
+            "fn": 0
+          }
+        },
+        "rknn_fp16_sim_parity_max_diff": 0.000245,
+        "rknn_fp16_sim_parity_mean_diff": 2.4e-05
+      }
+    }
+  }
+}

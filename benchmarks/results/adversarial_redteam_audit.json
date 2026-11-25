@@ -1,0 +1,249 @@
+{
+  "benchmark": "adversarial_redteam_audit",
+  "timestamp_utc": "2026-11-24T09:02:43.198628+00:00",
+  "target_host": "192.168.1.6",
+  "target_info": {
+    "base_url": "http://192.168.1.6:8000",
+    "ip": "192.168.1.6",
+    "port": 8000,
+    "mode": "python",
+    "attack_mode": "live_wire+api",
+    "edgeshield_api_detected": true,
+    "probe_method": "icmp_ping",
+    "ping_ms": 35.4,
+    "health": {
+      "status": "ok",
+      "version": "v1",
+      "auth_enabled": false
+    },
+    "latency_ms": 7.36,
+    "metrics": {
+      "timestamp": 1795510949.3997953,
+      "hostname": "6tops",
+      "platform": "linux",
+      "architecture": "aarch64",
+      "cpu": {
+        "usage_percent": null,
+        "per_core_percent": {
+          "cpu": null,
+          "cpu0": null,
+          "cpu1": null,
+          "cpu2": null,
+          "cpu3": null,
+          "cpu4": null,
+          "cpu5": null,
+          "cpu6": null,
+          "cpu7": null
+        },
+        "logical_cores": 8,
+        "note": "CPU utilisation is calculated from /proc/stat deltas; first sample is warming up."
+      },
+      "memory": {
+        "total_bytes": 33330864128,
+        "used_bytes": 2727264256,
+        "available_bytes": 30603599872,
+        "usage_percent": 8.2,
+        "swap_total_bytes": 0,
+        "swap_used_bytes": 0,
+        "swap_usage_percent": 0.0
+      },
+      "storage": {
+        "mount": "/",
+        "total_bytes": 125238267904,
+        "used_bytes": 115295473664,
+        "free_bytes": 4774420480,
+        "usage_percent": 92.1
+      },
+      "temperature": {
+        "sensors": [
+          {
+            "sensor": "thermal_zone0",
+            "temperature_c": 49.9,
+            "source": "thermal_zone"
+          },
+          {
+            "sensor": "thermal_zone1",
+            "temperature_c": 49.9,
+            "source": "thermal_zone"
+          },
+          {
+            "sensor": "thermal_zone2",
+            "temperature_c": 49.9,
+            "source": "thermal_zone"
+          },
+          {
+            "sensor": "thermal_zone3",
+            "temperature_c": 49.9,
+            "source": "thermal_zone"
+          },
+          {
+            "sensor": "thermal_zone4",
+            "temperature_c": 48.1,
+            "source": "thermal_zone"
+          },
+          {
+            "sensor": "thermal_zone5",
+            "temperature_c": 48.1,
+            "source": "thermal_zone"
+          },
+          {
+            "sensor": "thermal_zone6",
+            "temperature_c": 48.1,
+            "source": "thermal_zone"
+          },
+          {
+            "sensor": "temp1_input",
+            "temperature_c": 49.9,
+            "source": "hwmon"
+          },
+          {
+            "sensor": "temp1_input",
+            "temperature_c": 49.0,
+            "source": "hwmon"
+          },
+          {
+            "sensor": "temp1_input",
+            "temperature_c": 48.1,
+            "source": "hwmon"
+          }
+        ],
+        "max_c": 49.9
+      },
+      "frequency": {
+        "average_mhz": 2052.0,
+        "per_core_mhz": [
+          2352.0,
+          2256.0,
+          1800.0,
+          1800.0,
+          2352.0,
+          2256.0,
+          1800.0,
+          1800.0
+        ]
+      },
+      "npu": {
+        "available": true,
+        "busy_percent": null,
+        "devices": [
+          {
+            "device": "fdab0000.npu",
+            "available": true,
+            "busy_percent": null,
+            "current_frequency_hz": 1000000000,
+            "max_frequency_hz": 1000000000,
+            "raw_load": "100@1000000000Hz"
+          }
+        ],
+        "note": "Busy percentage is shown only when exported by the kernel."
+      },
+      "gpu": {
+        "available": true,
+        "busy_percent": null,
+        "devices": [
+          {
+            "device": "fb000000.gpu",
+            "available": true,
+            "busy_percent": null,
+            "current_frequency_hz": 300000000,
+            "max_frequency_hz": 1000000000,
+            "raw_load": "0@300000000Hz"
+          }
+        ],
+        "note": "Busy percentage is shown only when exported by the kernel."
+      },
+      "network": [
+        {
+          "interface": "lo",
+          "rx_bytes": 11648930,
+          "tx_bytes": 11648930,
+          "rx_bytes_per_sec": null,
+          "tx_bytes_per_sec": null
+        },
+        {
+          "interface": "enP2p33s0",
+          "rx_bytes": 23256718,
+          "tx_bytes": 418111551,
+          "rx_bytes_per_sec": null,
+          "tx_bytes_per_sec": null
+        },
+        {
+          "interface": "can0",
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_bytes_per_sec": null,
+          "tx_bytes_per_sec": null
+        },
+        {
+          "interface": "docker0",
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_bytes_per_sec": null,
+          "tx_bytes_per_sec": null
+        }
+      ],
+      "system": {
+        "uptime_seconds": 10449.4,
+        "load_average": [
+          1.88,
+          1.99,
+          2.07
+        ]
+      },
+      "sampling_interval_seconds": null,
+      "limitations": [
+        "Hardware counters depend on kernel and vendor driver exposure.",
+        "NPU/GPU availability does not imply that utilisation counters are available.",
+        "Temperature sensors are reported only when exported through Linux thermal or hwmon interfaces.",
+        "Metrics are read-only; this endpoint does not change CPU governors, clocks, fan policy or device state."
+      ],
+      "logical_cpu_count": 8,
+      "cpu_utilisation_percent": null,
+      "memory_available_kb": 29886328,
+      "cpu_temperature_celsius": null
+    }
+  },
+  "live_wire_summary": {
+    "attacks_fired": 10,
+    "total_packets_sent": 468,
+    "total_bytes_sent": 82697,
+    "wall_seconds": 2.839,
+    "board_events_before": 7341,
+    "board_events_after": 7455,
+    "board_events_delta": 114,
+    "attack_ids": [
+      "live_port_scan",
+      "live_ssh_bruteforce",
+      "live_iot_mirai_probe",
+      "live_udp_flood",
+      "live_dns_tunnel",
+      "live_c2_beacon",
+      "live_icmp_covert",
+      "live_phishing_wire",
+      "live_scam_sms_wire",
+      "live_nested_killchain"
+    ]
+  },
+  "api_suite_summary": {
+    "total_cases": 160,
+    "total_attacks": 129,
+    "attacks_caught": 129,
+    "false_negatives": 0,
+    "attack_detection_rate_pct": 100.0,
+    "precision_pct": 96.99,
+    "f1_pct": 98.47,
+    "accuracy_pct": 97.5,
+    "total_benign": 31,
+    "benign_fp": 4,
+    "benign_fpr_pct": 12.9,
+    "severity_calibration_rate_pct": 98.45,
+    "latency_ms": {
+      "min": 14.906,
+      "p50": 32.364,
+      "p95": 56.23,
+      "p99": 125.795,
+      "max": 238.925,
+      "mean": 35.917
+    }
+  }
+}

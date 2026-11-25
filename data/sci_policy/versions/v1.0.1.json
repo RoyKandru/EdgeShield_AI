@@ -1,0 +1,34 @@
+{
+  "version": "v1",
+  "parent_version": "v1",
+  "created_at": "2026-11-23T09:18:30.845984+00:00",
+  "actor": "soc-analyst",
+  "reason": "PROP-F66D8261A5: missing_domain_reputation -> update_verified_domain_intelligence",
+  "verified_allow_domains": [],
+  "verified_deny_domains": [
+    "novel-zero-day-scam-test42.org"
+  ],
+  "verified_deny_indicators": [],
+  "verified_benign_phrases": [],
+  "rule_weights": {
+    "url": {},
+    "sms": {},
+    "network": {}
+  },
+  "thresholds": {
+    "url_ml_threshold": null,
+    "sms_ml_threshold": 0.85,
+    "sms_flag_score": 45,
+    "network_ml_threshold": null
+  },
+  "preprocessing": {
+    "unicode_normalization": true,
+    "embedded_url_handoff": true
+  },
+  "validation_summary": {
+    "f1": 1.0,
+    "fpr": 0.0,
+    "critical_threat_recall": 1.0
+  },
+  "sha256": "a15fb2fe8d2bed5864e49a22882f8766084bb9eaed8119a0d5e3af62ff983623"
+}

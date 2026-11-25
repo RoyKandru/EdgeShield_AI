@@ -1,0 +1,24 @@
+[19:23:51] loading cache features_v2.parquet
+[19:23:52] 2830743 flows, 0.197 attack; labels={'BENIGN': 2273097, 'DoS_Hulk': 231073, 'PortScan': 158930, 'DDoS': 128027, 'DoS_GoldenEye': 10293, 'FTP-Patator': 7938, 'SSH-Patator': 5897, 'DoS_slowloris': 5796, 'DoS_Slowhttptest': 5499, 'Bot': 1966, 'Web_Attack_Brute_Force': 1507, 'Web_Attack_XSS': 652, 'Infiltration': 36, 'Web_Attack_Sql_Injection': 21, 'Heartbleed': 11}
+[19:23:56] A: tr=1981513 va=283072 te=566158
+[19:24:19] A V0_baseline12: P=0.9906 R=0.9880 FPR=0.0023
+[19:24:46] A V1_flow_rich: P=0.9958 R=0.9981 FPR=0.0010
+[19:25:15] A V2_flow_rich+host_agg: P=0.9999 R=0.9992 FPR=0.0000
+[19:25:24] A window rules thr=(100,1000) -> 0.948
+[19:25:45] B V0_baseline12: P=0.9803 R=0.3493 FPR=0.0049
+[19:26:09] B V1_flow_rich: P=0.9974 R=0.2340 FPR=0.0004
+[19:26:32] B V2_flow_rich+host_agg: P=1.0000 R=0.9872 FPR=0.0000
+[19:26:42] B window rules thr=(100,1000) -> R=0.992 FPR=0.1090
+[19:27:11] C hold-out PortScan V1_flow_rich: recall=0.003 FPR=0.0019 P=0.315
+[19:27:36] C hold-out PortScan V2_flow_rich+host_agg: recall=0.979 FPR=0.0011 P=0.996
+[19:28:05] C hold-out DDoS V1_flow_rich: recall=0.629 FPR=0.0016 P=0.989
+[19:28:28] C hold-out DDoS V2_flow_rich+host_agg: recall=0.989 FPR=0.0004 P=0.998
+[19:28:58] C hold-out Bot V1_flow_rich: recall=0.000 FPR=0.0008 P=0.000
+[19:29:24] C hold-out Bot V2_flow_rich+host_agg: recall=0.000 FPR=0.0000 P=0.000
+[19:29:55] C hold-out DoS_Hulk V1_flow_rich: recall=0.679 FPR=0.0008 P=0.996
+[19:30:24] C hold-out DoS_Hulk V2_flow_rich+host_agg: recall=1.000 FPR=0.0001 P=1.000
+[19:31:00] C hold-out WebAttacks V1_flow_rich: recall=0.041 FPR=0.0009 P=0.146
+[19:31:22] C hold-out WebAttacks V2_flow_rich+host_agg: recall=0.001 FPR=0.0002 P=0.021
+[19:31:53] C hold-out Patator V1_flow_rich: recall=0.001 FPR=0.0011 P=0.021
+[19:32:17] C hold-out Patator V2_flow_rich+host_agg: recall=0.486 FPR=0.0001 P=0.987
+[19:32:21] done

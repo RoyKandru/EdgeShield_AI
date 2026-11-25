@@ -1,0 +1,21 @@
+[Unit]
+Description=EdgeShield AI On-Device Cybersecurity Assistant (Arm64 + ExecuTorch Llama)
+After=network-online.target
+
+[Service]
+Type=simple
+User=open
+WorkingDirectory=/home/open/EdgeShield_AI/source/edgeshield-ai
+Environment=EDGESHIELD_EXECUTOR=command
+Environment=EDGESHIELD_EXECUTOR_COMMAND=/home/open/EdgeShield_AI/source/edgeshield-ai/bin/executorch_runner
+Environment=EDGESHIELD_EXECUTOR_MODEL_PATH=/home/open/EdgeShield_AI/source/edgeshield-ai/models/llama.pte
+Environment=EDGESHIELD_EXECUTOR_TOKENIZER_PATH=/home/open/EdgeShield_AI/source/edgeshield-ai/models/tokenizer.model
+Environment=EDGESHIELD_EXECUTOR_DAEMON=true
+Environment=EDGESHIELD_LIVE_MONITOR_ENABLED=true
+Environment=EDGESHIELD_LIVE_MONITOR_INTERFACE=auto
+ExecStart=/home/open/miniforge3/bin/python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
