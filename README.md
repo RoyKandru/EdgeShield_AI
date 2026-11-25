@@ -6,6 +6,7 @@
 
 Bharat AI-SoC Challenge 2026–27 · Problem Statement 3  
 ### **Team EdgeProc**
+**Pradeep Roy Kandru** (Team Leader) · **Amit Mane** · **Srivathsa Tirumala**
 
 [![Platform](https://img.shields.io/badge/platform-Arm64%20%7C%20RK3588J-273849)](#target-platform)
 [![NPU](https://img.shields.io/badge/accelerator-RK3588%203--Core%20NPU-273849)](#dual-pipeline-architecture)
@@ -529,7 +530,7 @@ EdgeShield_AI_v1.3.0/
 
 | Resource | What it contains |
 |---|---|
-| [Final Project Report (PDF / DOCX)](docs/EdgeShield_AI_Final_Project_Report.pdf) | Complete methodology, datasets, hardware utilization, quantization & results ([DOCX](docs/EdgeShield_AI_Final_Project_Report.docx)) |
+| [Final Project Report (PDF / DOCX)](docs/EdgeShield_AI_Final_Project_Report.pdf) | Expanded engineering report: team, methodology, datasets, neural architectures, `p50/p95/p99` latency, quantization (`8da4w` `ctx=512`), thermals, roadmap & Shield-Breaker ([DOCX](docs/EdgeShield_AI_Final_Project_Report.docx)) |
 | [Technical engineering report (PDF)](docs/EdgeShield_AI_Technical_Report_v1.4.pdf) | System design, model architectures, hardware partitioning, board results and limitations |
 | [Technical report (HTML / Markdown)](docs/TECHNICAL_REPORT_v1.4.md) | Text and HTML (`docs/EdgeShield_AI_Technical_Report_v1.4.html`) versions of the engineering report |
 | [RK3588J Edge AI Pipelines](docs/EDGE_AI_PIPELINES_RK3588J_v1.4.0.md) | 3-core NPU + ExecuTorch pipeline specifications |
