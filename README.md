@@ -312,7 +312,7 @@ The application can start on a non-RK3588 development host using the available f
 ### 2. Install the Python application dependencies
 
 ```bash
-cd EdgeShield_AI_v1.3.0/source/edgeshield-ai
+cd EdgeShield_AI
 
 python3 -m venv .venv
 . .venv/bin/activate
@@ -490,38 +490,36 @@ This integration is permission-based forwarding after message receipt; it is not
 ## Repository structure
 
 ```text
-EdgeShield_AI_v1.3.0/
+EdgeShield_AI/
 ├── README.md                         # Project overview and challenge submission entry point
-├── run.sh                            # Package-level launcher
-├── docs/                             # Top-level architecture and planning documents
-└── source/
-    └── edgeshield-ai/
-        ├── app/
-        │   ├── detectors/             # SMS, URL, network and live-monitor logic
-        │   ├── edge_models/           # RKNN clients, workers and model integration
-        │   ├── advisory/              # ExecuTorch command adapter and template fallback
-        │   ├── sci/                   # SCI governance, validation and containment
-        │   ├── events.py              # Threat event contracts and event handling
-        │   ├── risk.py                # Risk scoring / aggregation
-        │   └── static/                # Local web dashboard
-        ├── models/
-        │   ├── rknn/                  # Three RK3588 FP16 detector models + metadata
-        │   └── *.joblib               # Classical ML / fallback artifacts
-        ├── benchmarks/
-        │   ├── README.md
-        │   └── results/               # Raw benchmark and audit JSON records
-        ├── docs/
-        │   ├── img/screens/            # RK3588J dashboard screenshots
-        │   ├── DEMO.md
-        │   ├── MOBILE_COMPANION.md
-        │   ├── BOARD_DEPLOYMENT_RK3588J.md
-        │   └── TECHNICAL_REPORT_v1.4.md
-        ├── native/                    # C++ native runtime / API baseline
-        ├── src/                       # Native sniffer and ExecuTorch runner source
-        ├── bin/                       # Included Arm64 helper binaries
-        ├── scripts/                   # Training, export, build and benchmark scripts
-        ├── deploy/                    # Service and nftables deployment examples
-        └── tests/                     # Python test suite
+├── LICENSE                           # Apache License 2.0
+├── run.sh                            # Application launcher
+├── app/
+│   ├── detectors/                    # SMS, URL, network and live-monitor logic
+│   ├── edge_models/                  # RKNN clients, workers and model integration
+│   ├── advisory/                     # ExecuTorch command adapter and template fallback
+│   ├── sci/                          # SCI governance, validation and containment
+│   ├── events.py                     # Threat event contracts and event handling
+│   ├── risk.py                       # Risk scoring / CrossChannelCorrelator
+│   └── static/                       # Local web dashboard
+├── models/
+│   ├── rknn/                         # Three RK3588 FP16 detector models + metadata
+│   └── *.joblib                      # Classical ML / fallback artifacts
+├── benchmarks/
+│   ├── README.md
+│   └── results/                      # Raw benchmark and audit JSON records
+├── docs/
+│   ├── img/screens/                  # RK3588J dashboard screenshots
+│   ├── DEMO.md
+│   ├── MOBILE_COMPANION.md
+│   ├── BOARD_DEPLOYMENT_RK3588J.md
+│   └── EDGE_AI_PIPELINES_RK3588J.md
+├── native/                           # C++ native runtime / API baseline
+├── src/                              # Native sniffer and ExecuTorch runner source
+├── bin/                              # Included Arm64 helper binaries
+├── scripts/                          # Training, export, build and benchmark scripts
+├── deploy/                           # Service and nftables deployment examples
+└── tests/                            # Python test suite
 ```
 
 ---
@@ -530,9 +528,7 @@ EdgeShield_AI_v1.3.0/
 
 | Resource | What it contains |
 |---|---|
-| [Technical engineering report (PDF)](docs/EdgeShield_AI_Technical_Report_v1.4.pdf) | System design, model architectures, hardware partitioning, board results and limitations |
-| [Technical report (HTML / Markdown)](docs/TECHNICAL_REPORT_v1.4.md) | Text and HTML (`docs/EdgeShield_AI_Technical_Report_v1.4.html`) versions of the engineering report |
-| [RK3588J Edge AI Pipelines](docs/EDGE_AI_PIPELINES_RK3588J_v1.4.0.md) | 3-core NPU + ExecuTorch pipeline specifications |
+| [RK3588J Edge AI Pipelines](docs/EDGE_AI_PIPELINES_RK3588J.md) | 3-core NPU + ExecuTorch pipeline specifications |
 | [HLD & SLD Architecture](docs/HLD.md) | High-level (`docs/HLD.md`) and low-level (`docs/SLD.md`) system design |
 | [Benchmark guide](benchmarks/README.md) | Test methods and reported metrics |
 | [Raw benchmark results](benchmarks/results/) | JSON measurements from the board |
@@ -547,7 +543,7 @@ EdgeShield_AI_v1.3.0/
 On the RK3588J board, after installing the matching runtime and dependencies:
 
 ```bash
-cd source/edgeshield-ai
+cd EdgeShield_AI
 python3 scripts/run_benchmarks.py
 ```
 
@@ -556,7 +552,7 @@ This command is intended to reproduce the hardware and model evidence described 
 ### Run the automated tests
 
 ```bash
-cd source/edgeshield-ai
+cd EdgeShield_AI
 pytest -q
 ```
 
