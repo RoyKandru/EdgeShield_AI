@@ -54,16 +54,16 @@ EdgeShield AI is an Arm64 edge-security gateway that brings network intrusion de
 The following screenshots are included in `docs/img/screens/` and were captured from the RK3588J dashboard.
 
 <p align="center">
-  <img src="source/edgeshield-ai/docs/img/screens/1_command_center.png" width="48%" alt="EdgeShield command center dashboard">
-  <img src="source/edgeshield-ai/docs/img/screens/2_investigation_drawer_llama.png" width="48%" alt="Threat investigation and local Llama advisory">
+  <img src="docs/img/screens/1_command_center.png" width="48%" alt="EdgeShield command center dashboard">
+  <img src="docs/img/screens/2_investigation_drawer_llama.png" width="48%" alt="Threat investigation and local Llama advisory">
 </p>
 <p align="center">
-  <img src="source/edgeshield-ai/docs/img/screens/3_threat_scanners.png" width="48%" alt="URL, SMS and network threat scanners">
-  <img src="source/edgeshield-ai/docs/img/screens/4_correlations.png" width="48%" alt="Cross-channel threat correlations">
+  <img src="docs/img/screens/3_threat_scanners.png" width="48%" alt="URL, SMS and network threat scanners">
+  <img src="docs/img/screens/4_correlations.png" width="48%" alt="Cross-channel threat correlations">
 </p>
 <p align="center">
-  <img src="source/edgeshield-ai/docs/img/screens/5_sci_containment.png" width="48%" alt="SCI and reversible containment dashboard">
-  <img src="source/edgeshield-ai/docs/img/screens/6_arm_soc_monitor.png" width="48%" alt="RK3588J NPU and Arm SoC monitor">
+  <img src="docs/img/screens/5_sci_containment.png" width="48%" alt="SCI and reversible containment dashboard">
+  <img src="docs/img/screens/6_arm_soc_monitor.png" width="48%" alt="RK3588J NPU and Arm SoC monitor">
 </p>
 
 *Screenshots: Command Center · Investigation and advisory · Threat Scanners · Correlation view · SCI / Containment · Arm SoC Monitor.*
@@ -149,7 +149,7 @@ The board-specific deployment guide is in [`docs/BOARD_DEPLOYMENT_RK3588J.md`](d
 
 ## Measured results
 
-The repository includes raw measurement records under [`benchmarks/results/`](source/edgeshield-ai/benchmarks/results/). The headline figures below are copied from those records and are identified by test type so that model evaluation, board throughput and adversarial testing are not confused with one another.
+The repository includes raw measurement records under [`benchmarks/results/`](benchmarks/results/). The headline figures below are copied from those records and are identified by test type so that model evaluation, board throughput and adversarial testing are not confused with one another.
 
 ### RK3588J simultaneous NPU throughput
 
@@ -162,7 +162,7 @@ The repository includes raw measurement records under [`benchmarks/results/`](so
 | Core 2 | Scam SMS | 71.77 | 8.653 ms | 9.102 ms |
 | **Combined simultaneous load** | **All three cores** | **415.83 req/s** | — | — |
 
-This is a four-second concurrent benchmark across the three NPU endpoints. It is an observed test result, not a guaranteed production throughput figure. See [`rk3588_3core_npu_concurrency.json`](source/edgeshield-ai/benchmarks/results/rk3588_3core_npu_concurrency.json).
+This is a four-second concurrent benchmark across the three NPU endpoints. It is an observed test result, not a guaranteed production throughput figure. See [`rk3588_3core_npu_concurrency.json`](benchmarks/results/rk3588_3core_npu_concurrency.json).
 
 ### Held-out detector evaluation
 
@@ -174,7 +174,7 @@ This is a four-second concurrent benchmark across the three NPU endpoints. It is
 
 **Thresholds matter.** The URL model's high-precision operating point (0.96) is different from its lower-threshold / cost-sensitive settings. The SMS detector's F1 figure is reported at 0.50; its cost-sensitive recall result uses a lower threshold (0.22). Metrics from different thresholds should not be compared as if they were the same operating point.
 
-See [`detectors_heldout_metrics.json`](source/edgeshield-ai/benchmarks/results/detectors_heldout_metrics.json) and [`benchmarks/README.md`](source/edgeshield-ai/benchmarks/README.md).
+See [`detectors_heldout_metrics.json`](benchmarks/results/detectors_heldout_metrics.json) and [`benchmarks/README.md`](benchmarks/README.md).
 
 ### Local Llama sustained-run benchmark
 
@@ -189,11 +189,11 @@ See [`detectors_heldout_metrics.json`](source/edgeshield-ai/benchmarks/results/d
 | RSS delta during this test | 0.00 MB |
 | Test output validation | All 20 runs validated |
 
-These are board test results for the particular model export, context configuration and test workload. They are not a universal latency or thermal guarantee. Raw evidence: [`llama_sustained_20run_thermal.json`](source/edgeshield-ai/benchmarks/results/llama_sustained_20run_thermal.json).
+These are board test results for the particular model export, context configuration and test workload. They are not a universal latency or thermal guarantee. Raw evidence: [`llama_sustained_20run_thermal.json`](benchmarks/results/llama_sustained_20run_thermal.json).
 
 ### System memory snapshot
 
-A recorded board snapshot measured **1,278.25 MB total EdgeShield RSS**: 359.41 MB for the API / three NPU workers / live sniffer pipeline and 918.84 MB for the ExecuTorch Llama process. This is a measurement from the included system-memory benchmark, not a minimum hardware requirement. See [`system_memory_footprint.json`](source/edgeshield-ai/benchmarks/results/system_memory_footprint.json).
+A recorded board snapshot measured **1,278.25 MB total EdgeShield RSS**: 359.41 MB for the API / three NPU workers / live sniffer pipeline and 918.84 MB for the ExecuTorch Llama process. This is a measurement from the included system-memory benchmark, not a minimum hardware requirement. See [`system_memory_footprint.json`](benchmarks/results/system_memory_footprint.json).
 
 ### Adversarial audit and regression evidence
 
@@ -207,7 +207,7 @@ A recorded board snapshot measured **1,278.25 MB total EdgeShield RSS**: 359.41 
 | Automated tests | 61 passed, 3 skipped |
 | SCI ledger verification | Valid; 8 records checked in the recorded run |
 
-**Interpretation:** The reported 100% attack recall applies to the 129 attack cases in this particular test suite. It does not mean zero false positives or universal detection. Four benign controls were flagged. Review the raw [`adversarial_redteam_audit.json`](source/edgeshield-ai/benchmarks/results/adversarial_redteam_audit.json) before interpreting the result.
+**Interpretation:** The reported 100% attack recall applies to the 129 attack cases in this particular test suite. It does not mean zero false positives or universal detection. Four benign controls were flagged. Review the raw [`adversarial_redteam_audit.json`](benchmarks/results/adversarial_redteam_audit.json) before interpreting the result.
 
 ---
 
@@ -229,7 +229,7 @@ An optional link sandbox component exists in the source tree. It is not required
 
 SMS content can be submitted through the local API. The hybrid SMS pipeline combines deterministic scam indicators and model evidence with the RKNN BiGRU inference path when the NPU worker is available.
 
-**Cellular SMS is not passively visible on Ethernet.** To analyse messages received by a phone, use the Android companion / local webhook forwarder described in [`MOBILE_COMPANION.md`](source/edgeshield-ai/docs/MOBILE_COMPANION.md). It requires user-granted Android permissions and local connectivity to the gateway.
+**Cellular SMS is not passively visible on Ethernet.** To analyse messages received by a phone, use the Android companion / local webhook forwarder described in [`MOBILE_COMPANION.md`](docs/MOBILE_COMPANION.md). It requires user-granted Android permissions and local connectivity to the gateway.
 
 ### Common event and risk layer
 
@@ -259,7 +259,7 @@ The containment implementation includes a dry-run-first response path with finit
 
 **Containment is not automatically enabled as an enforcement guarantee.** Review the environment, firewall rules, protected-host configuration and dry-run mode before any live enforcement. Use only on systems and networks you own or are authorised to administer.
 
-The recorded SCI / regression evidence is available in [`sci_and_regression_proof.json`](source/edgeshield-ai/benchmarks/results/sci_and_regression_proof.json).
+The recorded SCI / regression evidence is available in [`sci_and_regression_proof.json`](benchmarks/results/sci_and_regression_proof.json).
 
 ---
 
@@ -429,7 +429,7 @@ The actual model and tokenizer must be a compatible pair. Do not rename an unrel
 
 If the model files are absent, the application uses the built-in deterministic template advisory backend. This fallback is expected behaviour and does not indicate that Llama inference is running.
 
-See [`scripts/export_llama_executorch.sh`](source/edgeshield-ai/scripts/export_llama_executorch.sh) for the model export workflow and [`docs/TECHNICAL_REPORT_v1.4.md`](source/edgeshield-ai/docs/TECHNICAL_REPORT_v1.4.md) for the recorded configuration and performance results.
+See [`scripts/export_llama_executorch.sh`](scripts/export_llama_executorch.sh) for the model export workflow and [`docs/TECHNICAL_REPORT_v1.4.md`](docs/TECHNICAL_REPORT_v1.4.md) for the recorded configuration and performance results.
 
 ---
 
@@ -449,7 +449,7 @@ A local automation tool such as Tasker or MacroDroid can also send an HTTP POST 
 http://<BOARD_LAN_IP>:8000/api/sms/analyze
 ```
 
-with a JSON body containing the message. Review [`docs/MOBILE_COMPANION.md`](source/edgeshield-ai/docs/MOBILE_COMPANION.md) for details.
+with a JSON body containing the message. Review [`docs/MOBILE_COMPANION.md`](docs/MOBILE_COMPANION.md) for details.
 
 This integration is permission-based forwarding after message receipt; it is not silent interception of cellular SMS.
 
@@ -498,15 +498,15 @@ EdgeShield_AI_v1.3.0/
 
 | Resource | What it contains |
 |---|---|
-| [Technical engineering report (PDF)](source/edgeshield-ai/docs/EdgeShield_AI_Technical_Report_v1.4.pdf) | System design, model architectures, hardware partitioning, board results and limitations |
-| [Technical report (Markdown)](source/edgeshield-ai/docs/TECHNICAL_REPORT_v1.4.md) | Text version of the engineering report |
-| [Benchmark guide](source/edgeshield-ai/benchmarks/README.md) | Test methods and reported metrics |
-| [Raw benchmark results](source/edgeshield-ai/benchmarks/results/) | JSON measurements from the board |
-| [Demo runbook](source/edgeshield-ai/docs/DEMO.md) | Suggested live demonstration flow |
-| [Board deployment guide](source/edgeshield-ai/docs/BOARD_DEPLOYMENT_RK3588J.md) | RK3588J bring-up and deployment notes |
-| [Mobile companion guide](source/edgeshield-ai/docs/MOBILE_COMPANION.md) | Android SMS forwarding |
-| [SCI engine design](source/edgeshield-ai/docs/SCI_ENGINE_DESIGN.md) | Governance and correction pipeline design |
-| [Model manifests](source/edgeshield-ai/models/rknn/manifest.json) | Model metadata, target core and artifact hashes |
+| [Technical engineering report (PDF)](docs/EdgeShield_AI_Technical_Report_v1.4.pdf) | System design, model architectures, hardware partitioning, board results and limitations |
+| [Technical report (Markdown)](docs/TECHNICAL_REPORT_v1.4.md) | Text version of the engineering report |
+| [Benchmark guide](benchmarks/README.md) | Test methods and reported metrics |
+| [Raw benchmark results](benchmarks/results/) | JSON measurements from the board |
+| [Demo runbook](docs/DEMO.md) | Suggested live demonstration flow |
+| [Board deployment guide](docs/BOARD_DEPLOYMENT_RK3588J.md) | RK3588J bring-up and deployment notes |
+| [Mobile companion guide](docs/MOBILE_COMPANION.md) | Android SMS forwarding |
+| [SCI engine design](docs/SCI_ENGINE_DESIGN.md) | Governance and correction pipeline design |
+| [Model manifests](models/rknn/manifest.json) | Model metadata, target core and artifact hashes |
 
 ### Reproduce the benchmarks
 
@@ -558,7 +558,7 @@ The principal runtime settings include:
 | `EDGESHIELD_API_TOKEN` | Optional API token for protected operations |
 | `EDGESHIELD_PORT` / `EDGESHIELD_HOST` | API bind address and port |
 
-See [`.env.example`](source/edgeshield-ai/.env.example) for the supplied configuration template.
+See [`.env.example`](.env.example) for the supplied configuration template.
 
 ---
 
