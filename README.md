@@ -54,19 +54,23 @@ EdgeShield AI is an Arm64 edge-security gateway that brings network intrusion de
 The following are the Dashboard screenshots 
 
 <p align="center">
-  <img src="docs/img/screens/1_command_center.png" width="48%" alt="EdgeShield command center dashboard">
-  <img src="docs/img/screens/2_investigation_drawer_llama.png" width="48%" alt="Threat investigation and local Llama advisory">
+  <img src="docs/img/screens/1_live_threats.png" width="48%" alt="EdgeShield Live Threats dashboard">
+  <img src="docs/img/screens/2_alert_investigation_llama.png" width="48%" alt="Alert Investigation with Threat Explanation, Remediation and Reader">
 </p>
 <p align="center">
-  <img src="docs/img/screens/3_threat_scanners.png" width="48%" alt="URL, SMS and network threat scanners">
-  <img src="docs/img/screens/4_correlations.png" width="48%" alt="Cross-channel threat correlations">
+  <img src="docs/img/screens/3_local_scanners_url.png" width="48%" alt="Local Scanners — URL Phishing Scanner">
+  <img src="docs/img/screens/4_local_scanners_sms.png" width="48%" alt="Local Scanners — Scam SMS Scanner">
 </p>
 <p align="center">
-  <img src="docs/img/screens/5_sci_containment.png" width="48%" alt="SCI and reversible containment dashboard">
-  <img src="docs/img/screens/6_arm_soc_monitor.png" width="48%" alt="RK3588J NPU and Arm SoC monitor">
+  <img src="docs/img/screens/5_local_scanners_network_pcap.png" width="48%" alt="Local Scanners — PCAP Analyzer, Observed LAN Devices and Network Flow Detections">
+  <img src="docs/img/screens/6_correlations.png" width="48%" alt="Cross-channel threat correlations">
+</p>
+<p align="center">
+  <img src="docs/img/screens/7_sci_containment.png" width="48%" alt="SCI governance and reversible containment dashboard">
+  <img src="docs/img/screens/8_arm_soc_monitor.png" width="48%" alt="RK3588J NPU and Arm SoC Monitor">
 </p>
 
-*Screenshots: Live Threats · Investigation and advisory · Local Scanners · Correlation view · SCI / Containment · Arm SoC Monitor.*
+*Screenshots: Live Threats · Alert Investigation (Llama + Reader) · Local Scanners (URL / SMS / Network & PCAP) · Correlations · SCI & Containment · Arm SoC Monitor.*
 
 ---
 
@@ -150,7 +154,7 @@ The model metadata and checksums are recorded in `models/rknn/manifest.json` and
 
 - **Model:** Llama 3.2 1B, exported to ExecuTorch (`llama_3_2_1b_xnnpack_ctx512.pte`, `766 MB`, `max_context_len=512`, `8da4w` `group_size=128` + 4-bit embedding quantization `group_size=32`).
 - **Runtime:** Native C++ runner (`src/executorch_runner.cpp`) using ExecuTorch with XNNPACK and Arm KleidiAI.
-- **Role:** Runs two focused on-device passes per alert to generate both a plain-language **Threat Explanation** and **3-step Recommended Remediation Actions** in **English, Hindi, or Hinglish**, rendered as separate cards above **Why This Was Flagged (Detection Signals)** in the **Alert Investigation** panel (with **Read Aloud / Stop** speech controls).
+- **Role:** Runs two focused on-device passes per alert to generate both a plain-language **Threat Explanation** and **3-step Recommended Remediation Actions** in **English, Hindi, or Hinglish**, rendered as separate cards above **Why This Was Flagged (Detection Signals)** in the **Alert Investigation** panel, with a **Reader / Stop** voice control that reads both the explanation and remediation steps aloud.
 - **Guardrail:** The model is downstream of detection (`app/advisory/validator.py`). It cannot change the detector's verdict or SCI policy; when `>= 2` valid LLM remediation steps are produced, they are served directly without static template padding.
 - **Fallback:** If the `.pte` and tokenizer are absent, a deterministic template advisory provider is used.
 

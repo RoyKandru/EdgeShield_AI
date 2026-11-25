@@ -332,52 +332,52 @@ bool run_generation(
 std::string build_explanation_prompt(const EventCtx& c, const std::string& lang, std::string& out_prefix) {
     std::ostringstream ss;
     if (lang == "hi") {
-        if (c.is_url && !c.host.empty()) out_prefix = "वेबसाइट " + c.host + " एक खतरनाक फ़िशिंग लिंक है क्योंकि";
-        else if (c.is_url) out_prefix = "यह लिंक (जोखिम " + std::to_string(c.risk_score) + "/100) खतरनाक है क्योंकि";
-        else if (c.is_net && !c.first_ip.empty()) out_prefix = "आईपी पता " + c.first_ip + " से आ रहा नेटवर्क ट्रैफ़िक संदिग्ध है क्योंकि";
-        else if (c.is_net) out_prefix = "यह नेटवर्क गतिविधि (जोखिम " + std::to_string(c.risk_score) + "/100) संदिग्ध है क्योंकि";
+        if (c.is_url && !c.host.empty()) out_prefix = "वेबसाइट " + c.host + " एक नकली या खतरनाक लिंक लग रही है क्योंकि";
+        else if (c.is_url) out_prefix = "यह लिंक (जोखिम " + std::to_string(c.risk_score) + "/100) सुरक्षित नहीं है क्योंकि";
+        else if (c.is_net && !c.first_ip.empty()) out_prefix = "डिवाइस " + c.first_ip + " से नेटवर्क पर असामान्य गतिविधि हो रही है, जिसका मतलब है कि";
+        else if (c.is_net) out_prefix = "नेटवर्क पर असामान्य गतिविधि (जोखिम " + std::to_string(c.risk_score) + "/100) मिली है, जिसका मतलब है कि";
         else if (!c.host.empty()) out_prefix = "इस संदेश में दिया गया लिंक " + c.host + " एक धोखाधड़ी (स्कैम) है क्योंकि";
         else out_prefix = "यह SMS संदेश (जोखिम " + std::to_string(c.risk_score) + "/100) एक धोखाधड़ी (स्कैम) है क्योंकि";
 
         ss << "Alert: security_risk (90/100)\n"
            << "Evidence: Unverified origin; Urgent credential lure\n"
-           << "Explanation: यह गतिविधि संदिग्ध है क्योंकि यह बिना सत्यापित स्रोत के संवेदनशील जानकारी मांग रही है। ऐसे प्रयासों का उद्देश्य खाते की सुरक्षा को नुकसान पहुँचाना होता है।\n"
+           << "Explanation: यह गतिविधि खतरनाक है क्योंकि कोई अनजान व्यक्ति आपसे निजी जानकारी या पासवर्ड चुराने की कोशिश कर रहा है।\n"
            << "---\n"
-           << "साइबर सुरक्षा चेतावनी\n"
+           << "साइबर सुरक्षा चेतावनी (आम उपयोगकर्ता के लिए सरल भाषा में, बिना किसी कठिन तकनीकी शब्द के समझाएं)\n"
            << "श्रेणी: " << c.threat_cat << " (जोखिम: " << c.risk_score << "/100)\n"
            << "विवरण: " << c.raw_input << "\n"
            << "साक्ष्य: " << c.evidence_line << "\n"
            << "सरल हिंदी व्याख्या:\n" << out_prefix;
     } else if (lang == "hinglish") {
-        if (c.is_url && !c.host.empty()) out_prefix = "Website " + c.host + " ek khatarnak phishing link hai kyunki";
-        else if (c.is_url) out_prefix = "Yeh link (risk " + std::to_string(c.risk_score) + "/100) khatarnak phishing threat hai kyunki";
-        else if (c.is_net && !c.first_ip.empty()) out_prefix = "IP address " + c.first_ip + " se aa raha network traffic sandigdh hai kyunki";
-        else if (c.is_net) out_prefix = "Yeh network activity (risk " + std::to_string(c.risk_score) + "/100) sandigdh hai kyunki";
+        if (c.is_url && !c.host.empty()) out_prefix = "Website " + c.host + " ek fake ya khatarnak link lag rahi hai kyunki";
+        else if (c.is_url) out_prefix = "Yeh link (risk " + std::to_string(c.risk_score) + "/100) safe nahi hai kyunki";
+        else if (c.is_net && !c.first_ip.empty()) out_prefix = "Device " + c.first_ip + " se network par unusual activity ho rahi hai, iska matlab hai ki";
+        else if (c.is_net) out_prefix = "Network par unusual activity (risk " + std::to_string(c.risk_score) + "/100) mili hai, iska matlab hai ki";
         else if (!c.host.empty()) out_prefix = "Is SMS mein diya gaya link " + c.host + " ek fraud scam hai kyunki";
         else out_prefix = "Yeh SMS alert (risk " + std::to_string(c.risk_score) + "/100) ek fraud scam hai kyunki";
 
         ss << "Alert: security_risk (90/100)\n"
            << "Evidence: Unverified origin; Urgent lure\n"
-           << "Hinglish: Yeh activity sandigdh hai kyunki yeh bina verified source ke sensitive details maang rahi hai. Aise attempts ka maqsad account ya data ko nuksan pahunchana hota hai.\n"
+           << "Hinglish: Yeh activity khatarnak hai kyunki koi anjaan vyakti aapka password, OTP ya account access churane ki koshish kar raha hai.\n"
            << "---\n"
-           << "Security Alert Report\n"
+           << "Security Alert Report (Explain simply for an everyday non-technical user, no technical jargon)\n"
            << "Category: " << c.threat_cat << " (Risk " << c.risk_score << "/100)\n"
            << "Target: " << c.raw_input << "\n"
            << "Evidence: " << c.evidence_line << "\n"
            << "Hinglish Explanation:\n" << out_prefix;
     } else {
-        if (c.is_url && !c.host.empty()) out_prefix = "The domain " + c.host + " is flagged as a phishing threat because";
-        else if (c.is_url) out_prefix = "This URL (risk " + std::to_string(c.risk_score) + "/100) is dangerous because";
-        else if (c.is_net && !c.first_ip.empty()) out_prefix = "Network traffic from " + c.first_ip + " is flagged as suspicious because";
-        else if (c.is_net) out_prefix = "This network flow (risk " + std::to_string(c.risk_score) + "/100) is suspicious because";
-        else if (!c.host.empty()) out_prefix = "This SMS referencing " + c.host + " is a scam because";
-        else out_prefix = "This SMS alert (risk " + std::to_string(c.risk_score) + "/100) is a scam because";
+        if (c.is_url && !c.host.empty()) out_prefix = "The website " + c.host + " looks like a fake or dangerous link because";
+        else if (c.is_url) out_prefix = "This link (risk " + std::to_string(c.risk_score) + "/100) is unsafe because";
+        else if (c.is_net && !c.first_ip.empty()) out_prefix = "Unusual network activity from device " + c.first_ip + " was detected, which means";
+        else if (c.is_net) out_prefix = "Unusual network activity (risk " + std::to_string(c.risk_score) + "/100) was detected, which means";
+        else if (!c.host.empty()) out_prefix = "This text message mentioning " + c.host + " is likely a scam because";
+        else out_prefix = "This text message (risk " + std::to_string(c.risk_score) + "/100) is likely a scam because";
 
         ss << "Security Alert Report\n"
            << "Category: " << c.threat_cat << " (Risk " << c.risk_score << "/100)\n"
            << "Target: " << c.raw_input << "\n"
            << "Evidence: " << c.evidence_line << "\n"
-           << "Plain-Language Explanation:\n" << out_prefix;
+           << "Plain-Language Explanation for a non-technical everyday user (2-3 simple sentences, avoid technical jargon, explain the real-world danger clearly):\n" << out_prefix;
     }
     return ss.str();
 }
@@ -385,40 +385,40 @@ std::string build_explanation_prompt(const EventCtx& c, const std::string& lang,
 std::string build_actions_prompt(const EventCtx& c, const std::string& lang, std::string& out_step1_prefix) {
     std::ostringstream ss;
     if (lang == "hi") {
-        if (c.is_url) out_step1_prefix = "1. इस संदिग्ध लिंक को न खोलें और";
-        else if (c.is_net) out_step1_prefix = "1. इस संदिग्ध नेटवर्क ट्रैफ़िक की जांच करें और";
-        else out_step1_prefix = "1. इस संदेश पर भरोसा न करें और";
+        if (c.is_url) out_step1_prefix = "1. इस लिंक को न खोलें और";
+        else if (c.is_net) out_step1_prefix = "1. इस संदिग्ध डिवाइस को तुरंत Wi-Fi/नेटवर्क से हटाएं या ब्लॉक करें और";
+        else out_step1_prefix = "1. इस संदेश का जवाब न दें और";
 
         ss << "उदाहरण उपाय:\n"
-           << "1. इस संदिग्ध अनुरोध पर भरोसा न करें और कोई गोपनीय जानकारी साझा न करें।\n"
-           << "2. केवल आधिकारिक ऐप या सत्यापित लॉग से स्थिति की जांच करें।\n"
+           << "1. इस संदिग्ध अनुरोध पर भरोसा न करें और कोई भी पासवर्ड या OTP न बताएं।\n"
+           << "2. केवल आधिकारिक ऐप या वेबसाइट पर जाकर खुद जांच करें।\n"
            << "---\n"
            << "सुरक्षा चेतावनी: " << c.threat_cat << " (" << c.risk_score << "/100)\n"
            << "विवरण: " << c.raw_input << "\n"
            << "साक्ष्य: " << c.evidence_line << "\n"
-           << "तत्काल सुरक्षा उपाय (हिंदी में 3 कदम):\n" << out_step1_prefix;
+           << "आम उपयोगकर्ता के लिए सरल 3 सुरक्षा कदम (हिंदी में):\n" << out_step1_prefix;
     } else if (lang == "hinglish") {
-        if (c.is_url) out_step1_prefix = "1. Is suspicious link ko bilkul open na karein aur";
-        else if (c.is_net) out_step1_prefix = "1. Is suspicious network traffic ko check karein aur";
-        else out_step1_prefix = "1. Is SMS par bharosa na karein aur";
+        if (c.is_url) out_step1_prefix = "1. Is link ko bilkul open na karein aur";
+        else if (c.is_net) out_step1_prefix = "1. Is suspicious device ko Wi-Fi/network se disconnect ya block karein aur";
+        else out_step1_prefix = "1. Is SMS ka reply na karein aur";
 
         ss << "Example Steps:\n"
            << "1. Is sandigdh request ko ignore karein aur koi bhi password ya OTP share na karein.\n"
-           << "2. Hamesha official app ya trusted logs se khud verify karein.\n"
+           << "2. Hamesha official app khol kar khud verify karein.\n"
            << "---\n"
            << "Security Alert: " << c.threat_cat << " (" << c.risk_score << "/100)\n"
            << "Target: " << c.raw_input << "\n"
            << "Evidence: " << c.evidence_line << "\n"
-           << "Remediation Actions (Hinglish mein 3 steps):\n" << out_step1_prefix;
+           << "Simple Action Steps (Hinglish mein 3 aasan steps):\n" << out_step1_prefix;
     } else {
-        if (c.is_url) out_step1_prefix = "1. Do not open this URL or enter";
-        else if (c.is_net) out_step1_prefix = "1. Inspect active connections and";
-        else out_step1_prefix = "1. Do not reply to this SMS or share";
+        if (c.is_url) out_step1_prefix = "1. Do not click or open this link and";
+        else if (c.is_net) out_step1_prefix = "1. Disconnect or block this device (" + (c.first_ip.empty() ? std::string("source") : c.first_ip) + ") from your network and";
+        else out_step1_prefix = "1. Do not reply to this message or share";
 
         ss << "Security Alert: " << c.threat_cat << " (" << c.risk_score << "/100)\n"
            << "Target: " << c.raw_input << "\n"
            << "Evidence: " << c.evidence_line << "\n"
-           << "Recommended Remediation Actions (3 concise steps):\n" << out_step1_prefix;
+           << "Simple Action Steps for a non-technical user (3 short, clear steps telling them exactly what to do):\n" << out_step1_prefix;
     }
     return ss.str();
 }

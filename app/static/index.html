@@ -3987,7 +3987,7 @@ function renderLlamaCardHtml(adv, cacheKey, eventId, inlineSlotId = '') {
         <span>Threat Explanation</span>
         <span style="display:flex;gap:5px;flex-wrap:wrap;align-items:center">
           <span class="badge b-low">${esc(adv.provider || 'llama-executorch')}${speedPart}${msPart}</span>
-          <button type="button" class="btn-sm" onclick="speakCachedAdvisory('${escJsStr(cacheKey)}')">${ic('volume')} Read Aloud</button>
+          <button type="button" class="btn-sm" onclick="speakCachedAdvisory('${escJsStr(cacheKey)}')" title="Read explanation and remediation actions aloud"><svg class="ic-lg" style="width:18px;height:18px" aria-hidden="true"><use href="#ic-volume"/></svg> Reader</button>
           <button type="button" class="btn-sm" onclick="stopSpeech()" aria-label="Stop speech" title="Stop speech">${ic('stop')} Stop</button>
         </span>
       </h4>
@@ -4502,22 +4502,38 @@ function renderWelcomePanel() {
     <div class="insp-empty-state" style="display:flex;flex-direction:column;gap:12px">
       <div class="insp-section" style="margin-bottom:0">
         <div class="insp-label">Captured Input / Artifact</div>
-        <div class="code-box" style="min-height:44px;color:var(--muted);border-style:dashed">&mdash;</div>
+        <div class="code-box" style="min-height:42px;color:var(--muted);border-style:dashed;display:flex;align-items:center;gap:8px;font-family:inherit;font-size:13px">
+          ${ic('scan')} <span>Select any alert on the left and click <strong>Click to Explain</strong> to inspect its URL, SMS, or network flow.</span>
+        </div>
       </div>
 
       <div class="advisory-exp-card llama-card" style="margin-top:0">
-        <h4><span>Threat Explanation</span></h4>
-        <div class="llama-text muted" style="min-height:64px">Select an alert and click <strong>Click to Explain</strong> to generate an on-device explanation.</div>
+        <h4 style="margin-bottom:6px">
+          <span style="display:inline-flex;align-items:center;gap:6px">${ic('shield')} Threat Explanation</span>
+          <span class="badge b-net" style="font-size:11px">Plain-Language AI</span>
+        </h4>
+        <div class="llama-text muted" style="font-size:13.5px;line-height:1.5;min-height:46px">
+          A clear, jargon-free explanation of what this alert means and what risk it poses will appear here.
+        </div>
       </div>
 
       <div class="advisory-rem-card llama-card" style="margin-top:0">
-        <h4><span>Recommended Remediation Actions</span></h4>
-        <div class="muted" style="min-height:64px">&mdash;</div>
+        <h4 style="margin-bottom:6px">
+          <span style="display:inline-flex;align-items:center;gap:6px">${ic('check')} Recommended Remediation Actions</span>
+          <span class="badge b-low" style="font-size:11px">Simple Steps</span>
+        </h4>
+        <ol class="remediation-list" style="margin-top:4px;opacity:0.78">
+          <li><span class="step-num">1</span><span class="muted">Immediate action to stay safe (e.g., do not click or share OTP).</span></li>
+          <li><span class="step-num">2</span><span class="muted">How to verify safely or isolate the suspicious device/link.</span></li>
+          <li><span class="step-num">3</span><span class="muted">Follow-up protection or reporting step.</span></li>
+        </ol>
       </div>
 
       <div class="insp-signals-card" style="margin-top:0">
-        <div class="insp-label" style="color:#3730a3">Why This Was Flagged (Detection Signals)</div>
-        <div class="muted" style="min-height:48px">&mdash;</div>
+        <div class="insp-label" style="color:#3730a3;display:flex;align-items:center;gap:6px">${ic('activity')} Why This Was Flagged (Detection Signals)</div>
+        <div class="muted" style="font-size:13px;line-height:1.45">
+          NPU model confidence scores, matched threat indicators, and risk weights will appear here after selection.
+        </div>
       </div>
     </div>`;
 }
