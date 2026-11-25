@@ -5,7 +5,7 @@
 ### On-Device Threat, Phishing & Scam Detection for the Arm Edge
 
 **Bharat AI-SoC Challenge 2026–27 · Problem Statement 3**  
-**EdgeProc AI Technologies Pvt. Ltd.**
+**Team EdgeProc**
 
 [![Platform](https://img.shields.io/badge/platform-Arm64%20%7C%20RK3588J-273849)](#target-platform)
 [![NPU](https://img.shields.io/badge/accelerator-RK3588%203--Core%20NPU-273849)](#dual-pipeline-architecture)
