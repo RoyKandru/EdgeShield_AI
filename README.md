@@ -9,8 +9,8 @@ Bharat AI-SoC Challenge 2026–27 · Problem Statement 3
 **Pradeep Roy Kandru** (Team Leader) · **Amit Mane** · **Srivathsa Tirumala**
 
 [![Platform](https://img.shields.io/badge/platform-Arm64%20%7C%20RK3588J-273849)](#target-platform)
+[![Runtime](https://img.shields.io/badge/Llama%203.2_1B%20%2B%20ExecuTorch-273849)](#dual-pipeline-architecture)
 [![NPU](https://img.shields.io/badge/accelerator-RK3588%203--Core%20NPU-273849)](#dual-pipeline-architecture)
-[![Runtime](https://img.shields.io/badge/AI%20runtime-RKNN%20%2B%20ExecuTorch-273849)](#dual-pipeline-architecture)
 [![Operation](https://img.shields.io/badge/operation-local%20%2F%20offline-273849)](#privacy-and-operational-boundaries)
 
 **One edge gateway. Three specialist threat detectors. One evidence-driven security workflow.**
