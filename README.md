@@ -626,6 +626,12 @@ Review the repository's `LICENSE` and third-party notices before redistribution.
 
 ---
 
+## Continuous Threat Simulation (`Shield-Breaker`)
+
+For end-to-end validation and live demonstration on an authorized LAN, we also used **Shield-Breaker**—a companion traffic and threat generator that continuously streams realistic **URL phishing probes, Network intrusion flows, and Scam SMS messages** toward the EdgeShield gateway. This enables sustained stress-testing of the 3-core RK3588 NPU detectors, cross-channel correlation window, and on-device Llama explanations under continuous multi-channel load.
+
+---
+
 <div align="center">
 
 **EdgeShield AI — Detection at the edge. Explanations on-device. Response under operator control.**
