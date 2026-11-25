@@ -1088,31 +1088,28 @@
       background: #dbeafe;
       box-shadow: inset 3px 0 0 #0ea5e9;
     }
-    @keyframes newRowPulseNet {
-      0%, 100% { background: transparent; box-shadow: inset 4px 0 0 transparent; }
-      45% { background: rgba(2, 132, 199, 0.26); box-shadow: inset 4px 0 0 #0284c7; }
-    }
-    @keyframes newRowPulseUrl {
-      0%, 100% { background: transparent; box-shadow: inset 4px 0 0 transparent; }
-      45% { background: rgba(124, 58, 237, 0.24); box-shadow: inset 4px 0 0 #7c3aed; }
-    }
-    @keyframes newRowPulseSms {
-      0%, 100% { background: transparent; box-shadow: inset 4px 0 0 transparent; }
-      45% { background: rgba(13, 148, 136, 0.24); box-shadow: inset 4px 0 0 #0d9488; }
-    }
+    /* Static non-blinking border highlight for new alerts by criticality */
     .ev-row.ev-new,
     tr.ev-row.new-row,
     tr.ev-row.row-new {
-      animation: newRowPulseNet 0.8s ease-in-out 5;
+      box-shadow: inset 4px 0 0 #0284c7, inset 0 1px 0 rgba(2, 132, 199, 0.3), inset 0 -1px 0 rgba(2, 132, 199, 0.3);
+      background: rgba(2, 132, 199, 0.04);
     }
-    tr.ev-row.ev-new[data-src="net"] {
-      animation: newRowPulseNet 0.8s ease-in-out 5;
+    tr.ev-row.ev-new[data-tier="critical"] {
+      box-shadow: inset 4px 0 0 #dc2626, inset 0 1px 0 rgba(220, 38, 38, 0.42), inset 0 -1px 0 rgba(220, 38, 38, 0.42);
+      background: rgba(220, 38, 38, 0.05);
     }
-    tr.ev-row.ev-new[data-src="url"] {
-      animation: newRowPulseUrl 0.8s ease-in-out 5;
+    tr.ev-row.ev-new[data-tier="high"] {
+      box-shadow: inset 4px 0 0 #ea580c, inset 0 1px 0 rgba(234, 88, 12, 0.42), inset 0 -1px 0 rgba(234, 88, 12, 0.42);
+      background: rgba(234, 88, 12, 0.05);
     }
-    tr.ev-row.ev-new[data-src="sms"] {
-      animation: newRowPulseSms 0.8s ease-in-out 5;
+    tr.ev-row.ev-new[data-tier="medium"] {
+      box-shadow: inset 4px 0 0 #d97706, inset 0 1px 0 rgba(217, 119, 6, 0.42), inset 0 -1px 0 rgba(217, 119, 6, 0.42);
+      background: rgba(217, 119, 6, 0.05);
+    }
+    tr.ev-row.ev-new[data-tier="low"] {
+      box-shadow: inset 4px 0 0 #059669, inset 0 1px 0 rgba(5, 150, 105, 0.42), inset 0 -1px 0 rgba(5, 150, 105, 0.42);
+      background: rgba(5, 150, 105, 0.05);
     }
     tr.ev-row[data-src="net"] .new-tag { background: #0284c7; border-color: #0369a1; color: #f0f9ff; }
     tr.ev-row[data-src="url"] .new-tag { background: #7c3aed; border-color: #6d28d9; color: #f5f3ff; }
@@ -4364,7 +4361,7 @@ function renderOverviewTable() {
     const srcLow = String(e.source || '').toLowerCase();
     const srcKey = srcLow.includes('url') ? 'url' : srcLow.includes('sms') ? 'sms' : 'net';
     return `
-      <tr class="ev-row ${sel} ${fresh}" data-src="${srcKey}" data-event-id="${esc(e.event_id)}" tabindex="0" aria-selected="${sel ? 'true' : 'false'}"
+      <tr class="ev-row ${sel} ${fresh}" data-tier="${esc(tier)}" data-src="${srcKey}" data-event-id="${esc(e.event_id)}" tabindex="0" aria-selected="${sel ? 'true' : 'false'}"
           onclick="selectEvent('${eid}', true)"
           onkeydown="if(event.target.tagName!=='BUTTON'&&(event.key==='Enter'||event.key===' ')){event.preventDefault(); selectEvent('${eid}', true);}">
         <td class="mono muted" style="font-size:11.5px">${idx + 1}</td>
@@ -4496,52 +4493,32 @@ function renderWelcomePanel() {
     drawer.hidden = false;
     drawer.setAttribute('aria-hidden', 'false');
   }
-  if (titleEl) titleEl.textContent = 'EdgeShield AI Overview';
+  if (titleEl) titleEl.textContent = 'Alert Investigation';
   if (idEl) idEl.textContent = '';
   if (closeBtn) closeBtn.hidden = true;
   if (!body) return;
 
   body.innerHTML = `
-    <div class="welcome-panel">
-      <div class="welcome-hero">
-        <div class="welcome-brand-row">
-          <span class="welcome-logo">${ic('shield')}</span>
-          <div>
-            <h3 class="welcome-title">EdgeShield AI</h3>
-            <div class="welcome-byline">by <strong>EdgeProc</strong> &middot; On-Device Arm64 + RK3588 NPU Security Console</div>
-          </div>
-        </div>
-        <p class="welcome-desc">
-          Real-time multi-channel threat detection, cross-channel kill-chain correlation, and verdict-locked on-device AI explanations running locally on EdgeProc hardware with zero cloud dependency.
-        </p>
+    <div class="insp-empty-state" style="display:flex;flex-direction:column;gap:12px">
+      <div class="insp-section" style="margin-bottom:0">
+        <div class="insp-label">Captured Input / Artifact</div>
+        <div class="code-box" style="min-height:44px;color:var(--muted);border-style:dashed">&mdash;</div>
       </div>
 
-      <div class="insp-label" style="margin:14px 0 8px">Core On-Device Capabilities</div>
-      <div class="welcome-cap-grid">
-        <div class="welcome-cap-tile">
-          <div class="welcome-cap-head">${ic('network')} <strong>Network Intrusion Monitoring</strong></div>
-          <div class="muted">Live NIC packet capture &amp; PCAP inspection on NPU_CORE_0 for C2 beacons, port scans, and DNS exfiltration.</div>
-        </div>
-        <div class="welcome-cap-tile">
-          <div class="welcome-cap-head">${ic('link')} <strong>Phishing URL Detection</strong></div>
-          <div class="muted">Dual-branch MLP + CharCNN inference on NPU_CORE_1 catching credential harvesters and homograph domains.</div>
-        </div>
-        <div class="welcome-cap-tile">
-          <div class="welcome-cap-head">${ic('message')} <strong>Scam SMS Detection</strong></div>
-          <div class="muted">SplitBiGRU + MaskedPool NLP model on NPU_CORE_2 flagging smishing, OTP theft, and urgent lure campaigns.</div>
-        </div>
-        <div class="welcome-cap-tile">
-          <div class="welcome-cap-head">${ic('cpu')} <strong>On-Device AI Explanation &amp; Remediation</strong></div>
-          <div class="muted">ExecuTorch Llama-3.2 on Arm64 CPU generates plain-language EN/HI/Hinglish explanations &amp; action steps.</div>
-        </div>
+      <div class="advisory-exp-card llama-card" style="margin-top:0">
+        <h4><span>Threat Explanation</span></h4>
+        <div class="llama-text muted" style="min-height:64px">Select an alert and click <strong>Click to Explain</strong> to generate an on-device explanation.</div>
       </div>
 
-      <div class="insp-label" style="margin:14px 0 8px">How to Use EdgeShield AI</div>
-      <ol class="welcome-steps">
-        <li><span class="step-num">1</span><span><strong>Monitor or Scan:</strong> Watch live alerts stream in the left table, or switch to <em>Local Scanners</em> to probe URLs, SMS, or PCAP files offline.</span></li>
-        <li><span class="step-num">2</span><span><strong>Click Any Alert:</strong> Select a row or click <em>Explain</em> to inspect detection signals and auto-generate an on-device Llama explanation.</span></li>
-        <li><span class="step-num">3</span><span><strong>Remediate Safely:</strong> Follow the numbered remediation steps or trigger reversible <em>Contain (TTL)</em> isolation logged to the SHA-256 SCI ledger.</span></li>
-      </ol>
+      <div class="advisory-rem-card llama-card" style="margin-top:0">
+        <h4><span>Recommended Remediation Actions</span></h4>
+        <div class="muted" style="min-height:64px">&mdash;</div>
+      </div>
+
+      <div class="insp-signals-card" style="margin-top:0">
+        <div class="insp-label" style="color:#3730a3">Why This Was Flagged (Detection Signals)</div>
+        <div class="muted" style="min-height:48px">&mdash;</div>
+      </div>
     </div>`;
 }
 
