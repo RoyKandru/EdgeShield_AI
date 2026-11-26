@@ -6,7 +6,7 @@
 
 Bharat AI-SoC Challenge 2026–27 · Problem Statement 3  
 ### **Team EdgeProc**
-**Pradeep Roy Kandru** (Team Leader) · **Amit Mane** · **Srivathsa Tirumala**
+**Pradeep Roy Kandru** (Team Lead) · **Amit Mane** · **Srivathsa Tirumala**
 
 [![Platform](https://img.shields.io/badge/platform-Arm64%20%7C%20RK3588J-273849)](#target-platform)
 [![Runtime](https://img.shields.io/badge/Llama%203.2_1B%20%2B%20ExecuTorch-273849)](#dual-pipeline-architecture)
