@@ -26,7 +26,7 @@ EdgeShield AI is an Arm64 edge-security gateway that brings network intrusion de
 | What | EdgeShield AI |
 |---|---|
 | Challenge scope | PS3 — on-device threat, phishing and scam detection |
-| Target device | Rockchip RK3588J Arm64 Linux system-on-module / custom board |
+| Target device | Rockchip RK3588J Arm64 SoC / custom board |
 | Detection acceleration | RK3588 3-core NPU using RKNN FP16 models |
 | NPU Core 0 | Network IDS — 1D-CNN + MLP |
 | NPU Core 1 | Phishing URL — lexical MLP + character 1D-CNN |
