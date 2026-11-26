@@ -320,6 +320,7 @@ python3 -m venv .venv
 python -m pip install --upgrade pip
 pip install -e ".[dev]"
 ```
+**Note:** Copy all the model files provided in drive link shared for video demonstration to models folder
 
 ### 3. Install the RKNN Lite runtime
 
