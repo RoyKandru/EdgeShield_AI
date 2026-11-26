@@ -320,7 +320,7 @@ python3 -m venv .venv
 python -m pip install --upgrade pip
 pip install -e ".[dev]"
 ```
-**Note:** Create models directory in the project root & Copy all the model files provided in drive link shared for video demonstration to models folder
+**Note:** Create a `models` directory in the project root and copy all model files provided in the Google Drive link shared for the video demonstration into this directory before running the project.
 
 ### 3. Install the RKNN Lite runtime
 
